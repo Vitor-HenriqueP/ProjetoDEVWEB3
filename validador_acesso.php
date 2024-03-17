@@ -11,7 +11,7 @@ if (isset($_SESSION['usuario']) && is_object($_SESSION['usuario'])) {
 }
 //Se o usuario não for autenticado não sera possivel realizar o login.
 if (!isset($_SESSION['autenticar']) || $_SESSION['autenticar'] != 'SIM') {
-    header('Location: http://localhost/cadastroAlunos/index.php?login=erro');
+    header('Location: http://localhost/projetoDEVWEB3/login.php?login=erro');
     exit(); 
     
 }
