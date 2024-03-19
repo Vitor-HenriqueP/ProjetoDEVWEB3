@@ -8,7 +8,7 @@ if (isset($_SESSION['tipo_usuario'])) {
 }
 
 if ($tipo_usuario != 1) {
-    header('Location: index.php'); // Redireciona para a página inicial se o usuário não for do tipo 1
+    header('Location: ../../index.php'); // Redireciona para a página inicial se o usuário não for do tipo 1
     exit();
 }
 ?>
