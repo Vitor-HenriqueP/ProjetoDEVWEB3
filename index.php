@@ -1,12 +1,6 @@
 <?php
 session_start();
 
-$tipo_usuario = null;
-
-if (isset($_SESSION['tipo_usuario'])) {
-    $tipo_usuario = $_SESSION['tipo_usuario'];
-}
-
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['logout'])) {
     session_destroy();
     header('Location: login.php');
@@ -84,12 +78,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['logout'])) {
 <body>
     <h1>Minha Loja de Produtos</h1>
 
-    <?php if ($tipo_usuario) : ?>
-        <form method="post" action="index.php">
-            <input type="hidden" name="logout" value="1">
-            <input type="submit" value="Logout">
-        </form>
-    <?php endif; ?>
+    <form method="post" action="index.php">
+        <input type="hidden" name="logout" value="1">
+        <input type="submit" value="Logout">
+    </form>
 
     <div class="container">
         <?php
