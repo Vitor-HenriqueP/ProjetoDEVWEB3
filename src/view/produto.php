@@ -1,4 +1,6 @@
 <?php
+session_start();
+
 $host = "localhost"; // host do banco de dados
 $username = "root"; // nome de usuário do banco de dados
 $password = ""; // senha do banco de dados
@@ -81,7 +83,17 @@ if (isset($_GET['id'])) {
                     <h1 class="product-title"><?php echo $row['nome']; ?></h1>
                     <p class="product-description"><?php echo $row['descricao']; ?></p>
                     <p class="product-price">R$<?php echo number_format($row['preco'], 2, ',', '.'); ?></p>
-                    <!-- Adicione mais informações do produto aqui, se necessário -->
+                    <?php
+                    // Verifica se o usuário está logado
+                    if (isset($_SESSION['login'])) {
+                        echo "<form method='post' action='../../adicionar_carrinho.php'>";
+                        echo "<input type='hidden' name='id_produto' value='$id'>";
+                        echo "<input type='submit' value='Adicionar ao Carrinho'>";
+                        echo "</form>";
+                    } else {
+                        echo "<p>Faça login para adicionar este produto ao carrinho.</p>";
+                    }
+                    ?>
                 </div>
             </div>
         </div>

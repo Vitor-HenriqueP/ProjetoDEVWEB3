@@ -1,5 +1,6 @@
 <?php
 include 'conexao.php';
+session_start();
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $login = $_POST['login'];
@@ -12,9 +13,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $row = mysqli_fetch_assoc($result);
         if (password_verify($senha, $row['senha'])) {
             // Login bem-sucedido
-            session_start();
+            $_SESSION['id'] = $row['id']; // Definindo o ID do usuário na sessão
             $_SESSION['login'] = $login;
-            $_SESSION['tipo_usuario'] = $row['tipo_usuario']; // Armazena o tipo de usuário na sessão
+            $_SESSION['tipo_usuario'] = $row['tipo_user']; // Corrigido para 'tipo_user'
             header('Location: index.php');
             exit();
         } else {
