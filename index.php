@@ -99,11 +99,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['logout'])) {
         }
 
         $sql = "SELECT id, nome, descricao, preco, imagem FROM produto";
-        $result = $conn->query($sql);
+        $stmt = $conn->prepare($sql);
+        $stmt->execute();
+
+        $result = $stmt->get_result();
 
         if ($result->num_rows > 0) {
             while ($row = $result->fetch_assoc()) {
-                echo "<a href='./src/view/produto.php?id=" . $row["id"] . "' style='text-decoration: none; color: inherit;'>";
+                echo "<form method='post' action='./src/view/produto.php'>";
+                echo "<input type='hidden' name='id' value='" . $row["id"] . "'>";
+                echo "<button type='submit' style='border: none; background: none; padding: 0; text-decoration: none; color: inherit;'>";
                 echo "<div class='card'>";
                 echo "<img src='data:image/jpeg;base64," . base64_encode($row["imagem"]) . "'>";
                 echo "<div class='card-content'>";
@@ -112,12 +117,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['logout'])) {
                 echo "<p class='price'>R$" . number_format($row["preco"], 2, ',', '.') . "</p>";
                 echo "</div>";
                 echo "</div>";
-                echo "</a>";
+                echo "</button>";
+                echo "</form>";
             }
         } else {
             echo "Nenhum produto encontrado.";
         }
 
+        $stmt->close();
         $conn->close();
         ?>
     </div>

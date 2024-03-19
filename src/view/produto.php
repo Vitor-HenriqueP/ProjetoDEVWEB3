@@ -14,13 +14,17 @@ if ($conn->connect_error) {
     die("Erro ao conectar ao banco de dados: " . $conn->connect_error);
 }
 
-// Verifica se o parâmetro 'id' foi passado na URL
-if (isset($_GET['id'])) {
-    $id = $_GET['id'];
+// Verifica se o ID do produto foi enviado via POST
+if (isset($_POST['id'])) {
+    $id = $_POST['id'];
 
     // Consulta SQL para obter os detalhes do produto com base no ID
-    $sql = "SELECT * FROM produto WHERE id = $id";
-    $result = $conn->query($sql);
+    $sql = "SELECT * FROM produto WHERE id = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param('i', $id);
+    $stmt->execute();
+
+    $result = $stmt->get_result();
 
     if ($result->num_rows > 0) {
         $row = $result->fetch_assoc();
@@ -107,5 +111,6 @@ if (isset($_GET['id'])) {
     echo "ID do produto não especificado.";
 }
 
+$stmt->close();
 $conn->close();
 ?>
