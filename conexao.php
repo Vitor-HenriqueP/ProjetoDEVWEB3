@@ -13,8 +13,5 @@ if ($conn->connect_error) {
     die("Erro ao conectar ao banco de dados: " . $conn->connect_error);
 }
 
-echo "Conexão bem sucedida";
-
-// Fecha a conexão
-$conn->close();
+// Não feche a conexão aqui
 ?>
