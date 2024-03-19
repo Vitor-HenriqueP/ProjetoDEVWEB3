@@ -9,6 +9,28 @@ if (!isset($_SESSION['login'])) {
     exit();
 }
 
+// Verifica se o ID do produto foi enviado por POST
+if (isset($_POST['id_produto']) && isset($_POST['action'])) {
+    $id_produto = $_POST['id_produto'];
+    $id_usuario = $_SESSION['id']; // Obter o ID do usuário da sessão
+
+    if ($_POST['action'] === 'remove') {
+        // Remove um item do carrinho
+        $sql = "DELETE FROM carrinho WHERE id_usuario = $id_usuario AND id_produto = $id_produto LIMIT 1";
+    } elseif ($_POST['action'] === 'add') {
+        // Adiciona um item ao carrinho
+        $sql = "INSERT INTO carrinho (id_usuario, id_produto) VALUES ($id_usuario, $id_produto)";
+    }
+
+    if ($conn->query($sql) === TRUE) {
+        // Atualiza a página após a alteração no carrinho
+        header('Location: carrinho.php');
+        exit();
+    } else {
+        echo "Erro ao atualizar o carrinho: " . $conn->error;
+    }
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -25,15 +47,27 @@ if (!isset($_SESSION['login'])) {
     <?php
     // Consulta SQL para obter os produtos no carrinho do usuário logado
     $id_usuario = $_SESSION['id'];
-    $sql = "SELECT p.nome, p.descricao, p.preco FROM carrinho c INNER JOIN produto p ON c.id_produto = p.id WHERE c.id_usuario = $id_usuario";
+    $sql = "SELECT c.id_produto, COUNT(c.id_produto) as quantidade, p.nome, p.descricao, p.preco, p.imagem FROM carrinho c INNER JOIN produto p ON c.id_produto = p.id WHERE c.id_usuario = $id_usuario GROUP BY c.id_produto";
     $result = $conn->query($sql);
 
     if ($result->num_rows > 0) {
         $total = 0; // Variável para armazenar o total dos produtos no carrinho
 
         while ($row = $result->fetch_assoc()) {
-            $total += $row['preco']; // Adiciona o preço do produto ao total
-            echo "<p>{$row['nome']} - {$row['descricao']} - R$ {$row['preco']}</p>";
+            $total += $row['preco'] * $row['quantidade']; // Adiciona o preço do produto ao total
+            echo "<p>{$row['nome']} - {$row['descricao']} - R$ {$row['preco']} - Quantidade: {$row['quantidade']}</p>";
+            echo "<img width = 100px src='data:image/jpeg;base64," . base64_encode($row['imagem']) . "' alt='{$row['nome']}'>";
+            echo "<form method='post'>";
+            echo "<input type='hidden' name='id_produto' value='{$row['id_produto']}'>";
+            echo "<input type='hidden' name='action' value='remove'>";
+            echo "<input type='submit' value='-'>";
+            echo "</form>";
+
+            echo "<form method='post'>";
+            echo "<input type='hidden' name='id_produto' value='{$row['id_produto']}'>";
+            echo "<input type='hidden' name='action' value='add'>";
+            echo "<input type='submit' value='+'>";
+            echo "</form>";
         }
 
         // Exibe o valor total
