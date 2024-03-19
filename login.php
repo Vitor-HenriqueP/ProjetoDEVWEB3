@@ -1,30 +1,26 @@
 <?php
 include 'conexao.php';
+include 'src/models/User.php'; // Supondo que o arquivo com a classe Usuario esteja nesse caminho
+
 session_start();
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $login = $_POST['login'];
     $senha = $_POST['senha'];
 
-    $sql = "SELECT * FROM usuarios WHERE login='$login'";
-    $result = mysqli_query($conn, $sql);
+    $usuario = new Usuario($conn); // Criando uma instância da classe Usuario
+    $usuarioEncontrado = $usuario->findByLogin($login); // Buscando o usuário pelo login
 
-    if (mysqli_num_rows($result) == 1) {
-        $row = mysqli_fetch_assoc($result);
-        if (password_verify($senha, $row['senha'])) {
-            // Login bem-sucedido
-            $_SESSION['id'] = $row['id']; // Definindo o ID do usuário na sessão
-            $_SESSION['login'] = $login;
-            $_SESSION['tipo_usuario'] = $row['tipo_usuario']; // Armazena o tipo de usuário na sessão
-            header('Location: index.php');
-            exit();
-        } else {
-            // Senha incorreta
-            $erro = "Senha incorreta";
-        }
+    if ($usuarioEncontrado && password_verify($senha, $usuarioEncontrado['senha'])) {
+        // Login bem-sucedido
+        $_SESSION['id'] = $usuarioEncontrado['id']; // Definindo o ID do usuário na sessão
+        $_SESSION['login'] = $login;
+        $_SESSION['tipo_usuario'] = $usuarioEncontrado['tipo_usuario']; // Armazenando o tipo de usuário na sessão
+        header('Location: index.php');
+        exit();
     } else {
-        // Usuário não encontrado
-        $erro = "Usuário não encontrado";
+        // Senha incorreta ou usuário não encontrado
+        $erro = "Login ou senha incorretos";
     }
 }
 ?>

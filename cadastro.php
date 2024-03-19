@@ -1,22 +1,22 @@
 <?php
 include 'conexao.php';
+include 'src/models/User.php'; // Supondo que o arquivo com a definição da classe Usuario seja 'Usuario.php'
+
+$usuario = new Usuario($conn); // Criando uma instância da classe Usuario
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $nome = $_POST['nome'];
     $login = $_POST['login'];
     $senha = $_POST['senha'];
     $senha_hash = password_hash($senha, PASSWORD_DEFAULT); // Gerar hash da senha    
-    $tipo_usuario = 2;
 
-
-    $sql = "INSERT INTO usuarios (nome, login, senha) VALUES ('$nome', '$login', '$senha_hash')";
-
-    if (mysqli_query($conn, $sql)) {
+    if ($usuario->cadastrarUsuario($nome, $login, $senha_hash)) {
         echo "Usuário cadastrado com sucesso!";
     } else {
-        echo "Erro ao cadastrar o usuário: " . mysqli_error($conn);
+        echo "Erro ao cadastrar o usuário.";
     }
 }
+
 ?>
 
 <!DOCTYPE html>
