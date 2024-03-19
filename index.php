@@ -1,13 +1,3 @@
-<?php
-session_start();
-
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['logout'])) {
-    session_destroy();
-    header('Location: login.php');
-    exit();
-}
-?>
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -73,62 +63,46 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['logout'])) {
             color: #333;
             font-size: 16px;
         }
+        #searchInput {
+            width: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+            margin-bottom: 20px;
+        }
     </style>
 </head>
 <body>
     <h1>Minha Loja de Produtos</h1>
 
-    <?php if (isset($_SESSION['login'])): ?>
-    <form method="post" action="index.php">
-        <input type="hidden" name="logout" value="1">
-        <input type="submit" value="Logout">
+    <!-- Formulário de pesquisa -->
+    <form id="searchForm" method="GET">
+        <input type="text" id="searchInput" name="q" placeholder="Pesquisar...">
     </form>
-    <?php endif; ?>
 
-    <div class="container">
-        <?php
-        $host = "localhost"; // host do banco de dados
-        $username = "root"; // nome de usuário do banco de dados
-        $password = ""; // senha do banco de dados
-        $dbname = "ProjetoDEVWEB3"; // nome do banco de dados
-
-        // Conexão com o banco de dados
-        $conn = new mysqli($host, $username, $password, $dbname);
-
-        // Verifica se houve algum erro na conexão
-        if ($conn->connect_error) {
-            die("Erro ao conectar ao banco de dados: " . $conn->connect_error);
-        }
-
-        $sql = "SELECT id, nome, descricao, preco, imagem FROM produto";
-        $stmt = $conn->prepare($sql);
-        $stmt->execute();
-
-        $result = $stmt->get_result();
-
-        if ($result->num_rows > 0) {
-            while ($row = $result->fetch_assoc()) {
-                echo "<form method='post' action='./src/view/produto.php'>";
-                echo "<input type='hidden' name='id' value='" . $row["id"] . "'>";
-                echo "<button type='submit' style='border: none; background: none; padding: 0; text-decoration: none; color: inherit;'>";
-                echo "<div class='card'>";
-                echo "<img src='data:image/jpeg;base64," . base64_encode($row["imagem"]) . "'>";
-                echo "<div class='card-content'>";
-                echo "<h3>" . $row["nome"] . "</h3>";
-                echo "<p>" . $row["descricao"] . "</p>";
-                echo "<p class='price'>R$" . number_format($row["preco"], 2, ',', '.') . "</p>";
-                echo "</div>";
-                echo "</div>";
-                echo "</button>";
-                echo "</form>";
-            }
-        } else {
-            echo "Nenhum produto encontrado.";
-        }
-
-        $stmt->close();
-        $conn->close();
-        ?>
+    <div class="container" id="productsContainer">
+        <!-- Resultados da pesquisa serão exibidos aqui -->
     </div>
+
+    <script>
+        // Função para atualizar os produtos exibidos com base na pesquisa
+        function updateProducts() {
+            var searchQuery = document.getElementById('searchInput').value;
+            var url = 'search.php?q=' + encodeURIComponent(searchQuery);
+
+            fetch(url)
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById('productsContainer').innerHTML = data;
+                });
+        }
+
+        // Adiciona um ouvinte de eventos ao campo de pesquisa para atualizar os produtos enquanto o usuário digita
+        document.getElementById('searchInput').addEventListener('input', function(event) {
+            updateProducts(); // Atualiza os produtos exibidos
+        });
+
+        // Atualiza os produtos iniciais ao carregar a página
+        updateProducts();
+    </script>
 </body>
 </html>
