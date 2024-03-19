@@ -31,6 +31,7 @@ if (isset($_POST['id_produto']) && isset($_POST['action'])) {
     }
 }
 
+
 ?>
 
 <!DOCTYPE html>
