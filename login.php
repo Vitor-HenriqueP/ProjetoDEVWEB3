@@ -14,6 +14,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             // Login bem-sucedido
             session_start();
             $_SESSION['login'] = $login;
+            $_SESSION['tipo_usuario'] = $row['tipo_usuario']; // Armazena o tipo de usuário na sessão
             header('Location: index.php');
             exit();
         } else {

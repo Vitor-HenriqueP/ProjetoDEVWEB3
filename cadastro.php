@@ -5,7 +5,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $nome = $_POST['nome'];
     $login = $_POST['login'];
     $senha = $_POST['senha'];
-    $senha_hash = password_hash($senha, PASSWORD_DEFAULT); // Gerar hash da senha
+    $senha_hash = password_hash($senha, PASSWORD_DEFAULT); // Gerar hash da senha    
+    $tipo_usuario = 2;
+
 
     $sql = "INSERT INTO usuarios (nome, login, senha) VALUES ('$nome', '$login', '$senha_hash')";
 
@@ -37,11 +39,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <label for="senha">Senha:</label><br>
         <input type="password" id="senha" name="senha" required><br><br>
 
-        <label for="tipo_usuario">Tipo de Usuário:</label><br>
-        <select id="tipo_usuario" name="tipo_usuario" required>
-            <option value="admin">Administrador</option>
-            <option value="comum">Usuário Comum</option>
-        </select><br><br>
+      
 
         <input type="submit" value="Cadastrar">
     </form>

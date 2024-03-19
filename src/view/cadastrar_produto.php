@@ -1,3 +1,18 @@
+<?php
+session_start();
+
+$tipo_usuario = null;
+
+if (isset($_SESSION['tipo_usuario'])) {
+    $tipo_usuario = $_SESSION['tipo_usuario'];
+}
+
+if ($tipo_usuario != 1) {
+    header('Location: index.php'); // Redireciona para a página inicial se o usuário não for do tipo 1
+    exit();
+}
+?>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -22,7 +37,6 @@
     </form>
 
     <?php
-    require'../../validador_acesso.php';
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $host = "localhost"; // host do banco de dados
         $username = "root"; // nome de usuário do banco de dados
