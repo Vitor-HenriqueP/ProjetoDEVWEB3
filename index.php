@@ -78,10 +78,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['logout'])) {
 <body>
     <h1>Minha Loja de Produtos</h1>
 
+    <?php if (isset($_SESSION['login'])): ?>
     <form method="post" action="index.php">
         <input type="hidden" name="logout" value="1">
         <input type="submit" value="Logout">
     </form>
+    <?php endif; ?>
 
     <div class="container">
         <?php
