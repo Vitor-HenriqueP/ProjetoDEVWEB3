@@ -81,14 +81,28 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['logout'])) {
             color: #333;
             font-size: 16px;
         }
+
+        .btn-cadastrar {
+            display: none;
+            margin-bottom: 20px;
+        }
     </style>
 </head>
 
 <body>
     <h1>Minha Loja de Produtos</h1>
-    <a href="login.php">login<i class="fas fa-user"></i></a>
+    <input style="width: 800px" type="text" id="searchInput" placeholder="Pesquisar produtos">
+
+    <?php if (!isset($_SESSION['login'])) : ?>
+        <a href="login.php">login<i class="fas fa-user"></i></a>
+
+    <?php endif; ?>
     <br>
     <a href="src/view/carrinho.php">Carrinho<i class="fas fa-user"></i></a>
+    <br>
+    <?php if (isset($_SESSION['login']) && $_SESSION['tipo_usuario'] == 1) : ?>
+        <a href="src/view/cadastrar_produto.php">cadastrar_produto</a>
+    <?php endif; ?>
 
     <?php if (isset($_SESSION['login'])) : ?>
         <form method="post" action="index.php">
@@ -97,7 +111,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['logout'])) {
         </form>
     <?php endif; ?>
 
-    <input type="text" id="searchInput" placeholder="Pesquisar produtos">
 
     <div class="container">
         <?php

@@ -75,5 +75,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         <input type="submit" value="Cadastrar">
     </form>
+    <a href="../../index.php">Voltar </a>
 </body>
 </html>
