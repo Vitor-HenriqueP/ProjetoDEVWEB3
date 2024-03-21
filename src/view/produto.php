@@ -1,21 +1,10 @@
 <?php
 session_start();
 
-$host = "localhost"; // host do banco de dados
-$username = "root"; // nome de usuário do banco de dados
-$password = ""; // senha do banco de dados
-$dbname = "ProjetoDEVWEB3"; // nome do banco de dados
+include '../../conexao.php'; // Inclua o arquivo de conexão
 
-// Conexão com o banco de dados
-$conn = new mysqli($host, $username, $password, $dbname);
-
-// Verifica se houve algum erro na conexão
-if ($conn->connect_error) {
-    die("Erro ao conectar ao banco de dados: " . $conn->connect_error);
-}
-
-// Verifica se o ID do produto foi enviado via POST
-if (isset($_POST['id'])) {
+// Verifica se o ID do produto foi enviado via POST e é um número inteiro válido
+if (isset($_POST['id']) && is_numeric($_POST['id'])) {
     $id = $_POST['id'];
 
     // Consulta SQL para obter os detalhes do produto com base no ID
@@ -35,7 +24,7 @@ if (isset($_POST['id'])) {
             <meta charset="UTF-8">
             <meta http-equiv="X-UA-Compatible" content="IE=edge">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title><?php echo $row['nome']; ?></title>
+            <title><?php echo htmlspecialchars($row['nome']); ?></title>
             <style>
                 body {
                     font-family: Arial, sans-serif;
@@ -75,32 +64,61 @@ if (isset($_POST['id'])) {
                     font-weight: bold;
                     margin-bottom: 20px;
                 }
+                form {
+                    margin-top: 20px;
+                }
+                form input[type="submit"] {
+                    padding: 10px 20px;
+                    background-color: #007bff;
+                    color: white;
+                    border: none;
+                    cursor: pointer;
+                }
+                form input[type="submit"]:hover {
+                    background-color: #0056b3;
+                }
             </style>
         </head>
         <body>
         <div class="container">
             <div class="product">
                 <div class="product-image">
-                    <img src="data:image/jpeg;base64,<?php echo base64_encode($row['imagem']); ?>" alt="<?php echo $row['nome']; ?>">
+                    <img src="data:image/jpeg;base64,<?php echo base64_encode($row['imagem']); ?>" alt="<?php echo htmlspecialchars($row['nome']); ?>">
                 </div>
                 <div class="product-info">
-                    <h1 class="product-title"><?php echo $row['nome']; ?></h1>
-                    <p class="product-description"><?php echo $row['descricao']; ?></p>
+                    <h1 class="product-title"><?php echo htmlspecialchars($row['nome']); ?></h1>
+                    <p class="product-description"><?php echo htmlspecialchars($row['descricao']); ?></p>
                     <p class="product-price">R$<?php echo number_format($row['preco'], 2, ',', '.'); ?></p>
                     <?php
-                    // Verifica se o usuário está logado
+                    // Verifica se o usuário está logado antes de mostrar o botão de adicionar ao carrinho
                     if (isset($_SESSION['login'])) {
-                        echo "<form method='post' action='../../adicionar_carrinho.php'>";
+                        // Formulário para adicionar ao carrinho
+                        echo "<form method='post' action='../../adicionar_carrinho.php' onsubmit='return checkLogin()'>";
                         echo "<input type='hidden' name='id_produto' value='$id'>";
                         echo "<input type='submit' value='Adicionar ao Carrinho'>";
                         echo "</form>";
                     } else {
-                        echo "<p>Faça login para adicionar este produto ao carrinho.</p>";
+                        // Mostra mensagem e redireciona para a página de login
+                        echo "<p>Faça login para adicionar ao carrinho</p>";
+                        echo "<button onclick='redirectToLogin()'>Login</button>";
                     }
                     ?>
                 </div>
             </div>
         </div>
+        <script>
+            function checkLogin() {
+                if (!<?php echo isset($_SESSION['login']) ? 'true' : 'false'; ?>) {
+                    alert('Faça login para adicionar ao carrinho');
+                    return false;
+                }
+                return true;
+            }
+
+            function redirectToLogin() {
+                window.location.href = '../../login.php';
+            }
+        </script>
         </body>
         </html>
         <?php
@@ -108,7 +126,7 @@ if (isset($_POST['id'])) {
         echo "Produto não encontrado.";
     }
 } else {
-    echo "ID do produto não especificado.";
+    echo "ID do produto não especificado ou inválido.";
 }
 
 $stmt->close();

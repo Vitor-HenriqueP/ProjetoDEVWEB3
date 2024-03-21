@@ -10,7 +10,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $senha = $_POST['senha'];
     $senha_hash = password_hash($senha, PASSWORD_DEFAULT); // Gerar hash da senha    
 
-    if ($usuario->cadastrarUsuario($nome, $login, $senha_hash)) {
+    // Preparar a query SQL usando um prepared statement
+    $stmt = $conn->prepare("INSERT INTO usuarios (nome, login, senha) VALUES (?, ?, ?)");
+    $stmt->bind_param("sss", $nome, $login, $senha_hash);
+    
+    if ($stmt->execute()) {
         echo "Usuário cadastrado com sucesso!";
     } else {
         echo "Erro ao cadastrar o usuário.";
@@ -38,8 +42,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         <label for="senha">Senha:</label><br>
         <input type="password" id="senha" name="senha" required><br><br>
-
-      
 
         <input type="submit" value="Cadastrar">
     </form>
