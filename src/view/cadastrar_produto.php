@@ -73,7 +73,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <input type="number" id="preco" name="preco" step="0.01" required><br><br>
 
         <label for="imagem">Imagem:</label><br>
-        <input type="file" id="imagem" name="imagem" accept="image/*"><br><br>
+        <input type="file" id="imagem" name="imagem" accept="image/*"required><br><br>
 
         <input type="submit" value="Cadastrar">
     </form>

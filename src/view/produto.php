@@ -105,13 +105,26 @@ if (isset($_POST['id']) && is_numeric($_POST['id'])) {
                         <a href="../../index.php">Voltar para a pagina inicial</a>
 
                         <?php
-                        // Verifica se o usuário está logado antes de mostrar o botão de adicionar ao carrinho
+                        // Verifica se o usuário está logado antes de mostrar os botões de editar e excluir
                         if (isset($_SESSION['login'])) {
                             // Formulário para adicionar ao carrinho
                             echo "<form method='post' action='../../adicionar_carrinho.php' onsubmit='return checkLogin()'>";
                             echo "<input type='hidden' name='id_produto' value='$id'>";
                             echo "<input type='submit' value='Adicionar ao Carrinho'>";
                             echo "</form>";
+
+                            // Botões de editar e excluir (para usuários do tipo 1)
+                            if ($_SESSION['tipo_usuario'] == 1) {
+                                echo "<form method='post' action='editar_produto.php'>";
+                                echo "<input type='hidden' name='id' value='$id'>";
+                                echo "<input type='submit' value='Editar'>";
+                                echo "</form>";
+
+                                echo "<form method='post' action='excluir_produto.php'>";
+                                echo "<input type='hidden' name='id' value='$id'>";
+                                echo "<input type='submit' value='Excluir' onclick='return confirm(\"Tem certeza que deseja excluir este produto?\")'>";
+                                echo "</form>";
+                            }
                         } else {
                             // Mostra mensagem e redireciona para a página de login
                             echo "<p>Faça login para adicionar ao carrinho</p>";

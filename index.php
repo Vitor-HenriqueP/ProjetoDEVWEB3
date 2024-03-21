@@ -92,6 +92,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['logout'])) {
 <body>
     <h1>Minha Loja de Produtos</h1>
     <input style="width: 800px" type="text" id="searchInput" placeholder="Pesquisar produtos">
+    <br>
 
     <?php if (!isset($_SESSION['login'])) : ?>
         <a href="login.php">login<i class="fas fa-user"></i></a>
