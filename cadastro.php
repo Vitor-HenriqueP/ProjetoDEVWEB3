@@ -5,20 +5,30 @@ include 'src/models/User.php'; // Supondo que o arquivo com a definição da cla
 $usuario = new Usuario($conn); // Criando uma instância da classe Usuario
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $nome = $_POST['nome'];
-    $login = $_POST['login'];
-    $senha = $_POST['senha'];
+    $nome = filter_input(INPUT_POST, 'nome', FILTER_SANITIZE_STRING);
+    $login = filter_input(INPUT_POST, 'login', FILTER_SANITIZE_STRING);
+    $senha = filter_input(INPUT_POST, 'senha', FILTER_SANITIZE_STRING);
     $senha_hash = password_hash($senha, PASSWORD_DEFAULT); // Gerar hash da senha    
 
-    // Preparar a query SQL usando um prepared statement
-    $stmt = $conn->prepare("INSERT INTO usuarios (nome, login, senha) VALUES (?, ?, ?)");
-    $stmt->bind_param("sss", $nome, $login, $senha_hash);
+    // Verificar se o login já está em uso
+    $stmt_verificar = $conn->prepare("SELECT id FROM usuarios WHERE login = ?");
+    $stmt_verificar->bind_param("s", $login);
+    $stmt_verificar->execute();
+    $result_verificar = $stmt_verificar->get_result();
 
-    if ($stmt->execute()) {
-        echo "Usuário cadastrado com sucesso!";
-        header('Location: login.php');
+    if ($result_verificar->num_rows > 0) {
+        echo "Login já está em uso. Por favor, escolha outro.";
     } else {
-        echo "Erro ao cadastrar o usuário.";
+        // Preparar a query SQL usando um prepared statement
+        $stmt = $conn->prepare("INSERT INTO usuarios (nome, login, senha) VALUES (?, ?, ?)");
+        $stmt->bind_param("sss", $nome, $login, $senha_hash);
+
+        if ($stmt->execute()) {
+            echo "Usuário cadastrado com sucesso!";
+            header('Location: login.php');
+        } else {
+            echo "Erro ao cadastrar o usuário.";
+        }
     }
 }
 
@@ -50,9 +60,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <a href="index.php">Voltar para a pagina inicial</a>
         <br>
         <a href="login.php">Voltar para a pagina de login</a>
-
-
-
     </form>
 </body>
 

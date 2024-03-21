@@ -1,6 +1,5 @@
 <?php
 include 'conexao.php'; // Assumindo que este arquivo inclui a conexão com o banco de dados
-include 'src/models/User.php'; // Supondo que o arquivo com a classe Usuario esteja nesse caminho
 
 session_start();
 
@@ -8,7 +7,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $login = $_POST['login'];
     $senha = $_POST['senha'];
 
-    $stmt = $conn->prepare("SELECT id, login, senha, tipo_usuario FROM usuarios WHERE login = ?");
+    $stmt = $conn->prepare("SELECT id, nome, login, senha, tipo_usuario FROM usuarios WHERE login = ?");
     $stmt->bind_param("s", $login);
     $stmt->execute();
     $result = $stmt->get_result();
@@ -18,8 +17,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if (password_verify($senha, $usuarioEncontrado['senha'])) {
             // Login bem-sucedido
             $_SESSION['id'] = $usuarioEncontrado['id'];
+            $_SESSION['nome'] = $usuarioEncontrado['nome']; // Adicione esta linha para armazenar o nome do usuário na sessão
             $_SESSION['login'] = $login;
-            $_SESSION['tipo_usuario'] = $usuarioEncontrado['tipo_usuario'];
+            $_SESSION['tipo_usuario'] = $usuarioEncontrado['tipo_user']; // Corrigido para 'tipo_user'
             header('Location: index.php');
             exit();
         } else {
@@ -54,11 +54,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <input type="password" id="senha" name="senha" required><br><br>
 
         <input type="submit" value="Entrar">
-        <a href="index.php">Voltar para a pagina inicial</a>
+        <a href="index.php">Voltar para a página inicial</a>
         <br>
 
         <a href="cadastro.php">Cadastre-se</a>
-
     </form>
 </body>
 

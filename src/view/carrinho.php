@@ -3,11 +3,7 @@ include '../../conexao.php'; // Verifique o caminho do arquivo de conexão
 
 session_start();
 
-// Verifica se o usuário está logado
-if (!isset($_SESSION['login'])) {
-    header('Location: ../../login.php');
-    exit();
-}
+
 
 // Verifica se o ID do produto foi enviado por POST
 if (isset($_POST['id_produto']) && isset($_POST['action'])) {

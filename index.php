@@ -96,11 +96,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['logout'])) {
 
     <?php if (!isset($_SESSION['login'])) : ?>
         <a href="login.php">login<i class="fas fa-user"></i></a>
-
+        <br>
     <?php endif; ?>
-    <br>
-    <a href="src/view/carrinho.php">Carrinho<i class="fas fa-user"></i></a>
-    <br>
+    <?php if (!isset($_SESSION['login']) || ($_SESSION['tipo_usuario'] != 1)) : ?>
+        <a href="src/view/carrinho.php">Carrinho<i class="fas fa-user"></i></a>
+        <br>
+    <?php endif; ?>
+
     <?php if (isset($_SESSION['login']) && $_SESSION['tipo_usuario'] == 1) : ?>
         <a href="src/view/cadastrar_produto.php">cadastrar_produto</a>
     <?php endif; ?>
@@ -110,6 +112,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['logout'])) {
             <input type="hidden" name="logout" value="1">
             <input type="submit" value="Logout">
         </form>
+        <br>
+
+        <span>Bem-vindo, <?php echo $_SESSION['nome']; ?></span>
+        <br>
+
+        <a href="redefinir_login.php">Redefinir Login</a>
     <?php endif; ?>
 
 
@@ -125,21 +133,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['logout'])) {
             die("Erro ao conectar ao banco de dados: " . $conn->connect_error);
         }
 
-        $sql = "SELECT id, nome, descricao, preco, imagem FROM produto WHERE nome LIKE ?";
-        $stmt = $conn->prepare($sql);
-        $searchTerm = isset($_GET['search']) ? "%{$_GET['search']}%" : "%";
-        $searchTerm = mysqli_real_escape_string($conn, $searchTerm); // Escapando o termo de pesquisa
-        $stmt->bind_param("s", $searchTerm);
+        $sql = "SELECT id, nome, descricao, preco, imagem FROM produto";
+        $result = $conn->query($sql);
 
-        $stmt->execute();
-        $result = $stmt->get_result();
         if ($result->num_rows > 0) {
             while ($row = $result->fetch_assoc()) {
                 echo "<form method='post' action='./src/view/produto.php'>";
                 echo "<input type='hidden' name='id' value='" . $row["id"] . "'>";
                 echo "<button type='submit' style='border: none; background: none; padding: 0; text-decoration: none; color: inherit;'>";
                 echo "<div class='card'>";
-                echo "<img src='data:image/jpeg;base64," . base64_encode($row["imagem"]) . "'>";
+                echo "<img src='data:image/jpeg
+                ;base64," . base64_encode($row["imagem"]) . "'>";
                 echo "<div class='card-content'>";
                 echo "<h3>" . $row["nome"] . "</h3>";
                 echo "<p>" . $row["descricao"] . "</p>";
@@ -152,7 +156,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['logout'])) {
         } else {
             echo "Nenhum produto encontrado.";
         }
-        $stmt->close();
         $conn->close();
         ?>
     </div>
