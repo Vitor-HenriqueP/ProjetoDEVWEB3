@@ -2,8 +2,12 @@
 include '../../conexao.php'; // Verifique o caminho do arquivo de conexão
 
 session_start();
+$tipo_usuario = $_SESSION['tipo_usuario'];
 
-
+if ($tipo_usuario == 1) {
+    header('Location: ../../index.php'); // Redireciona para a página inicial se o usuário não for do tipo 1
+    exit();
+}
 
 // Verifica se o ID do produto foi enviado por POST
 if (isset($_POST['id_produto']) && isset($_POST['action'])) {
@@ -26,10 +30,6 @@ if (isset($_POST['id_produto']) && isset($_POST['action'])) {
         // Exibir a mensagem de produto adicionado ao carrinho por 3 segundos
         echo "<script>setTimeout(function() { document.getElementById('mensagem').style.display = 'none'; }, 3000);</script>";
     }
-}
-if ($tipo_usuario != 1) {
-    header('Location: ../../index.php'); // Redireciona para a página inicial se o usuário não for do tipo 1
-    exit();
 }
 
 ?>
