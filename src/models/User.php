@@ -1,7 +1,7 @@
 <?php
 class Usuario
 {
-    private $conn;
+    protected $conn;
 
     public function __construct($conn)
     {
@@ -17,13 +17,7 @@ class Usuario
         return $stmt->get_result()->fetch_assoc();
     }
 
-    public function cadastrarUsuario($nome, $login, $senha)
-    {
-        $query = "INSERT INTO usuarios (nome, login, senha) VALUES (?, ?, ?)";
-        $stmt = $this->conn->prepare($query);
-        $stmt->bind_param("sss", $nome, $login, $senha); // 'sss' indica que são três strings
-        return $stmt->execute();
-    }
+
 
     public function autenticarUsuario($login, $senha)
     {
@@ -34,4 +28,27 @@ class Usuario
         return false;
     }
 }
-?>
+
+
+class Usuario_Padrao extends Usuario
+{
+    public function cadastrarUsuario($nome, $login, $senha)
+    {
+        $tipo_usuario = 2; // Definindo o tipo de usuário como 2
+        $query = "INSERT INTO usuarios (nome, login, senha, tipo_usuario) VALUES (?, ?, ?, ?)";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bind_param("sssi", $nome, $login, $senha, $tipo_usuario); // 'sssi' indica que são três strings e uma int
+        return $stmt->execute();
+    }
+}
+class Usuario_Adm extends Usuario
+{
+    public function cadastrarUsuario($nome, $login, $senha)
+    {
+        $tipo_usuario = 1; // Definindo o tipo de usuário como 1
+        $query = "INSERT INTO usuarios (nome, login, senha, tipo_usuario) VALUES (?, ?, ?, ?)";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bind_param("sssi", $nome, $login, $senha, $tipo_usuario); // 'sssi' indica que são três strings e uma int
+        return $stmt->execute();
+    }
+}

@@ -1,14 +1,14 @@
 <?php
 include 'conexao.php';
-include 'src/models/User.php'; // Supondo que o arquivo com a definição da classe Usuario seja 'Usuario.php'
+include 'src/models/User.php';
 
-$usuario = new Usuario($conn); // Criando uma instância da classe Usuario
+$usuario = new Usuario_Padrao($conn);
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $nome = filter_input(INPUT_POST, 'nome', FILTER_SANITIZE_STRING);
     $login = filter_input(INPUT_POST, 'login', FILTER_SANITIZE_STRING);
     $senha = filter_input(INPUT_POST, 'senha', FILTER_SANITIZE_STRING);
-    $senha_hash = password_hash($senha, PASSWORD_DEFAULT); // Gerar hash da senha    
+    $senha_hash = password_hash($senha, PASSWORD_DEFAULT);
 
     // Verificar se o login já está em uso
     $stmt_verificar = $conn->prepare("SELECT id FROM usuarios WHERE login = ?");
@@ -20,7 +20,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo "Login já está em uso. Por favor, escolha outro.";
     } else {
         // Preparar a query SQL usando um prepared statement
-        $stmt = $conn->prepare("INSERT INTO usuarios (nome, login, senha) VALUES (?, ?, ?)");
+        $stmt = $conn->prepare("INSERT INTO usuarios (nome, login, senha, tipo_usuario) VALUES (?, ?, ?, 2)");
         $stmt->bind_param("sss", $nome, $login, $senha_hash);
 
         if ($stmt->execute()) {
@@ -57,9 +57,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <input type="password" id="senha" name="senha" required><br><br>
 
         <input type="submit" value="Cadastrar">
-        <a href="index.php">Voltar para a pagina inicial</a>
+        <a href="index.php">Voltar para a página inicial</a>
         <br>
-        <a href="login.php">Voltar para a pagina de login</a>
+        <a href="login.php">Voltar para a página de login</a>
     </form>
 </body>
 
