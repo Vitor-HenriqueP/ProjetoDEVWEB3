@@ -8,7 +8,7 @@ class Usuario
         $this->conn = $conn;
     }
 
-    public function findByLogin($login)
+    private function findByLogin($login)
     {
         $query = "SELECT * FROM usuarios WHERE login = ?";
         $stmt = $this->conn->prepare($query);
@@ -17,7 +17,6 @@ class Usuario
         return $stmt->get_result()->fetch_assoc();
     }
 
-
     public function cadastrarUsuario($nome, $login, $senha)
     {
         $query = "INSERT INTO usuarios (nome, login, senha) VALUES (?, ?, ?)";
@@ -25,7 +24,6 @@ class Usuario
         $stmt->bind_param("sss", $nome, $login, $senha); // 'sss' indica que são três strings
         return $stmt->execute();
     }
-
 
     public function autenticarUsuario($login, $senha)
     {
@@ -36,3 +34,4 @@ class Usuario
         return false;
     }
 }
+?>
