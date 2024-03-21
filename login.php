@@ -12,7 +12,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt->bind_param("s", $login);
     $stmt->execute();
     $result = $stmt->get_result();
-    
+
     if ($result->num_rows == 1) {
         $usuarioEncontrado = $result->fetch_assoc();
         if (password_verify($senha, $usuarioEncontrado['senha'])) {
@@ -33,15 +33,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
 </head>
+
 <body>
     <h1>Login</h1>
-    <?php if(isset($erro)) { echo "<p>$erro</p>"; } ?>
+    <?php if (isset($erro)) {
+        echo "<p>$erro</p>";
+    } ?>
     <form method="post" action="login.php">
         <label for="login">Login:</label><br>
         <input type="text" id="login" name="login" required><br><br>
@@ -52,9 +56,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <input type="submit" value="Entrar">
         <a href="index.php">Voltar para a pagina inicial</a>
         <br>
-    
+
         <a href="cadastro.php">Cadastre-se</a>
 
     </form>
 </body>
+
 </html>

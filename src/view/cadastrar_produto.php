@@ -55,9 +55,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>Cadastro de Produto</title>
 </head>
+
 <body>
     <h2>Cadastro de Produto</h2>
     <form method="post" enctype="multipart/form-data">
@@ -77,4 +79,5 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </form>
     <a href="../../index.php">Voltar </a>
 </body>
+
 </html>

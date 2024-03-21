@@ -36,12 +36,14 @@ if (isset($_POST['id_produto']) && isset($_POST['action'])) {
 
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Carrinho</title>
 </head>
+
 <body>
     <h1>Carrinho</h1>
 
@@ -89,7 +91,6 @@ if (isset($_POST['id_produto']) && isset($_POST['action'])) {
                 // Recarrega a página após 2 segundos
                 echo "<script>setTimeout(function(){ location.reload(); }, 500);</script>";
                 echo "<div id='compra-realizada' style='background-color: #dff0d8; color: #3c763d; padding: 10px; margin-top: 10px;'>Compra realizada!</div>";
-
             } else {
                 echo "Erro ao realizar a compra: " . $conn->error;
             }
@@ -103,6 +104,7 @@ if (isset($_POST['id_produto']) && isset($_POST['action'])) {
 
     <div class="card-mensagem" id="mensagem"><?php echo isset($mensagem) ? $mensagem : ''; ?></div>
 </body>
+
 </html>
 
 <?php

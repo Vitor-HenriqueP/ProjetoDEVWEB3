@@ -1,3 +1,3 @@
 <?php
-define('Title','Cadastro Alunos');
+define('Title','Estação Digital');
 ?>

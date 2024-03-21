@@ -17,9 +17,10 @@ if (isset($_POST['id']) && is_numeric($_POST['id'])) {
 
     if ($result->num_rows > 0) {
         $row = $result->fetch_assoc();
-        ?>
+?>
         <!DOCTYPE html>
         <html lang="pt-br">
+
         <head>
             <meta charset="UTF-8">
             <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -32,41 +33,51 @@ if (isset($_POST['id']) && is_numeric($_POST['id'])) {
                     padding: 0;
                     background-color: #f5f5f5;
                 }
+
                 .container {
                     max-width: 1200px;
                     margin: 0 auto;
                     padding: 20px;
                 }
+
                 .product {
                     display: flex;
                     align-items: flex-start;
                 }
+
                 .product-image {
                     flex: 1;
                     margin-right: 20px;
                 }
+
                 .product-image img {
                     max-width: 100%;
                     height: auto;
                 }
+
                 .product-info {
                     flex: 2;
                 }
+
                 .product-title {
                     font-size: 24px;
                     margin-bottom: 10px;
                 }
+
                 .product-description {
                     margin-bottom: 20px;
                 }
+
                 .product-price {
                     font-size: 28px;
                     font-weight: bold;
                     margin-bottom: 20px;
                 }
+
                 form {
                     margin-top: 20px;
                 }
+
                 form input[type="submit"] {
                     padding: 10px 20px;
                     background-color: #007bff;
@@ -74,56 +85,59 @@ if (isset($_POST['id']) && is_numeric($_POST['id'])) {
                     border: none;
                     cursor: pointer;
                 }
+
                 form input[type="submit"]:hover {
                     background-color: #0056b3;
                 }
             </style>
         </head>
-        <body>
-        <div class="container">
-            <div class="product">
-                <div class="product-image">
-                    <img src="data:image/jpeg;base64,<?php echo base64_encode($row['imagem']); ?>" alt="<?php echo htmlspecialchars($row['nome']); ?>">
-                </div>
-                <div class="product-info">
-                    <h1 class="product-title"><?php echo htmlspecialchars($row['nome']); ?></h1>
-                    <p class="product-description"><?php echo htmlspecialchars($row['descricao']); ?></p>
-                    <p class="product-price">R$<?php echo number_format($row['preco'], 2, ',', '.'); ?></p>
-                    <a href="../../index.php">Voltar para a pagina inicial</a>
 
-                    <?php
-                    // Verifica se o usuário está logado antes de mostrar o botão de adicionar ao carrinho
-                    if (isset($_SESSION['login'])) {
-                        // Formulário para adicionar ao carrinho
-                        echo "<form method='post' action='../../adicionar_carrinho.php' onsubmit='return checkLogin()'>";
-                        echo "<input type='hidden' name='id_produto' value='$id'>";
-                        echo "<input type='submit' value='Adicionar ao Carrinho'>";
-                        echo "</form>";
-                    } else {
-                        // Mostra mensagem e redireciona para a página de login
-                        echo "<p>Faça login para adicionar ao carrinho</p>";
-                        echo "<button onclick='redirectToLogin()'>Login</button>";
-                    }
-                    ?>
+        <body>
+            <div class="container">
+                <div class="product">
+                    <div class="product-image">
+                        <img src="data:image/jpeg;base64,<?php echo base64_encode($row['imagem']); ?>" alt="<?php echo htmlspecialchars($row['nome']); ?>">
+                    </div>
+                    <div class="product-info">
+                        <h1 class="product-title"><?php echo htmlspecialchars($row['nome']); ?></h1>
+                        <p class="product-description"><?php echo htmlspecialchars($row['descricao']); ?></p>
+                        <p class="product-price">R$<?php echo number_format($row['preco'], 2, ',', '.'); ?></p>
+                        <a href="../../index.php">Voltar para a pagina inicial</a>
+
+                        <?php
+                        // Verifica se o usuário está logado antes de mostrar o botão de adicionar ao carrinho
+                        if (isset($_SESSION['login'])) {
+                            // Formulário para adicionar ao carrinho
+                            echo "<form method='post' action='../../adicionar_carrinho.php' onsubmit='return checkLogin()'>";
+                            echo "<input type='hidden' name='id_produto' value='$id'>";
+                            echo "<input type='submit' value='Adicionar ao Carrinho'>";
+                            echo "</form>";
+                        } else {
+                            // Mostra mensagem e redireciona para a página de login
+                            echo "<p>Faça login para adicionar ao carrinho</p>";
+                            echo "<button onclick='redirectToLogin()'>Login</button>";
+                        }
+                        ?>
+                    </div>
                 </div>
             </div>
-        </div>
-        <script>
-            function checkLogin() {
-                if (!<?php echo isset($_SESSION['login']) ? 'true' : 'false'; ?>) {
-                    alert('Faça login para adicionar ao carrinho');
-                    return false;
+            <script>
+                function checkLogin() {
+                    if (!<?php echo isset($_SESSION['login']) ? 'true' : 'false'; ?>) {
+                        alert('Faça login para adicionar ao carrinho');
+                        return false;
+                    }
+                    return true;
                 }
-                return true;
-            }
 
-            function redirectToLogin() {
-                window.location.href = '../../login.php';
-            }
-        </script>
+                function redirectToLogin() {
+                    window.location.href = '../../login.php';
+                }
+            </script>
         </body>
+
         </html>
-        <?php
+<?php
     } else {
         echo "Produto não encontrado.";
     }
