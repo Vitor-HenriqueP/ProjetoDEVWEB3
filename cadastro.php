@@ -16,6 +16,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     
     if ($stmt->execute()) {
         echo "Usuário cadastrado com sucesso!";
+        header('Location: login.php');
     } else {
         echo "Erro ao cadastrar o usuário.";
     }
@@ -44,6 +45,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <input type="password" id="senha" name="senha" required><br><br>
 
         <input type="submit" value="Cadastrar">
+        <a href="index.php">Voltar para a pagina inicial</a>
+        <br>
+        <a href="login.php">Voltar para a pagina de login</a>
+
+
+
     </form>
 </body>
 </html>

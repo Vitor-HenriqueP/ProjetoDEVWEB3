@@ -50,6 +50,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <input type="password" id="senha" name="senha" required><br><br>
 
         <input type="submit" value="Entrar">
+        <a href="index.php">Voltar para a pagina inicial</a>
+        <br>
+    
+        <a href="cadastro.php">Cadastre-se</a>
+
     </form>
 </body>
 </html>

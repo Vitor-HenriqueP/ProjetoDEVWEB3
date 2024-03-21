@@ -24,6 +24,11 @@ if (isset($_POST['id_produto']) && isset($_POST['action'])) {
         $stmt = $conn->prepare("INSERT INTO carrinho (id_usuario, id_produto) VALUES (?, ?)");
         $stmt->bind_param("ii", $id_usuario, $id_produto);
         $stmt->execute();
+
+        // Definir uma mensagem de sucesso para exibir
+        $mensagem = "Produto adicionado ao carrinho.";
+        // Exibir a mensagem de produto adicionado ao carrinho por 3 segundos
+        echo "<script>setTimeout(function() { document.getElementById('mensagem').style.display = 'none'; }, 3000);</script>";
     }
 }
 
@@ -82,7 +87,7 @@ if (isset($_POST['id_produto']) && isset($_POST['action'])) {
             $stmt_delete->bind_param("i", $id_usuario);
             if ($stmt_delete->execute()) {
                 // Recarrega a página após 2 segundos
-                echo "<script>setTimeout(function(){ location.reload(); }, 1000);</script>";
+                echo "<script>setTimeout(function(){ location.reload(); }, 500);</script>";
                 echo "<div id='compra-realizada' style='background-color: #dff0d8; color: #3c763d; padding: 10px; margin-top: 10px;'>Compra realizada!</div>";
 
             } else {
@@ -95,6 +100,8 @@ if (isset($_POST['id_produto']) && isset($_POST['action'])) {
     ?>
 
     <a href="../../index.php">Voltar para a página inicial</a>
+
+    <div class="card-mensagem" id="mensagem"><?php echo isset($mensagem) ? $mensagem : ''; ?></div>
 </body>
 </html>
 

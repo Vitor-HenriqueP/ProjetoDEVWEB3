@@ -89,6 +89,8 @@ if (isset($_POST['id']) && is_numeric($_POST['id'])) {
                     <h1 class="product-title"><?php echo htmlspecialchars($row['nome']); ?></h1>
                     <p class="product-description"><?php echo htmlspecialchars($row['descricao']); ?></p>
                     <p class="product-price">R$<?php echo number_format($row['preco'], 2, ',', '.'); ?></p>
+                    <a href="../../index.php">Voltar para a pagina inicial</a>
+
                     <?php
                     // Verifica se o usuário está logado antes de mostrar o botão de adicionar ao carrinho
                     if (isset($_SESSION['login'])) {

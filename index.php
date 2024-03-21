@@ -8,6 +8,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['logout'])) {
 ?>
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>Minha Loja</title>
     <style>
@@ -17,6 +18,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['logout'])) {
             padding: 0;
             background-color: #f4f4f4;
         }
+
         h1 {
             text-align: center;
             padding: 20px 0;
@@ -24,6 +26,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['logout'])) {
             color: white;
             margin: 0;
         }
+
         .container {
             width: 80%;
             margin: 0 auto;
@@ -32,6 +35,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['logout'])) {
             flex-wrap: wrap;
             justify-content: space-around;
         }
+
         .card {
             width: 200px;
             background-color: white;
@@ -41,22 +45,27 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['logout'])) {
             overflow: hidden;
             transition: transform 0.3s;
         }
+
         .card:hover {
             transform: scale(1.05);
         }
+
         .card img {
             width: 100%;
             height: 150px;
             object-fit: cover;
         }
+
         .card-content {
             padding: 15px;
         }
+
         .card-content h3 {
             margin: 0;
             font-size: 16px;
             color: #333;
         }
+
         .card-content p {
             margin: 10px 0;
             color: #666;
@@ -66,6 +75,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['logout'])) {
             overflow: hidden;
             text-overflow: ellipsis;
         }
+
         .card-content .price {
             font-weight: bold;
             color: #333;
@@ -73,14 +83,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['logout'])) {
         }
     </style>
 </head>
+
 <body>
     <h1>Minha Loja de Produtos</h1>
-    
-    <?php if (isset($_SESSION['login'])): ?>
-    <form method="post" action="index.php">
-        <input type="hidden" name="logout" value="1">
-        <input type="submit" value="Logout">
-    </form>
+    <a href="login.php">login<i class="fas fa-user"></i></a>
+    <br>
+    <a href="src/view/carrinho.php">Carrinho<i class="fas fa-user"></i></a>
+
+    <?php if (isset($_SESSION['login'])) : ?>
+        <form method="post" action="index.php">
+            <input type="hidden" name="logout" value="1">
+            <input type="submit" value="Logout">
+        </form>
     <?php endif; ?>
 
     <input type="text" id="searchInput" placeholder="Pesquisar produtos">
@@ -96,13 +110,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['logout'])) {
         if ($conn->connect_error) {
             die("Erro ao conectar ao banco de dados: " . $conn->connect_error);
         }
-        
+
         $sql = "SELECT id, nome, descricao, preco, imagem FROM produto WHERE nome LIKE ?";
         $stmt = $conn->prepare($sql);
         $searchTerm = isset($_GET['search']) ? "%{$_GET['search']}%" : "%";
         $searchTerm = mysqli_real_escape_string($conn, $searchTerm); // Escapando o termo de pesquisa
         $stmt->bind_param("s", $searchTerm);
-        
+
         $stmt->execute();
         $result = $stmt->get_result();
         if ($result->num_rows > 0) {
@@ -147,4 +161,5 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['logout'])) {
         });
     </script>
 </body>
+
 </html>
