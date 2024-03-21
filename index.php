@@ -117,7 +117,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['logout'])) {
         <span>Bem-vindo, <?php echo $_SESSION['nome']; ?></span>
         <br>
 
-        <a href="redefinir_login.php">Redefinir Login</a>
+        <a href="redefinir_senha.php">Redefinir Senha</a>
+        <a href="redefinir_nome.php">Redefinir Nome</a>
+
     <?php endif; ?>
 
 
