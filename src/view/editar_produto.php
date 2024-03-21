@@ -2,10 +2,13 @@
 session_start();
 
 // Verifica se o usuário está logado e se é do tipo 1 (administrador)
+// Verifica se o usuário está logado e se é do tipo 1 (administrador)
 if (!isset($_SESSION['login']) || $_SESSION['tipo_usuario'] != 1) {
     header('Location: ../../index.php');
     exit();
 }
+
+
 
 // Verifica se foi enviado o ID do produto a ser editado
 if (!isset($_POST['id']) || !is_numeric($_POST['id'])) {

@@ -27,6 +27,10 @@ if (isset($_POST['id_produto']) && isset($_POST['action'])) {
         echo "<script>setTimeout(function() { document.getElementById('mensagem').style.display = 'none'; }, 3000);</script>";
     }
 }
+if ($tipo_usuario != 1) {
+    header('Location: ../../index.php'); // Redireciona para a página inicial se o usuário não for do tipo 1
+    exit();
+}
 
 ?>
 

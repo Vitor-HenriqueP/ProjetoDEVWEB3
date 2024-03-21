@@ -19,7 +19,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION['id'] = $usuarioEncontrado['id'];
             $_SESSION['nome'] = $usuarioEncontrado['nome']; // Adicione esta linha para armazenar o nome do usuário na sessão
             $_SESSION['login'] = $login;
-            $_SESSION['tipo_usuario'] = $usuarioEncontrado['tipo_user']; // Corrigido para 'tipo_user'
+            $_SESSION['tipo_usuario'] = $usuarioEncontrado['tipo_usuario']; // Corrigido para 'tipo_user'
             header('Location: index.php');
             exit();
         } else {
