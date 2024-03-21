@@ -45,6 +45,7 @@ class Usuario_Adm extends Usuario
 {
     public function cadastrarUsuario($nome, $login, $senha)
     {
+        
         $tipo_usuario = 1; // Definindo o tipo de usuário como 1
         $query = "INSERT INTO usuarios (nome, login, senha, tipo_usuario) VALUES (?, ?, ?, ?)";
         $stmt = $this->conn->prepare($query);
