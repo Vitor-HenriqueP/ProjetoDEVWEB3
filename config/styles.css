@@ -68,6 +68,20 @@ h1 {
     font-size: 16px;
 }
 
+.btn-carrinho {
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 8px 16px;
+    cursor: pointer;
+    transition: box-shadow 0.3s;
+}
+
+.btn-carrinho:hover {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
 .btn-cadastrar {
     display: none;
     margin-bottom: 20px;

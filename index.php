@@ -78,6 +78,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['logout'])) {
                 echo "<h3>" . $row["nome"] . "</h3>";
                 echo "<p>" . $row["descricao"] . "</p>";
                 echo "<p class='price'>R$" . number_format($row["preco"], 2, ',', '.') . "</p>";
+                echo "<button type='submit' class='btn-carrinho'>Ver detalhes</button>";
                 echo "</div>";
                 echo "</div>";
                 echo "</button>";
