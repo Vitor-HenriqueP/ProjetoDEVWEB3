@@ -72,18 +72,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['logout'])) {
                 echo "<input type='hidden' name='id' value='" . $row["id"] . "'>";
                 echo "<button type='submit' style='border: none; background: none; padding: 0; text-decoration: none; color: inherit;'>";
                 echo "<div class='card'>";
-                echo "<img src='data:image/jpeg
-                ;base64," . base64_encode($row["imagem"]) . "'>";
+                echo "<img src='data:image/jpeg;base64," . base64_encode($row["imagem"]) . "'>";
                 echo "<div class='card-content'>";
                 echo "<h3>" . $row["nome"] . "</h3>";
-                echo "<p>" . $row["descricao"] . "</p>";
+                
+                // Truncar a descrição para 20 palavras
+                $descricao = explode(' ', $row["descricao"]);
+                $descricao = array_slice($descricao, 0, 5);
+                $descricao = implode(' ', $descricao);
+                
+                echo "<p>" . $descricao . "</p>";
                 echo "<p class='price'>R$" . number_format($row["preco"], 2, ',', '.') . "</p>";
-                echo "<button type='submit' class='btn-carrinho'>Ver detalhes</button>";
                 echo "</div>";
                 echo "</div>";
                 echo "</button>";
                 echo "</form>";
             }
+            
         } else {
             echo "Nenhum produto encontrado.";
         }

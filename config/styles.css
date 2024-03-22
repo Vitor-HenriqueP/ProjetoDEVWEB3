@@ -14,7 +14,7 @@ h1 {
 }
 
 .container {
-    width: 80%;
+    width: 100%;
     margin: 0 auto;
     padding: 20px;
     display: flex;
@@ -30,6 +30,7 @@ h1 {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     overflow: hidden;
     transition: transform 0.3s;
+    padding: 30px;
 }
 
 .card:hover {
@@ -37,7 +38,7 @@ h1 {
 }
 
 .card img {
-    width: 100%;
+    width: 150px;
     height: 150px;
     object-fit: cover;
 }

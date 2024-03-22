@@ -68,8 +68,12 @@ if (isset($_POST['id_produto']) && isset($_POST['action'])) {
 
         while ($row = $result->fetch_assoc()) {
             $total += $row['preco'] * $row['quantidade']; // Adiciona o preço do produto ao total
-            echo "<p>{$row['nome']} - {$row['descricao']} - R$ {$row['preco']} - Quantidade: {$row['quantidade']}</p>";
-            echo "<img width = 100px src='data:image/jpeg;base64," . base64_encode($row['imagem']) . "' alt='{$row['nome']}'>";
+            $descricao = explode(' ', $row["descricao"]);
+            $descricao = array_slice($descricao, 0, 20);
+            $descricao = implode(' ', $descricao);
+    
+            echo "{$descricao} - R$ {$row['preco']} - Quantidade: {$row['quantidade']}</p>";
+            echo "<img width='100px' src='data:image/jpeg;base64," . base64_encode($row['imagem']) . "' alt='{$row['nome']}'>";
             echo "<form method='post'>";
             echo "<input type='hidden' name='id_produto' value='{$row['id_produto']}'>";
             echo "<input type='hidden' name='action' value='remove'>";
