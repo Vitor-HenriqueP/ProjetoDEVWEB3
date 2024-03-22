@@ -2,7 +2,7 @@
 include 'conexao.php';
 include 'src/models/User.php';
 
-$usuario = new Usuario_Padrao($conn);
+$usuario = new Usuario_Adm($conn);
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $nome = filter_input(INPUT_POST, 'nome', FILTER_SANITIZE_STRING);
@@ -41,7 +41,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </head>
 
 <body>
-    <h1>Cadastro de Usuário</h1>
+    <h1>Cadastro de Usuário Administrador</h1>
     <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
         <label for="nome">Nome:</label><br>
         <input type="text" id="nome" name="nome" required><br><br>
@@ -55,7 +55,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <input type="submit" value="Cadastrar">
         <a href="index.php">Voltar para a página inicial</a>
         <br>
-        <a href="login.php">Voltar para a página de login</a>
     </form>
 </body>
 

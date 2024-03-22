@@ -29,27 +29,32 @@ class Usuario
     }
 }
 
-
 class Usuario_Padrao extends Usuario
 {
     public function cadastrarUsuario($nome, $login, $senha)
     {
-        $tipo_usuario = 2; // Definindo o tipo de usuário como 2
-        $query = "INSERT INTO usuarios (nome, login, senha, tipo_usuario) VALUES (?, ?, ?, ?)";
+        $query = "INSERT INTO usuarios (nome, login, senha, tipo_usuario) VALUES (?, ?, ?, 2)";
         $stmt = $this->conn->prepare($query);
-        $stmt->bind_param("sssi", $nome, $login, $senha, $tipo_usuario); // 'sssi' indica que são três strings e uma int
+        $stmt->bind_param("sss", $nome, $login, $senha); // 'sss' indica que são três strings
         return $stmt->execute();
     }
 }
+
 class Usuario_Adm extends Usuario
 {
     public function cadastrarUsuario($nome, $login, $senha)
     {
-        
-        $tipo_usuario = 1; // Definindo o tipo de usuário como 1
-        $query = "INSERT INTO usuarios (nome, login, senha, tipo_usuario) VALUES (?, ?, ?, ?)";
+        $query = "INSERT INTO usuarios (nome, login, senha, tipo_usuario) VALUES (?, ?, ?, 1)";
         $stmt = $this->conn->prepare($query);
-        $stmt->bind_param("sssi", $nome, $login, $senha, $tipo_usuario); // 'sssi' indica que são três strings e uma int
+        $stmt->bind_param("sss", $nome, $login, $senha); // 'sss' indica que são três strings
         return $stmt->execute();
     }
 }
+class Usuario_Master extends Usuario
+{
+   
+       public $tipo_usuario = 3; // Definindo o tipo de usuário como 3
+      
+}
+
+?>
