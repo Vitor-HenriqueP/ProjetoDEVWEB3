@@ -1,13 +1,14 @@
 <?php
-include '../../conexao.php'; // Verifique o caminho do arquivo de conexão
+session_start(); // Inicie a sessão no início do arquivo
 
-session_start();
+include '../../conexao.php'; // Inclua o arquivo de conexão com o banco de dados
 
+// Verifique se o usuário está logado
 if (!isset($_SESSION['login'])) {
     echo '<script>alert("Faça login para acessar o carrinho");</script>';
     echo '<script>setTimeout(function(){ window.location.href = "../../login.php"; });</script>';
     exit();
-} 
+}
 
 $tipo_usuario = isset($_SESSION['tipo_usuario']) ? $_SESSION['tipo_usuario'] : null;
 
@@ -17,7 +18,7 @@ if ($tipo_usuario !== null && $tipo_usuario != 2) {
     exit();
 }
 
-// Verifica se o ID do produto foi enviado por POST
+// Verifique se o ID do produto foi enviado por POST
 if (isset($_POST['id_produto']) && isset($_POST['action'])) {
     $id_produto = intval($_POST['id_produto']);
     $id_usuario = intval($_SESSION['id']); // Obter o ID do usuário da sessão
@@ -27,6 +28,10 @@ if (isset($_POST['id_produto']) && isset($_POST['action'])) {
         $stmt = $conn->prepare("DELETE FROM carrinho WHERE id_usuario = ? AND id_produto = ? LIMIT 1");
         $stmt->bind_param("ii", $id_usuario, $id_produto);
         $stmt->execute();
+
+        // Redireciona o usuário para a mesma página usando GET
+        header("Location: $_SERVER[PHP_SELF]");
+        exit();
     } elseif ($_POST['action'] === 'add') {
         // Adiciona um item ao carrinho
         $stmt = $conn->prepare("INSERT INTO carrinho (id_usuario, id_produto) VALUES (?, ?)");
@@ -37,9 +42,21 @@ if (isset($_POST['id_produto']) && isset($_POST['action'])) {
         $mensagem = "Produto adicionado ao carrinho.";
         // Exibir a mensagem de produto adicionado ao carrinho por 3 segundos
         echo "<script>setTimeout(function() { document.getElementById('mensagem').style.display = 'none'; }, 3000);</script>";
+
+        // Redireciona o usuário para a mesma página usando GET
+        header("Location: $_SERVER[PHP_SELF]");
+        exit();
     }
 }
 
+// Atualizar a quantidade de itens no carrinho na sessão
+$stmt_quantidade = $conn->prepare("SELECT COUNT(id_produto) as quantidade FROM carrinho WHERE id_usuario = ?");
+$stmt_quantidade->bind_param("i", $id_usuario);
+$stmt_quantidade->execute();
+$result_quantidade = $stmt_quantidade->get_result();
+$row_quantidade = $result_quantidade->fetch_assoc();
+$_SESSION['quantidade_carrinho'] = $row_quantidade['quantidade'];
+$stmt_quantidade->close();
 ?>
 
 <!DOCTYPE html>
@@ -50,6 +67,42 @@ if (isset($_POST['id_produto']) && isset($_POST['action'])) {
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Carrinho</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .product-image-button:hover .product-image {
+            transform: scale(1.1);
+        }
+
+        .product-image {
+            max-width: 100px;
+            transition: transform 0.3s;
+        }
+
+        .button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 5px 10px;
+            margin: 0;
+            cursor: pointer;
+        }
+
+        .button:hover {
+            background-color: #0056b3;
+        }
+    </style>
 </head>
 
 <body>
@@ -67,23 +120,31 @@ if (isset($_POST['id_produto']) && isset($_POST['action'])) {
         $total = 0; // Variável para armazenar o total dos produtos no carrinho
 
         while ($row = $result->fetch_assoc()) {
-            $total += $row['preco'] * $row['quantidade']; // Adiciona o preço do produto ao total
+            $total += $row['preco'] *
+            $row['quantidade']; // Adiciona o preço do produto ao total
             $descricao = explode(' ', $row["descricao"]);
             $descricao = array_slice($descricao, 0, 20);
             $descricao = implode(' ', $descricao);
-    
-            echo "{$descricao} - R$ {$row['preco']} - Quantidade: {$row['quantidade']}</p>";
-            echo "<img width='100px' src='data:image/jpeg;base64," . base64_encode($row['imagem']) . "' alt='{$row['nome']}'>";
+
+            echo "<form method='post' action='../../src/view/produto.php'>";
+            echo "<input type='hidden' name='id' value='" . $row["id_produto"] . "'>";
+            echo "<button type='submit' style='background: none; border: none; padding: 0; margin: 0;' class='product-image-button'>";
+            echo "<img src='data:image/jpeg;base64," . base64_encode($row['imagem']) . "' alt='" . $row['nome'] . "' class='product-image'>";
+            echo "</button>";
+            echo "</form>";
+
+            echo "<p>{$descricao} - R$ {$row['preco']} - Quantidade: {$row['quantidade']}</p>";
+
             echo "<form method='post'>";
             echo "<input type='hidden' name='id_produto' value='{$row['id_produto']}'>";
             echo "<input type='hidden' name='action' value='remove'>";
-            echo "<input type='submit' value='-'>";
+            echo "<button type='submit' class='button'>-</button>";
             echo "</form>";
 
             echo "<form method='post'>";
             echo "<input type='hidden' name='id_produto' value='{$row['id_produto']}'>";
             echo "<input type='hidden' name='action' value='add'>";
-            echo "<input type='submit' value='+'>";
+            echo "<button type='submit' class='button'>+</button>";
             echo "</form>";
         }
 
@@ -92,7 +153,7 @@ if (isset($_POST['id_produto']) && isset($_POST['action'])) {
 
         // Botão Comprar
         echo "<form method='post'>";
-        echo "<input type='submit' name='comprar' value='Comprar'>";
+        echo "<input type='submit' name='comprar' value='Comprar' class='button'>";
         echo "</form>";
 
         if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['comprar'])) {
