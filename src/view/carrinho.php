@@ -4,7 +4,7 @@ include '../../conexao.php'; // Verifique o caminho do arquivo de conexão
 session_start();
 $tipo_usuario = $_SESSION['tipo_usuario'];
 
-if ($tipo_usuario == 1) {
+if ($tipo_usuario != 2) {
     header('Location: ../../index.php'); // Redireciona para a página inicial se o usuário não for do tipo 1
     exit();
 }

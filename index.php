@@ -98,7 +98,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['logout'])) {
         <a href="login.php">login<i class="fas fa-user"></i></a>
         <br>
     <?php endif; ?>
-    <?php if (!isset($_SESSION['login']) || ($_SESSION['tipo_usuario'] != 1)) : ?>
+    <?php if (!isset($_SESSION['login']) || ($_SESSION['tipo_usuario'] == 2)) : ?>
         <a href="src/view/carrinho.php">Carrinho<i class="fas fa-user"></i></a>
         <br>
     <?php endif; ?>
