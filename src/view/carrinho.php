@@ -2,10 +2,18 @@
 include '../../conexao.php'; // Verifique o caminho do arquivo de conexão
 
 session_start();
-$tipo_usuario = $_SESSION['tipo_usuario'];
 
-if ($tipo_usuario != 2) {
-    header('Location: ../../index.php'); // Redireciona para a página inicial se o usuário não for do tipo 1
+if (!isset($_SESSION['login'])) {
+    echo '<script>alert("Faça login para acessar o carrinho");</script>';
+    echo '<script>setTimeout(function(){ window.location.href = "../../login.php"; }, 2000);</script>';
+    exit();
+} 
+
+$tipo_usuario = isset($_SESSION['tipo_usuario']) ? $_SESSION['tipo_usuario'] : null;
+
+if ($tipo_usuario !== null && $tipo_usuario != 2) {
+    echo '<script>alert("Você não tem permissão para acessar esta página.");</script>';
+    echo '<script>setTimeout(function(){ window.location.href = "../../index.php"; }, 2000);</script>';
     exit();
 }
 
