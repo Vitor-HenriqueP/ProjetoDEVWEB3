@@ -26,70 +26,7 @@ if (isset($_POST['id']) && is_numeric($_POST['id'])) {
             <meta http-equiv="X-UA-Compatible" content="IE=edge">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <title><?php echo htmlspecialchars($row['nome']); ?></title>
-            <style>
-                body {
-                    font-family: Arial, sans-serif;
-                    margin: 0;
-                    padding: 0;
-                    background-color: #f5f5f5;
-                }
-
-                .container {
-                    max-width: 1200px;
-                    margin: 0 auto;
-                    padding: 20px;
-                }
-
-                .product {
-                    display: flex;
-                    align-items: flex-start;
-                }
-
-                .product-image {
-                    flex: 1;
-                    margin-right: 20px;
-                }
-
-                .product-image img {
-                    max-width: 100%;
-                    height: auto;
-                }
-
-                .product-info {
-                    flex: 2;
-                }
-
-                .product-title {
-                    font-size: 24px;
-                    margin-bottom: 10px;
-                }
-
-                .product-description {
-                    margin-bottom: 20px;
-                }
-
-                .product-price {
-                    font-size: 28px;
-                    font-weight: bold;
-                    margin-bottom: 20px;
-                }
-
-                form {
-                    margin-top: 20px;
-                }
-
-                form input[type="submit"] {
-                    padding: 10px 20px;
-                    background-color: #007bff;
-                    color: white;
-                    border: none;
-                    cursor: pointer;
-                }
-
-                form input[type="submit"]:hover {
-                    background-color: #0056b3;
-                }
-            </style>
+            <link rel="stylesheet" type="text/css" href="./assets/css/styleproduto.css">
         </head>
 
         <body>
@@ -136,6 +73,23 @@ if (isset($_POST['id']) && is_numeric($_POST['id'])) {
                     </div>
                 </div>
             </div>
+            <section class="content">
+		        <div class="box_form">
+			        <h1>Deixe seu Comentário:</h1>
+			        <form id="form1">
+				        <label for="name">Nome</label><br>
+				        <input type="text" name="name" id="name"/><br><br>
+
+				        <label for="comment">Comentário</label><br>
+				        <textarea name="comment" id="comment"></textarea><br><br>
+
+				        <input type="submit" form="form1" class="btn-sub" value="Enviar Comentário"/><br><br>
+			        </form>
+		        </div>
+
+		        <div class="box_comment">
+		        </div>
+	        </section>
             <script>
                 function checkLogin() {
                     if (!<?php echo isset($_SESSION['login']) ? 'true' : 'false'; ?>) {
@@ -149,6 +103,8 @@ if (isset($_POST['id']) && is_numeric($_POST['id'])) {
                     window.location.href = '../../login.php';
                 }
             </script>
+            <script src="assets/js/jQuery/jquery-3.5.1.min.js"></script>
+	        <script src="assets/js/script.js"></script>
         </body>
 
         </html>
