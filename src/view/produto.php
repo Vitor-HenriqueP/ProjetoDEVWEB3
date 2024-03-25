@@ -46,10 +46,22 @@ if (isset($_POST['id']) && is_numeric($_POST['id'])) {
                         // Verifica se o usuário está logado antes de mostrar os botões de editar e excluir
                         if (isset($_SESSION['login'])) {
                             // Formulário para adicionar ao carrinho
-                            if ($_SESSION['tipo_usuario'] != 1) {
+                            if ($_SESSION['tipo_usuario'] == 2) {
                                 echo "<form method='post' action='../../adicionar_carrinho.php' onsubmit='return checkLogin()'>";
                                 echo "<input type='hidden' name='id_produto' value='$id'>";
                                 echo "<input type='submit' value='Adicionar ao Carrinho'>";
+                                echo "</form>";
+
+                                // Formulário para adicionar comentário
+
+
+                            }
+                            if ($_SESSION['tipo_usuario'] != 3) {
+                                echo "<form id='form1' method='post' action='inserir.php'>";
+                                echo "<input type='hidden' name='id_produto' value='$id'>";
+                                echo "<label for='comment'>Comentário</label><br>";
+                                echo "<textarea name='comentario' id='comment' required></textarea><br><br>";
+                                echo "<input type='submit' name='enviar_comentario' value='Enviar Comentário'>";
                                 echo "</form>";
                             }
                             // Botões de editar e excluir (para usuários do tipo 1)
@@ -65,13 +77,7 @@ if (isset($_POST['id']) && is_numeric($_POST['id'])) {
                                 echo "</form>";
                             }
 
-                            // Formulário para adicionar comentário
-                            echo "<form id='form1' method='post' action='inserir.php'>";
-                            echo "<input type='hidden' name='id_produto' value='$id'>";
-                            echo "<label for='comment'>Comentário</label><br>";
-                            echo "<textarea name='comentario' id='comment' required></textarea><br><br>";
-                            echo "<input type='submit' name='enviar_comentario' value='Enviar Comentário'>";
-                            echo "</form>";
+
 
                             // Div para carregar os comentários
                             echo "<div id='comentarios'></div>";
