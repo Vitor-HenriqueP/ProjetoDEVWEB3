@@ -10,20 +10,28 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $senha = filter_input(INPUT_POST, 'senha', FILTER_SANITIZE_STRING);
     $senha_hash = password_hash($senha, PASSWORD_DEFAULT);
 
-    // Verificar se o login já está em uso
-    $stmt_verificar = $conn->prepare("SELECT id FROM usuarios WHERE login = ?");
-    $stmt_verificar->bind_param("s", $login);
-    $stmt_verificar->execute();
-    $result_verificar = $stmt_verificar->get_result();
-
-    if ($result_verificar->num_rows > 0) {
-        echo "Login já está em uso. Por favor, escolha outro.";
+    // Verificar se os campos estão preenchidos
+    if (empty($nome) || empty($login) || empty($senha)) {
+        echo "Por favor, preencha todos os campos.";
     } else {
-        if ($usuario->cadastrarUsuario($nome, $login, $senha_hash)) {
-            echo "Usuário cadastrado com sucesso!";
-            header('Location: login.php');
+        // Verificar se o login já está em uso
+        $stmt_verificar = $conn->prepare("SELECT id FROM usuarios WHERE login = ?");
+        $stmt_verificar->bind_param("s", $login);
+        $stmt_verificar->execute();
+        $result_verificar = $stmt_verificar->get_result();
+
+        if ($result_verificar->num_rows > 0) {
+            echo "Login já está em uso. Por favor, escolha outro.";
         } else {
-            echo "Erro ao cadastrar o usuário.";
+            if ($usuario->cadastrarUsuario($nome, $login, $senha_hash)) {
+                // Exibir alerta de sucesso em JavaScript
+                echo '<script>alert("Usuário cadastrado com sucesso!");</script>';
+                // Redirecionar após o alerta
+                echo '<meta http-equiv="refresh" content="0;url=login.php">';
+                exit(); // Interrompe a execução do código após o redirecionamento
+            } else {
+                echo "Erro ao cadastrar o usuário.";
+            }
         }
     }
 }

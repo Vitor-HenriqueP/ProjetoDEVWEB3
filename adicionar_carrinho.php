@@ -2,24 +2,35 @@
 include './conexao.php'; // Inclua o arquivo de conexão
 session_start();
 
+$mensagem = '';
+
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['id_produto'])) {
-    $id_produto = $_POST['id_produto'];
-    $id_usuario = $_SESSION['id']; // Obter o ID do usuário da sessão
-
-    // Preparar a consulta SQL usando prepared statements
-    $stmt = $conn->prepare("INSERT INTO carrinho (id_usuario, id_produto) VALUES (?, ?)");
-    $stmt->bind_param("ii", $id_usuario, $id_produto);
-
-    if ($stmt->execute()) {
-        // Definir uma mensagem de sucesso para exibir
-        $mensagem = "Produto adicionado ao carrinho.";
-        // Redirecionar para o carrinho após 3 segundos
-        echo '<script>window.setTimeout(function() { window.location.href = "index.php"; }, 1000);</script>';
+    // Validar o ID do produto como um número inteiro
+    $id_produto = filter_input(INPUT_POST, 'id_produto', FILTER_VALIDATE_INT);
+    if ($id_produto === false || $id_produto === null) {
+        $mensagem = "ID do produto inválido.";
     } else {
-        $mensagem = "Erro ao adicionar o produto ao carrinho: " . $conn->error;
-    }
+        // Obter o ID do usuário da sessão
+        $id_usuario = $_SESSION['id'] ?? null;
 
-    $stmt->close(); // Fechar a declaração preparada
+        if ($id_usuario === null) {
+            $mensagem = "Usuário não autenticado.";
+        } else {
+            // Preparar a consulta SQL usando prepared statements
+            $stmt = $conn->prepare("INSERT INTO carrinho (id_usuario, id_produto) VALUES (?, ?)");
+            $stmt->bind_param("ii", $id_usuario, $id_produto);
+
+            if ($stmt->execute()) {
+                $mensagem = "Produto adicionado ao carrinho.";
+                // Redirecionar para o carrinho após 3 segundos
+                echo '<meta http-equiv="refresh" content="3;url=index.php">';
+            } else {
+                $mensagem = "Erro ao adicionar o produto ao carrinho: " . $conn->error;
+            }
+
+            $stmt->close(); // Fechar a declaração preparada
+        }
+    }
 } else {
     $mensagem = "ID do produto não especificado.";
 }
@@ -47,7 +58,7 @@ $conn->close();
 </head>
 
 <body>
-    <div class="card-mensagem" id="mensagem"><?php echo $mensagem; ?></div>
+    <div class="card-mensagem" id="mensagem"><?php echo htmlspecialchars($mensagem); ?></div>
 </body>
 
 </html>

@@ -1,14 +1,19 @@
 <?php
-header('Content-Type: application/json');
-
 session_start();
+
+header('Content-Type: application/json');
 
 // Verifica se a requisição é do tipo POST e se o usuário está logado
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_SESSION['id'])) {
     // Limpa e valida os dados de entrada
     $comentario = filter_input(INPUT_POST, 'comentario', FILTER_SANITIZE_STRING);
     $id_usuario = $_SESSION['id'];
-    $id_produto = $_POST['id_produto'];
+    $id_produto = filter_input(INPUT_POST, 'id_produto', FILTER_VALIDATE_INT);
+
+    if ($id_produto === false) {
+        echo json_encode('ID do produto inválido');
+        exit;
+    }
 
     // Conexão com o banco de dados
     include '../../conexao.php';
@@ -32,4 +37,5 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_SESSION['id'])) {
 } else {
     echo json_encode('Você precisa estar logado para comentar.');
 }
+
 ?>

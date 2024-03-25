@@ -22,12 +22,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     $id = intval($_POST["id"]);
-    $nome = mysqli_real_escape_string($conn, $_POST["nome"]);
-    $descricao = mysqli_real_escape_string($conn, $_POST["descricao"]);
+    $nome = $_POST["nome"];
+    $descricao = $_POST["descricao"];
     $preco = floatval($_POST["preco"]);
 
     // Verifica se foi enviado um novo arquivo de imagem
-    if (isset($_FILES["imagem"]) && $_FILES["imagem"]["error"] == 0) {
+    if (isset($_FILES["imagem"]) && $_FILES["imagem"]["error"] == 0 && getimagesize($_FILES["imagem"]["tmp_name"])) {
         $imagem = file_get_contents($_FILES["imagem"]["tmp_name"]);
     } else {
         // Se não foi enviado, mantém a imagem atual
@@ -53,9 +53,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt->bind_param("ssdsi", $nome, $descricao, $preco, $imagem, $id);
 
     if ($stmt->execute()) {
-header('Location: ../../index.php');        
+        header('Location: ../../index.php');
+        exit();
     } else {
-        echo "Erro ao atualizar o produto: " . $conn->error;
+        echo "Erro ao atualizar o produto: " . $stmt->error;
     }
 
     $stmt->close();

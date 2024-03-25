@@ -1,19 +1,27 @@
 <?php
 session_start();
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['logout'])) {
+
+// Função para limpar a sessão ao fazer logout
+function logout() {
+    session_unset();
     session_destroy();
     header('Location: login.php');
     exit();
 }
+
+// Verifica se o logout foi solicitado
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['logout'])) {
+    logout();
+}
+
 ?>
+
 <!DOCTYPE html>
 <html>
-
 <head>
     <title>Minha Loja</title>
     <link rel="stylesheet" type="text/css" href="./config/style.css">
 </head>
-
 <body>
     <h1>Minha Loja de Produtos</h1>
     <input  type="text" id="searchInput" placeholder="Pesquisar produtos">
@@ -42,56 +50,56 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['logout'])) {
         </form>
         <br>
 
-        <span>Bem-vindo, <?php echo $_SESSION['nome']; ?></span>
+        <span>Bem-vindo, <?php echo htmlspecialchars($_SESSION['nome']); ?></span>
         <br>
 
         <a href="redefinir_senha.php">Redefinir Senha</a>
         <a href="redefinir_nome.php">Redefinir Nome</a>
-
     <?php endif; ?>
-
 
     <div class="container">
         <?php
         // Conexão com o banco de dados
-        $host = "localhost"; // host do banco de dados
-        $username = "root"; // nome de usuário do banco de dados
-        $password = ""; // senha do banco de dados
-        $dbname = "ProjetoDEVWEB3"; // nome do banco de dados
+        $host = "localhost";
+        $username = "root";
+        $password = "";
+        $dbname = "ProjetoDEVWEB3";
         $conn = new mysqli($host, $username, $password, $dbname);
         if ($conn->connect_error) {
             die("Erro ao conectar ao banco de dados: " . $conn->connect_error);
         }
 
-        $sql = "SELECT id, nome, descricao, preco, imagem FROM produto";
-        $result = $conn->query($sql);
+        $stmt = $conn->prepare("SELECT id, nome, descricao, preco, imagem FROM produto");
+        $stmt->execute();
+        $result = $stmt->get_result();
 
         if ($result->num_rows > 0) {
             while ($row = $result->fetch_assoc()) {
                 echo "<form method='post' action='./src/view/produto.php'>";
-                echo "<input type='hidden' name='id' value='" . $row["id"] . "'>";
+                echo "<input type='hidden' name='id' value='" . htmlspecialchars($row["id"]) . "'>";
                 echo "<button type='submit' style='border: none; background: none; padding: 0; text-decoration: none; color: inherit;'>";
                 echo "<div class='card'>";
                 echo "<img src='data:image/jpeg;base64," . base64_encode($row["imagem"]) . "'>";
                 echo "<div class='card-content'>";
-                echo "<h3>" . $row["nome"] . "</h3>";
-                
+                echo "<h3>" . htmlspecialchars($row["nome"]) . "</h3>";
+
                 // Truncar a descrição para 20 palavras
                 $descricao = explode(' ', $row["descricao"]);
                 $descricao = array_slice($descricao, 0, 5);
                 $descricao = implode(' ', $descricao);
-                
-                echo "<p>" . $descricao . "</p>";
+
+                echo "<p>" . htmlspecialchars($descricao) . "</p>";
                 echo "<p class='price'>R$" . number_format($row["preco"], 2, ',', '.') . "</p>";
                 echo "</div>";
                 echo "</div>";
                 echo "</button>";
                 echo "</form>";
             }
-            
+
         } else {
             echo "Nenhum produto encontrado.";
         }
+        $stmt->close();
         $conn->close();
         ?>
     </div>
@@ -114,5 +122,4 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['logout'])) {
         });
     </script>
 </body>
-
 </html>
