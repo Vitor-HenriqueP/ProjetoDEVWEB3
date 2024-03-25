@@ -1,12 +1,6 @@
 <?php
 include 'conexao.php';
 include 'src/models/User.php';
-session_start();
-
-if ($_SESSION['tipo_usuario'] != 3) {
-    header('Location: index.php');
-    exit;
-}
 
 $usuario = new Usuario_Adm($conn);
 
@@ -28,7 +22,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if ($usuario->cadastrarUsuario($nome, $login, $senha_hash)) {
             echo "Usuário cadastrado com sucesso!";
             header('Location: login.php');
-            exit; // Certifique-se de sair após redirecionar
         } else {
             echo "Erro ao cadastrar o usuário.";
         }

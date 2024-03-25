@@ -26,70 +26,8 @@ if (isset($_POST['id']) && is_numeric($_POST['id'])) {
             <meta http-equiv="X-UA-Compatible" content="IE=edge">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <title><?php echo htmlspecialchars($row['nome']); ?></title>
-            <style>
-                body {
-                    font-family: Arial, sans-serif;
-                    margin: 0;
-                    padding: 0;
-                    background-color: #f5f5f5;
-                }
-
-                .container {
-                    max-width: 1200px;
-                    margin: 0 auto;
-                    padding: 20px;
-                }
-
-                .product {
-                    display: flex;
-                    align-items: flex-start;
-                }
-
-                .product-image {
-                    flex: 1;
-                    margin-right: 20px;
-                }
-
-                .product-image img {
-                    max-width: 100%;
-                    height: auto;
-                }
-
-                .product-info {
-                    flex: 2;
-                }
-
-                .product-title {
-                    font-size: 24px;
-                    margin-bottom: 10px;
-                }
-
-                .product-description {
-                    margin-bottom: 20px;
-                }
-
-                .product-price {
-                    font-size: 28px;
-                    font-weight: bold;
-                    margin-bottom: 20px;
-                }
-
-                form {
-                    margin-top: 20px;
-                }
-
-                form input[type="submit"] {
-                    padding: 10px 20px;
-                    background-color: #007bff;
-                    color: white;
-                    border: none;
-                    cursor: pointer;
-                }
-
-                form input[type="submit"]:hover {
-                    background-color: #0056b3;
-                }
-            </style>
+            <link rel="stylesheet" type="text/css" href="./assets/css/styleproduto.css">
+            <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         </head>
 
         <body>
@@ -102,18 +40,17 @@ if (isset($_POST['id']) && is_numeric($_POST['id'])) {
                         <h1 class="product-title"><?php echo htmlspecialchars($row['nome']); ?></h1>
                         <p class="product-description"><?php echo htmlspecialchars($row['descricao']); ?></p>
                         <p class="product-price">R$<?php echo number_format($row['preco'], 2, ',', '.'); ?></p>
-                        <a href="../../index.php">Voltar para a pagina inicial</a>
+                        <a href="../../index.php">Voltar para a página inicial</a>
 
                         <?php
                         // Verifica se o usuário está logado antes de mostrar os botões de editar e excluir
-                        if (isset($_SESSION['login']) ) {
+                        if (isset($_SESSION['login'])) {
                             // Formulário para adicionar ao carrinho
-                            if (isset($_SESSION['login']) && ($_SESSION['tipo_usuario'] !=1)) {
-
-                            echo "<form method='post' action='../../adicionar_carrinho.php' onsubmit='return checkLogin()'>";
-                            echo "<input type='hidden' name='id_produto' value='$id'>";
-                            echo "<input type='submit' value='Adicionar ao Carrinho'>";
-                            echo "</form>";
+                            if ($_SESSION['tipo_usuario'] != 1) {
+                                echo "<form method='post' action='../../adicionar_carrinho.php' onsubmit='return checkLogin()'>";
+                                echo "<input type='hidden' name='id_produto' value='$id'>";
+                                echo "<input type='submit' value='Adicionar ao Carrinho'>";
+                                echo "</form>";
                             }
                             // Botões de editar e excluir (para usuários do tipo 1)
                             if ($_SESSION['tipo_usuario'] == 1) {
@@ -127,9 +64,20 @@ if (isset($_POST['id']) && is_numeric($_POST['id'])) {
                                 echo "<input type='submit' value='Excluir' onclick='return confirm(\"Tem certeza que deseja excluir este produto?\")'>";
                                 echo "</form>";
                             }
+
+                            // Formulário para adicionar comentário
+                            echo "<form id='form1' method='post' action='inserir.php'>";
+                            echo "<input type='hidden' name='id_produto' value='$id'>";
+                            echo "<label for='comment'>Comentário</label><br>";
+                            echo "<textarea name='comentario' id='comment' required></textarea><br><br>";
+                            echo "<input type='submit' name='enviar_comentario' value='Enviar Comentário'>";
+                            echo "</form>";
+
+                            // Div para carregar os comentários
+                            echo "<div id='comentarios'></div>";
                         } else {
                             // Mostra mensagem e redireciona para a página de login
-                            echo "<p>Faça login para adicionar ao carrinho</p>";
+                            echo "<p>Faça login para adicionar ao carrinho ou comentar</p>";
                             echo "<button onclick='redirectToLogin()'>Login</button>";
                         }
                         ?>
@@ -137,9 +85,60 @@ if (isset($_POST['id']) && is_numeric($_POST['id'])) {
                 </div>
             </div>
             <script>
+                // Função para enviar o formulário via AJAX
+                $('#form1').submit(function(e) {
+                    e.preventDefault(); // Evita o envio tradicional do formulário
+                    $.ajax({
+                        type: 'POST',
+                        url: $(this).attr('action'),
+                        data: $(this).serialize(),
+                        success: function(response) {
+                            if (response === 'Comentário Salvo com Sucesso') {
+                                // Recarrega os comentários após o envio bem-sucedido
+                                loadComentarios(<?php echo $id; ?>);
+                                // Limpa o campo de comentário após o envio bem-sucedido
+                                $('#comment').val('');
+                            }
+                        },
+                        error: function(xhr, status, error) {
+                            console.error(xhr.responseText); // Exibe a mensagem de erro no console
+                            alert('Erro ao enviar o comentário'); // Exibe uma mensagem de erro genérica
+                        }
+                    });
+                });
+
+                // Função para carregar os comentários via AJAX
+                function loadComentarios(idProduto) {
+                    $.ajax({
+                        type: 'GET',
+                        url: 'carregar_comentarios.php',
+                        data: {
+                            id: idProduto
+                        },
+                        dataType: 'json',
+                        success: function(response) {
+                            if (response.length > 0) {
+                                var comentariosHtml = '<h2>Comentários</h2>';
+                                response.forEach(function(comentario) {
+                                    comentariosHtml += '<p><strong>' + comentario.nome + '</strong> em ' + comentario.data_comentario + ':<br>';
+                                    comentariosHtml += comentario.comentario + '</p>';
+                                });
+                                $('#comentarios').html(comentariosHtml); // Atualiza a div de comentários
+                            } else {
+                                $('#comentarios').html('<p>Ainda não há comentários para este produto.</p>');
+                            }
+                        },
+                        error: function(xhr, status, error) {
+                            console.error(xhr.responseText); // Exibe a mensagem de erro no console
+                            alert('Erro ao carregar os comentários'); // Exibe uma mensagem de erro genérica
+                        }
+                    });
+                }
+
                 function checkLogin() {
                     if (!<?php echo isset($_SESSION['login']) ? 'true' : 'false'; ?>) {
                         alert('Faça login para adicionar ao carrinho');
+
                         return false;
                     }
                     return true;
@@ -148,12 +147,19 @@ if (isset($_POST['id']) && is_numeric($_POST['id'])) {
                 function redirectToLogin() {
                     window.location.href = '../../login.php';
                 }
+
+                // Carrega os comentários ao carregar a página
+                $(document).ready(function() {
+                    loadComentarios(<?php echo $id; ?>);
+                });
             </script>
+            <script src="assets/js/script.js"></script>
         </body>
 
         </html>
 <?php
     } else {
+
         echo "Produto não encontrado.";
     }
 } else {
