@@ -11,20 +11,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['logout'])) {
 
 <head>
     <title>Minha Loja</title>
-    <link rel="stylesheet" type="text/css" href="./config/styles.css">
+    <link rel="stylesheet" type="text/css" href="./config/style.css">
 </head>
 
 <body>
     <h1>Minha Loja de Produtos</h1>
-    <input style="width: 800px" type="text" id="searchInput" placeholder="Pesquisar produtos">
+    <input  type="text" id="searchInput" placeholder="Pesquisar produtos">
     <br>
 
     <?php if (!isset($_SESSION['login'])) : ?>
-        <a href="login.php">login<i class="fas fa-user"></i></a>
+        <a href="login.php">login</a>
         <br>
     <?php endif; ?>
     <?php if (!isset($_SESSION['login']) || ($_SESSION['tipo_usuario'] == 2)) : ?>
-        <a href="src/view/carrinho.php">Carrinho<i class="fas fa-user"></i></a>
+        <a href="src/view/carrinho.php">Carrinho</a>
         <br>
     <?php endif; ?>
 
