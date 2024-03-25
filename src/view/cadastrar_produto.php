@@ -8,6 +8,28 @@ if (!isset($_SESSION['login']) || $_SESSION['tipo_usuario'] != 1) {
 
 include '../../conexao.php'; // Assumindo que este arquivo inclui a conexão com o banco de dados
 
+// Função para criar um slug a partir de um texto
+function slugify($text) {
+    $text = preg_replace('~[^\pL\d]+~u', '-', $text); // Substitui caracteres não alfanuméricos por '-'
+    $text = iconv('utf-8', 'us-ascii//TRANSLIT', $text); // Converte caracteres especiais para equivalentes em ASCII
+    $text = strtolower($text); // Converte para minúsculas
+    $text = preg_replace('~[^-\w]+~', '', $text); // Remove caracteres que não são letras, números ou '-'
+    $text = trim($text, '-'); // Remove '-' do início e fim do texto
+    $text = preg_replace('~-+~', '-', $text); // Remove múltiplos '-' consecutivos
+    return $text;
+}
+
+// Função para verificar se o slug já existe no banco de dados
+function slugExists($conn, $slug) {
+    $sql = "SELECT COUNT(*) as count FROM produto WHERE slug = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("s", $slug);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $row = $result->fetch_assoc();
+    return $row['count'] > 0;
+}
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $nome = $_POST["nome"];
     $descricao = $_POST["descricao"];
@@ -31,10 +53,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $imagem = null;
     }
 
+    // Gerar o slug a partir do nome do produto
+    $slug = slugify($nome);
+
+    // Verificar se o slug já existe no banco de dados
+    while (slugExists($conn, $slug)) {
+        // Adicionar um número aleatório ao final do slug
+        $slug = $slug . '-' . rand(1000, 9999);
+    }
+
     // Preparar a query SQL usando um prepared statement
-    $sql = "INSERT INTO produto (nome, descricao, preco, imagem) VALUES (?, ?, ?, ?)";
+    $sql = "INSERT INTO produto (nome, descricao, preco, imagem, slug) VALUES (?, ?, ?, ?, ?)";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("ssds", $nome, $descricao, $preco, $imagem);
+    $stmt->bind_param("ssdss", $nome, $descricao, $preco, $imagem, $slug);
 
     if ($stmt->execute()) {
         echo "Produto cadastrado com sucesso.";

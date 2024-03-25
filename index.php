@@ -69,14 +69,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['logout'])) {
             die("Erro ao conectar ao banco de dados: " . $conn->connect_error);
         }
 
-        $stmt = $conn->prepare("SELECT id, nome, descricao, preco, imagem FROM produto");
+        $stmt = $conn->prepare("SELECT id, nome, descricao, preco, imagem, slug FROM produto");
         $stmt->execute();
         $result = $stmt->get_result();
 
         if ($result->num_rows > 0) {
             while ($row = $result->fetch_assoc()) {
-                echo "<form method='post' action='./src/view/produto.php'>";
-                echo "<input type='hidden' name='id' value='" . htmlspecialchars($row["id"]) . "'>";
+                echo "<form method='get' action='./src/view/produto.php'>";
+                echo "<input type='hidden' name='slug' value='" . htmlspecialchars($row["slug"]) . "'>";
                 echo "<button type='submit' style='border: none; background: none; padding: 0; text-decoration: none; color: inherit;'>";
                 echo "<div class='card'>";
                 echo "<img src='data:image/jpeg;base64," . base64_encode($row["imagem"]) . "'>";

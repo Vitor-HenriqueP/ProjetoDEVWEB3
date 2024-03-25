@@ -3,6 +3,17 @@ session_start();
 
 include '../../conexao.php'; // Inclua o arquivo de conexão com o banco de dados
 
+// Função para criar um slug a partir de um texto
+function slugify($text) {
+    $text = preg_replace('~[^\pL\d]+~u', '-', $text); // Substitui caracteres não alfanuméricos por '-'
+    $text = iconv('utf-8', 'us-ascii//TRANSLIT', $text); // Converte caracteres especiais para equivalentes em ASCII
+    $text = strtolower($text); // Converte para minúsculas
+    $text = preg_replace('~[^-\w]+~', '', $text); // Remove caracteres que não são letras, números ou '-'
+    $text = trim($text, '-'); // Remove '-' do início e fim do texto
+    $text = preg_replace('~-+~', '-', $text); // Remove múltiplos '-' consecutivos
+    return $text;
+}
+
 // Verifique se o usuário está logado
 if (!isset($_SESSION['login'])) {
     echo '<script>alert("Faça login para acessar o carrinho");</script>';
@@ -85,15 +96,19 @@ $stmt_quantidade->close();
         $total = 0; // Variável para armazenar o total dos produtos no carrinho
 
         while ($row = $result->fetch_assoc()) {
-            $total += $row['preco'] * $row['quantidade']; // Adiciona o preço do produto ao total
+            $total += $row['preco'] * $row['quantidade']; // Adiciona o preço do produto ao
+            // Adiciona o preço do produto ao total
             $descricao = explode(' ', $row["descricao"]);
             $descricao = array_slice($descricao, 0, 20);
             $descricao = implode(' ', $descricao);
+            
+            echo "<a href='../../src/view/produto.php?slug=" . slugify($row['nome']) . "'>";
+echo "<img src='data:image/jpeg;base64," . base64_encode($row['imagem']) . "' alt='" . $row['nome'] . "' class='product-image'>";
+echo "</a>";
 
             echo "<form method='post' action='../../src/view/produto.php'>";
-            echo "<input type='hidden' name='id' value='" . $row["id_produto"] . "'>";
+            echo "<input type='hidden' name='slug' value='" . slugify($row['nome']) . "'>";
             echo "<button type='submit' style='background: none; border: none; padding: 0; margin: 0;' class='product-image-button'>";
-            echo "<img src='data:image/jpeg;base64," . base64_encode($row['imagem']) . "' alt='" . $row['nome'] . "' class='product-image'>";
             echo "</button>";
             echo "</form>";
 
@@ -126,26 +141,18 @@ $stmt_quantidade->close();
             $stmt_delete->bind_param("i", $id_usuario);
             if ($stmt_delete->execute()) {
                 // Recarrega a página após 2 segundos
-                echo "<script>setTimeout(function(){ location.reload(); },
-                500);</script>";
-                echo "<div id='compra-realizada' style='background-color: #dff0d8; color: #3c763d; padding: 10px; margin-top: 10px;'>Compra realizada!</div>";
+                echo '<meta http-equiv="refresh" content="2">';
             } else {
-                echo "Erro ao realizar a compra: " . $conn->error;
+                echo "Erro ao finalizar a compra.";
             }
         }
     } else {
         echo "<p>Carrinho vazio</p>";
     }
+
+    $stmt->close();
     ?>
 
-    <a href="../../index.php">Voltar para a página inicial</a>
-
-    <div class="card-mensagem" id="mensagem"><?php echo isset($mensagem) ? $mensagem : ''; ?></div>
 </body>
 
 </html>
-
-<?php
-$stmt->close();
-$conn->close();
-?>

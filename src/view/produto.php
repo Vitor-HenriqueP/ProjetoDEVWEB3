@@ -3,14 +3,14 @@ session_start();
 
 include '../../conexao.php'; // Inclua o arquivo de conexão
 
-// Verifica se o ID do produto foi enviado via POST e é um número inteiro válido
-if (isset($_POST['id']) && is_numeric($_POST['id'])) {
-    $id = $_POST['id'];
+// Verifica se o slug do produto foi enviado via GET
+if (isset($_GET['slug'])) {
+    $slug = $_GET['slug'];
 
-    // Consulta SQL para obter os detalhes do produto com base no ID
-    $sql = "SELECT * FROM produto WHERE id = ?";
+    // Consulta SQL para obter os detalhes do produto com base no slug
+    $sql = "SELECT * FROM produto WHERE slug = ?";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param('i', $id);
+    $stmt->bind_param('s', $slug);
     $stmt->execute();
 
     $result = $stmt->get_result();
@@ -48,17 +48,13 @@ if (isset($_POST['id']) && is_numeric($_POST['id'])) {
                             // Formulário para adicionar ao carrinho
                             if ($_SESSION['tipo_usuario'] == 2) {
                                 echo "<form method='post' action='../../adicionar_carrinho.php' onsubmit='return checkLogin()'>";
-                                echo "<input type='hidden' name='id_produto' value='$id'>";
+                                echo "<input type='hidden' name='id_produto' value='{$row['id']}'>";
                                 echo "<input type='submit' value='Adicionar ao Carrinho'>";
                                 echo "</form>";
 
                                 // Formulário para adicionar comentário
-
-
-                            }
-                            if ($_SESSION['tipo_usuario'] != 3) {
                                 echo "<form id='form1' method='post' action='inserir.php'>";
-                                echo "<input type='hidden' name='id_produto' value='$id'>";
+                                echo "<input type='hidden' name='id_produto' value='{$row['id']}'>";
                                 echo "<label for='comment'>Comentário</label><br>";
                                 echo "<textarea name='comentario' id='comment' required></textarea><br><br>";
                                 echo "<input type='submit' name='enviar_comentario' value='Enviar Comentário'>";
@@ -67,17 +63,15 @@ if (isset($_POST['id']) && is_numeric($_POST['id'])) {
                             // Botões de editar e excluir (para usuários do tipo 1)
                             if ($_SESSION['tipo_usuario'] == 1) {
                                 echo "<form method='post' action='editar_produto.php'>";
-                                echo "<input type='hidden' name='id' value='$id'>";
+                                echo "<input type='hidden' name='id' value='{$row['id']}'>";
                                 echo "<input type='submit' value='Editar'>";
                                 echo "</form>";
 
                                 echo "<form method='post' action='excluir_produto.php'>";
-                                echo "<input type='hidden' name='id' value='$id'>";
+                                echo "<input type='hidden' name='id' value='{$row['id']}'>";
                                 echo "<input type='submit' value='Excluir' onclick='return confirm(\"Tem certeza que deseja excluir este produto?\")'>";
                                 echo "</form>";
                             }
-
-
 
                             // Div para carregar os comentários
                             echo "<div id='comentarios'></div>";
@@ -101,7 +95,7 @@ if (isset($_POST['id']) && is_numeric($_POST['id'])) {
                         success: function(response) {
                             if (response === 'Comentário Salvo com Sucesso') {
                                 // Recarrega os comentários após o envio bem-sucedido
-                                loadComentarios(<?php echo $id; ?>);
+                                loadComentarios(<?php echo $row['id']; ?>);
                                 // Limpa o campo de comentário após o envio bem-sucedido
                                 $('#comment').val('');
                             }
@@ -156,22 +150,23 @@ if (isset($_POST['id']) && is_numeric($_POST['id'])) {
 
                 // Carrega os comentários ao carregar a página
                 $(document).ready(function() {
-                    loadComentarios(<?php echo $id; ?>);
+                    loadComentarios(<?php echo $row['id']; ?>);
                 });
             </script>
             <script src="assets/js/script.js"></script>
         </body>
 
         </html>
-<?php
+        <?php
     } else {
-
         echo "Produto não encontrado.";
     }
 } else {
-    echo "ID do produto não especificado ou inválido.";
+    echo "Slug de produto inválido.";
 }
 
 $stmt->close();
 $conn->close();
 ?>
+
+    
