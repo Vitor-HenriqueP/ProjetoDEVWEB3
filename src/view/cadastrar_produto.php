@@ -10,21 +10,21 @@ include '../../conexao.php'; // Assumindo que este arquivo inclui a conexão com
 
 // Função para criar um slug a partir de um texto
 // Função para criar um slug a partir de um texto com uma string aleatória de 150 caracteres
-function slugify($text) {
-    $text = preg_replace('~[^\pL\d]+~u', '-', $text); // Substitui caracteres não alfanuméricos por '-'
+function slugify($text)
+{
+    $text = preg_replace('/[^\pL\d]+/u', '-', $text); // Substitui caracteres não alfanuméricos por '-'
     $text = iconv('utf-8', 'us-ascii//TRANSLIT', $text); // Converte caracteres especiais para equivalentes em ASCII
     $text = strtolower($text); // Converte para minúsculas
-    $text = preg_replace('[^-\w]+', '', $text); // Remove caracteres que não são letras, números ou '-'
+    $text = preg_replace('/[^-\w]+/', '', $text); // Remove caracteres que não são letras, números ou '-'
     $text = trim($text, '-'); // Remove '-' do início e fim do texto
-    $text = preg_replace('-+', '-', $text); // Remove múltiplos '-' consecutivos
-    
+    $text = preg_replace('/-+/', '-', $text); // Remove múltiplos '-' consecutivos
+
     // Adicionar uma string aleatória de 150 caracteres ao final do slug
-    $randomString = substr(str_shuffle(str_repeat($x='0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', ceil(150/strlen($x)) )),1,150);
+    $randomString = substr(str_shuffle(str_repeat($x = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', ceil(150 / strlen($x)))), 1, 150);
     $text = $text . '-' . $randomString;
-    
+
     return $text;
 }
-
 
 // Função para verificar se o slug já existe no banco de dados
 
@@ -55,7 +55,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $slug = slugify($nome);
 
     // Verificar se o slug já existe no banco de dados
-    
 
     // Preparar a query SQL usando um prepared statement
     $sql = "INSERT INTO produto (nome, descricao, preco, imagem, slug) VALUES (?, ?, ?, ?, ?)";
@@ -63,7 +62,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt->bind_param("ssdss", $nome, $descricao, $preco, $imagem, $slug);
 
     if ($stmt->execute()) {
-        echo "Produto cadastrado com sucesso.";
+        header('Location: cadastrar_produto.php');
+
+        exit();
     } else {
         echo "Erro ao cadastrar o produto: " . $stmt->error;
     }
@@ -72,17 +73,53 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $conn->close();
 }
 ?>
-
 <!DOCTYPE html>
 <html>
 
 <head>
     <title>Cadastro de Produto</title>
+    <style>
+        .success-message {
+            background-color: #d4edda;
+            color: #155724;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #c3e6cb;
+            border-radius: 5px;
+            display: none;
+        }
+    </style>
+    <script>
+        function showSuccessMessage() {
+            document.getElementById("successMessage").style.display = "block";
+            document.getElementById("formProduto").reset();
+            setTimeout(function() {
+                document.getElementById("successMessage").style.display = "none";
+            }, 2000); // Oculta a mensagem após 2 segundos
+        }
+
+        function submitForm() {
+            var form = document.getElementById("formProduto");
+            var formData = new FormData(form);
+
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "", true);
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+                    showSuccessMessage();
+                }
+            };
+            xhr.send(formData);
+
+            return false; // Evita a recarga da página
+        }
+    </script>
 </head>
 
 <body>
     <h2>Cadastro de Produto</h2>
-    <form method="post" enctype="multipart/form-data">
+    <div id="successMessage" class="success-message">Produto cadastrado com sucesso!</div>
+    <form id="formProduto" method="post" enctype="multipart/form-data" onsubmit="return submitForm()">
         <label for="nome">Nome:</label><br>
         <input type="text" id="nome" name="nome" required><br><br>
 
@@ -97,7 +134,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         <input type="submit" value="Cadastrar">
     </form>
-    <a href="../../index.php">Voltar </a>
+    <a href="../../index.php">Voltar</a>
 </body>
 
 </html>
