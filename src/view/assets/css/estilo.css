@@ -1,0 +1,131 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #ffffff;
+}
+
+h1 {
+    text-align: center;
+    padding: 20px 0;
+    background-color: #333;
+    color: rgb(255, 255, 255);
+    margin: 0;
+}
+
+.container {
+    width: 100%;
+    margin: 0 auto;
+    padding: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+
+.card {
+    width: 200px;
+    background-color: rgb(255, 255, 255);
+    border-radius: 5px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    transition: transform 0.3s;
+    padding: 30px;
+}
+
+.card:hover {
+    transform: scale(1.05);
+}
+
+.card img {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+}
+
+.card-content {
+    padding: 15px;
+}
+
+.card-content h3 {
+    margin: 0;
+    font-size: 16px;
+    color: #333;
+}
+
+.card-content p {
+    margin: 10px 0;
+    color: #666;
+    font-size: 14px;
+    line-height: 1.4;
+    max-height: 3.2em;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.card-content .price {
+    font-weight: bold;
+    color: #333;
+    font-size: 16px;
+}
+
+.btn-carrinho {
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 8px 16px;
+    cursor: pointer;
+    transition: box-shadow 0.3s;
+}
+
+.btn-carrinho:hover {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.btn-cadastrar {
+    display: none;
+    margin-bottom: 20px;
+}
+
+
+.product-image-button:hover .product-image {
+    transform: scale(1.1);
+}
+
+.product-image {
+    max-width: 100px;
+    transition: transform 0.3s;
+}
+
+.button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    margin: 0;
+    cursor: pointer;
+}
+
+.button:hover {
+    background-color: #0056b3;
+}
+#menuToggle input:checked~span{
+    opacity: 1;
+    transform: rotate(45deg) translate(-2px, -1px);
+    background: #232323;
+}
+menu{
+    display:none;
+}
+menu > ul{
+    list-style-type: none;
+}
+
+#burguer{
+    background-color: rgb(255, 255, 255);
+    cursor: pointer;
+}
+#burguer:hover{
+    background-color: rgb(87, 85, 85);
+}

@@ -20,43 +20,41 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['logout'])) {
 <html>
 <head>
     <title>Minha Loja</title>
-    <link rel="stylesheet" type="text/css" href="./config/style.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+    <link rel="stylesheet" type="text/css" href="./src/view/assets/css/estilo.css">
 </head>
 <body>
     <h1>Minha Loja de Produtos</h1>
     <input  type="text" id="searchInput" placeholder="Pesquisar produtos">
     <br>
-
-    <?php if (!isset($_SESSION['login'])) : ?>
-        <a href="login.php">login</a>
-        <br>
-    <?php endif; ?>
-    <?php if (!isset($_SESSION['login']) || ($_SESSION['tipo_usuario'] == 2)) : ?>
-        <a href="src/view/carrinho.php">Carrinho</a>
-        <br>
-    <?php endif; ?>
-
-    <?php if (isset($_SESSION['login']) && $_SESSION['tipo_usuario'] == 1) : ?>
-        <a href="src/view/cadastrar_produto.php">cadastrar_produto</a>
-    <?php endif; ?>
-    <?php if (isset($_SESSION['login']) && $_SESSION['tipo_usuario'] == 3) : ?>
-        <a href="cadastro_adm.php">cadastrar user Adm</a>
-    <?php endif; ?>
-
-    <?php if (isset($_SESSION['login'])) : ?>
-        <form method="post" action="index.php">
-            <input type="hidden" name="logout" value="1">
-            <input type="submit" value="Logout">
-        </form>
-        <br>
-
-        <span>Bem-vindo, <?php echo htmlspecialchars($_SESSION['nome']); ?></span>
-        <br>
-
-        <a href="redefinir_senha.php">Redefinir Senha</a>
-        <a href="redefinir_nome.php">Redefinir Nome</a>
-    <?php endif; ?>
-
+    <i id="burguer" class="material-symbols-outlined" onclick="clickMenu()">menu</i>
+    <menu id="itens">
+        <ul>
+            <?php if (!isset($_SESSION['login'])) : ?>
+            <li><a href="login.php">login</a></li>
+            <?php endif; ?>
+            <?php if (!isset($_SESSION['login']) || ($_SESSION['tipo_usuario'] == 2)) : ?>
+                <li><a href="src/view/carrinho.php">Carrinho</a></li>
+            <?php endif; ?>
+            <?php if (isset($_SESSION['login']) && $_SESSION['tipo_usuario'] == 1) : ?>
+                <li><a href="src/view/cadastrar_produto.php">cadastrar_produto</a></li>
+            <?php endif; ?>
+            <?php if (isset($_SESSION['login']) && $_SESSION['tipo_usuario'] == 3) : ?>
+                <li><a href="cadastro_adm.php">cadastrar user Adm</a></li>
+            <?php endif; ?>
+            <?php if (isset($_SESSION['login'])) : ?>
+                <li>
+                    <form method="post" action="index.php">
+                        <input type="hidden" name="logout" value="1">
+                        <input type="submit" value="Logout" class='button'>
+                    </form>
+                </li>
+                <li>Bem-vindo, <?php echo htmlspecialchars($_SESSION['nome']); ?></li>
+                <li><a href="redefinir_senha.php">Redefinir Senha</a></li>
+                <li><a href="redefinir_nome.php">Redefinir Nome</a></li>
+            <?php endif; ?>
+        </ul>
+    </menu>
     <div class="container">
         <?php
         // Conexão com o banco de dados
@@ -120,6 +118,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['logout'])) {
                 }
             }
         });
+        function clickMenu(){
+            if(itens.style.display == 'block'){
+                itens.style.display = 'none'
+            }else{
+                itens.style.display = 'block'
+            }
+        }
     </script>
+    
+    
 </body>
 </html>
