@@ -19,42 +19,56 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['logout'])) {
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Minha Loja</title>
+    <title>Estação Digital | Preço baixo e entrega expressa !</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
     <link rel="stylesheet" type="text/css" href="./src/view/assets/css/estilo.css">
 </head>
-<body>
-    <h1>Minha Loja de Produtos</h1>
-    <input  type="text" id="searchInput" placeholder="Pesquisar produtos">
-    <br>
-    <i id="burguer" class="material-symbols-outlined" onclick="clickMenu()">menu</i>
-    <menu id="itens">
-        <ul>
+<body id="body">
+<div class="header" id="header">
+        <button onclick="toggleSidebar()" class="btn_icon_header">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-list" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"/>
+            </svg>
+        </button>
+        <div class="logo_header">
+            <a href="index.php"><img src="./src/view/assets/imagens/logo.png" alt="Logo Estação Digital" class="img_logo_header"></a>
+        </div>
+        <div class="navigation_header" id="navigation_header">
+            <button onclick="toggleSidebar()" class="btn_icon_header">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16">
+                    <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+                </svg>
+            </button>
             <?php if (!isset($_SESSION['login'])) : ?>
-            <li><a href="login.php">login</a></li>
-            <?php endif; ?>
-            <?php if (!isset($_SESSION['login']) || ($_SESSION['tipo_usuario'] == 2)) : ?>
-                <li><a href="src/view/carrinho.php">Carrinho</a></li>
-            <?php endif; ?>
-            <?php if (isset($_SESSION['login']) && $_SESSION['tipo_usuario'] == 1) : ?>
-                <li><a href="src/view/cadastrar_produto.php">cadastrar_produto</a></li>
-            <?php endif; ?>
-            <?php if (isset($_SESSION['login']) && $_SESSION['tipo_usuario'] == 3) : ?>
-                <li><a href="cadastro_adm.php">cadastrar user Adm</a></li>
+            <a href="login.php">login</a>
             <?php endif; ?>
             <?php if (isset($_SESSION['login'])) : ?>
-                <li>
-                    <form method="post" action="index.php">
-                        <input type="hidden" name="logout" value="1">
-                        <input type="submit" value="Logout" class='button'>
-                    </form>
-                </li>
-                <li>Bem-vindo, <?php echo htmlspecialchars($_SESSION['nome']); ?></li>
-                <li><a href="redefinir_senha.php">Redefinir Senha</a></li>
-                <li><a href="redefinir_nome.php">Redefinir Nome</a></li>
+                <p>Bem-vindo, <?php echo htmlspecialchars($_SESSION['nome']); ?></p>
+                
+                <form method="post" action="index.php">
+                    <input type="hidden" name="logout" value="1">
+                    <input type="submit" value="Logout" class='button'>
+                </form>
+            <?php if (isset($_SESSION['login']) && $_SESSION['tipo_usuario'] == 1) : ?>
+                    <a href="src/view/cadastrar_produto.php">Cadastrar produto</a>
             <?php endif; ?>
-        </ul>
-    </menu>
+            <?php if (!isset($_SESSION['login']) || ($_SESSION['tipo_usuario'] == 2)) : ?>
+                <a href="src/view/carrinho.php">Carrinho</a>
+            <?php endif; ?>
+                <a href="redefinir_senha.php">Redefinir Senha</a></li>
+                <a href="redefinir_nome.php">Redefinir Nome</a></li>
+            <?php endif; ?>
+            <?php if (isset($_SESSION['login']) && $_SESSION['tipo_usuario'] == 3) : ?>
+                <a href="cadastro_adm.php">cadastrar user Adm</a>
+            <?php endif; ?>
+        </div>
+    </div>
+    <div class="containerOferta">
+        <span class="oferta">FRETE GRÁTIS PARA COMPRAS ACIMA DE R$99,99!!!</span>
+    </div>
+    <div class="container">
+        <input  type="text" id="searchInput" placeholder="Pesquisar produtos">
+    </div>
     <div class="container">
         <?php
         // Conexão com o banco de dados
@@ -118,6 +132,44 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['logout'])) {
                 }
             }
         });
+        var header           = document.getElementById('header');
+    var navigationHeader = document.getElementById('navigation_header');
+    var content          = document.getElementById('content');
+    var showSidebar      = false;
+
+    function toggleSidebar()
+    {
+        showSidebar = !showSidebar;
+        if(showSidebar)
+        {
+            navigationHeader.style.marginLeft = '-10vw';
+            navigationHeader.style.animationName = 'showSidebar';
+            content.style.filter = 'blur(2px)';
+        }
+        else
+        {
+            navigationHeader.style.marginLeft = '-100vw';
+            navigationHeader.style.animationName = '';
+            content.style.filter = '';
+        }
+    }
+
+    function closeSidebar()
+    {
+        if(showSidebar)
+        {
+            showSidebar = true;
+            toggleSidebar();
+        }
+    }
+
+    window.addEventListener('resize', function(event) {
+        if(window.innerWidth > 768 && showSidebar) 
+        {  
+            showSidebar = true;
+            toggleSidebar();
+        }
+    });
         function clickMenu(){
             if(itens.style.display == 'block'){
                 itens.style.display = 'none'
