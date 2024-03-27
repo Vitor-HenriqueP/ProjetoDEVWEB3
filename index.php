@@ -80,12 +80,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['logout'])) {
             <p>Bem-vindo, <?php echo htmlspecialchars($_SESSION['nome']); ?></p>
 
             <?php if (isset($_SESSION['login']) && $_SESSION['tipo_usuario'] == 1) : ?>
-                <a href="src/view/cadastrar_produto.php">Cadastrar produto</a>
+                <a href="src/view/cadastrar_produto.php" class="categoria">Cadastrar produto</a>
             <?php endif; ?>
       
         <?php endif; ?>
         <?php if (isset($_SESSION['login']) && $_SESSION['tipo_usuario'] == 3) : ?>
-            <a href="cadastro_adm.php">cadastrar user Adm</a>
+            <a href="cadastro_adm.php" class="categoria">cadastrar user Adm</a>
         <?php endif; ?>
         <a href="#" class="categoria" data-categoria="Todas">Todas</a>
         <a href="#" class="categoria" data-categoria="Eletrônicos">Eletrônicos</a>
