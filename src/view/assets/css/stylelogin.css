@@ -216,3 +216,27 @@ body{
 .container.active .toggle-right{
     transform: translateX(200%);
 }
+
+.popup {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #a3d1a8; /* Cor verde clara */
+    border: 1px solid #000000;
+    padding: 20px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+    z-index: 9999;
+}
+
+.popup-content {
+    text-align: center;
+}
+
+.close {
+    position: absolute;
+    top: 5px;
+    right: 10px;
+    cursor: pointer;
+}

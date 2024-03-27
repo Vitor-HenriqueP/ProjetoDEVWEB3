@@ -24,8 +24,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         } else {
             $senha_hash = password_hash($senha, PASSWORD_DEFAULT);
             if ($usuario->cadastrarUsuario($nome, $login, $senha_hash)) {
-                // Usuário cadastrado com sucesso
-                header('Location: login.php');
+                // Cadastro bem-sucedido
+                header('Location: login.php?cadastro=success');
                 exit();
             } else {
                 echo "Erro ao cadastrar o usuário.";
@@ -33,6 +33,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     }
 }
+
 session_start();
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -78,7 +79,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <div class="container" id="container">
         <div class="form-container sign-up">
             <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
-                <h1>Cadastro de Usuário</h1>
+                <h1>Cadastro de usuário</h1>
                 <input type="text" id="nome" name="nome" required placeholder="Nome">
                 <input type="text" id="login" name="login" required placeholder="E-mail">
                 <input type="password" id="senha" name="senha" required placeholder="Senha">
@@ -91,7 +92,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         } ?>
         <div class="form-container sign-in">
             <form method="post" action="login.php">
-            <h1>Entrar</h1>
+                <h1>Entrar</h1>
                 <input type="text" id="login" name="login" required placeholder="E-mail"><br><br>
                 <input type="password" id="senha" name="senha" required placeholder="Senha"><br><br>
                 <a href="#">Esqueceu sua senha ?</a>
@@ -115,6 +116,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
         </div>
     </div>
+    <div id="popup" class="popup">
+        <div class="popup-content">
+            <span class="close">&times;</span>
+            <p>Cadastro bem-sucedido!</p>
+        </div>
+    </div>
     <script src="./src/view/assets/js/scriptlogin.js"></script>
 </body>
+
 </html>
