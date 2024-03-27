@@ -82,8 +82,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['logout'])) {
             <?php if (isset($_SESSION['login']) && $_SESSION['tipo_usuario'] == 1) : ?>
                 <a href="src/view/cadastrar_produto.php">Cadastrar produto</a>
             <?php endif; ?>
-            <a href="redefinir_senha.php">Redefinir Senha</a></li>
-            <a href="redefinir_nome.php">Redefinir Nome</a></li>
+      
         <?php endif; ?>
         <?php if (isset($_SESSION['login']) && $_SESSION['tipo_usuario'] == 3) : ?>
             <a href="cadastro_adm.php">cadastrar user Adm</a>
