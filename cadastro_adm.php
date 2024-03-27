@@ -1,8 +1,17 @@
 <?php
 include 'conexao.php';
 include 'src/models/User.php';
+session_start();
 
+if (!isset($_SESSION['login']) || $_SESSION['tipo_usuario'] != 3) {
+    header('Location: index.php');
+    exit();
+}
 $usuario = new Usuario_Adm($conn);
+
+
+
+
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $nome = filter_input(INPUT_POST, 'nome', FILTER_SANITIZE_STRING);
@@ -66,4 +75,4 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </form>
 </body>
 
-</html>
+</html> 

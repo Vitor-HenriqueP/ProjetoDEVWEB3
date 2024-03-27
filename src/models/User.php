@@ -52,9 +52,7 @@ class Usuario_Adm extends Usuario
 }
 class Usuario_Master extends Usuario
 {
-   
-       public $tipo_usuario = 3; // Definindo o tipo de usuário como 3
-      
-}
 
-?>
+    public $tipo_usuario = 3; // Definindo o tipo de usuário como 3
+
+}
