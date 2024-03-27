@@ -65,71 +65,47 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <head>
     <title>Cadastro de Produto</title>
-    <style>
-        .success-message {
-            background-color: #d4edda;
-            color: #155724;
-            padding: 10px;
-            margin-bottom: 10px;
-            border: 1px solid #c3e6cb;
-            border-radius: 5px;
-            display: none;
-        }
-    </style>
-    <script>
-        function showSuccessMessage() {
-            document.getElementById("successMessage").style.display = "block";
-            document.getElementById("formProduto").reset();
-            setTimeout(function() {
-                document.getElementById("successMessage").style.display = "none";
-            }, 2000);
-        }
-
-        function submitForm() {
-            var form = document.getElementById("formProduto");
-            var formData = new FormData(form);
-
-            var xhr = new XMLHttpRequest();
-            xhr.open("POST", "", true);
-            xhr.onreadystatechange = function() {
-                if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
-                    showSuccessMessage();
-                }
-            };
-            xhr.send(formData);
-
-            return false;
-        }
-    </script>
+    <link rel="stylesheet" type="text/css" href="./assets/css/stylecadastro.css">
 </head>
 
 <body>
-    <h2>Cadastro de Produto</h2>
-    <div id="successMessage" class="success-message">Produto cadastrado com sucesso!</div>
-    <form id="formProduto" method="post" enctype="multipart/form-data" onsubmit="return submitForm()">
-        <label for="nome">Nome:</label><br>
-        <input type="text" id="nome" name="nome" required><br><br>
+    <div class="container">
+        <h2>Cadastro de Produto</h2>
+        <div id="successMessage" class="success-message">Produto cadastrado com sucesso!</div>
+        <form id="formProduto" method="post" enctype="multipart/form-data" action="index.php">
+            <label for="nome">Nome:</label><br>
+            <input type="text" id="nome" name="nome" required><br><br>
 
-        <label for="descricao">Descrição:</label><br>
-        <textarea id="descricao" name="descricao"></textarea><br><br>
+            <label for="descricao">Descrição:</label><br>
+            <textarea id="descricao" name="descricao"></textarea><br><br>
 
-        <label for="preco">Preço:</label><br>
-        <input type="number" id="preco" name="preco" step="0.01" required><br><br>
+            <label for="preco">Preço:</label><br>
+            <input type="number" id="preco" name="preco" step="0.01" required><br><br>
 
-        <label for="categoria">Categoria:</label><br>
-        <select id="categoria" name="categoria" required>
-            <option value="">Selecione uma categoria</option>
-            <option value="Eletrônicos">Eletrônicos</option>
-            <option value="Roupas">Roupas</option>
-            <option value="Acessórios">Acessórios</option>
-        </select><br><br>
+            <label for="categoria">Categoria:</label><br>
+            <select id="categoria" name="categoria" required>
+                <option value="">Selecione uma categoria</option>
+                <option value="Eletrônicos">Eletrônicos</option>
+                <option value="Roupas">Roupas</option>
+                <option value="Acessórios">Acessórios</option>
+            </select><br><br>
 
-        <label for="imagem">Imagem:</label><br>
-        <input type="file" id="imagem" name="imagem" accept="image/*" required><br><br>
+            <label for="imagem" class="file-upload-btn">
+                Upload Imagem
+                <input type="file" id="imagem" name="imagem" accept="image/*" required onchange="previewImage(this)">
+            </label><br><br>
+            
+            <img id="imagem-preview" src="" alt="Preview da Imagem" style="max-width: 100%; display: none;"><br><br>
 
-        <input type="submit" value="Cadastrar">
-    </form>
-    <a href="../../index.php">Voltar</a>
+            <input type="submit" value="Cadastrar">
+        </form>
+        <a href="../../index.php">Voltar</a>
+    </div>
+    <script src="./assets/js/scriptcadastro.js"></script>
 </body>
 
 </html>
+
+
+
+

@@ -29,39 +29,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $erro = "Por favor, preencha o campo Novo Nome.";
     }
 }
-?>
-
-<!DOCTYPE html>
-<html lang="pt-BR">
-
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Redefinir nome</title>
-</head>
-
-<body>
-    <h1>Redefinir nome</h1>
-    <?php if (isset($erro)) {
-        echo "<p>$erro</p>";
-    } ?>
-    <form method="post" action="redefinir_nome.php">
-        <label for="novo_nome">Novo Nome:</label><br>
-        <input value="<?php echo htmlspecialchars($_SESSION['nome']); ?>" type="text" id="novo_nome" name="novo_nome" required><br><br>
-
-        <input type="submit" value="Redefinir">
-
-        <a href="index.php">Voltar para a tela de inicio</a>
-    </form>
-</body>
-
-</html>
-
-<?php
-include 'conexao.php'; // Assumindo que este arquivo inclui a conexão com o banco de dados
-
-
 
 if (!isset($_SESSION['login'])) {
     header('Location: login.php');
@@ -97,22 +64,54 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Redefinir senha</title>
+    <link rel="stylesheet" type="text/css" href="./src/view/assets/css/stylecard.css">
+    <title>Redefinir nome</title>
 </head>
 
 <body>
-    <h1>Redefinir senha</h1>
-    <?php if (isset($erro)) {
-        echo "<p>$erro</p>";
-    } ?>
-    <form method="post" action="redefinir_senha.php">
-        <label for="nova_senha">Nova Senha:</label><br>
-        <input type="password" id="nova_senha" name="nova_senha" required><br><br>
+    <div class="container" id="container">
+        <div class="form-container sign-up">
+            <?php if (isset($erro)) {
+                echo "<p>$erro</p>";
+            } ?>
+            <form method="post" action="redefinir_nome.php">
+                <h1>Redefinir nome</h1>
+                <input value="<?php echo htmlspecialchars($_SESSION['nome']); ?>" type="text" id="novo_nome" name="novo_nome" required placeholder="Novo nome"><br><br>
 
-        <input type="submit" value="Redefinir">
+                <input type="submit" value="Redefinir" class="button">
 
-        <a href="index.php">Voltar para a tela de inicio</a>
-    </form>
+                <a href="index.php">Voltar para a tela de inicio</a>
+            </form>
+        </div>
+        <div class="form-container sign-in">
+            <?php if (isset($erro)) {
+                echo "<p>$erro</p>";
+            } ?>
+            <form method="post" action="redefinir_senha.php">
+                <h1>Redefinir senha</h1>
+                <input type="password" id="nova_senha" name="nova_senha" required placeholder="Nova senha"><br><br>
+
+                <input type="submit" value="Redefinir" class="button">
+
+                <a href="index.php">Voltar para a tela de inicio</a>
+            </form>
+        </div>
+        <div class="toggle-container">
+            <div class="toggle">
+                <div class="toggle-panel toggle-left">
+                    <h1>Redefinir senha</h1>
+                    <p>Você pode alterar sua senha sem complicações, mas lembre-se de criar uma senha segura!</p>
+                    <button class="hidden" id="signInBtn">Redefinir senha</button>
+                </div>
+                <div class="toggle-panel toggle-right">
+                    <h1>Redefinir nome</h1>
+                    <p>Você pode alterar seu nome a qualquer instante, lembre-se seja culto!</p>
+                    <button class="hidden" id="signUpBtn">Redefinir nome</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="./src/view/assets/js/scriptlogin.js"></script>
 </body>
 
 </html>

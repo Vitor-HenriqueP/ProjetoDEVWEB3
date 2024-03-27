@@ -1,0 +1,106 @@
+:root {
+    --color-blue: #0099ff;
+    --color-blue2: #1b269c;
+    --color-green: #00ffae;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(to right, #414141, black);
+    font-family: Arial, sans-serif;
+}
+
+.container {
+    width: 40%; /* Define a largura do container */
+    margin: 50px auto; /* Centraliza o container na página */
+    background-color: white; /* Define o fundo do container como branco */
+    padding: 20px;
+    border-radius: 10px; /* Adiciona borda arredondada ao container */
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); /* Adiciona sombra ao container */
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+input[type="text"],
+input[type="number"],
+select,
+textarea {
+    width: 100%;
+    padding: 10px;
+    margin: 5px 0;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+input[type="submit"],
+button {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    box-sizing: border-box;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    color: #fff;
+    cursor: pointer;
+    background-image: linear-gradient(to right, var(--color-green), var(--color-blue));
+}
+
+input[type="submit"]:hover,
+button:hover {
+    background-image: linear-gradient(to right, var(--color-green), var(--color-blue));
+}
+
+a {
+    color: #2980B9; /* Define a cor do link */
+    text-decoration: none; /* Remove o sublinhado padrão do link */
+    margin-top: 10px;
+    display: inline-block;
+}
+
+.success-message {
+    background-image: linear-gradient(to right, var(--color-green), var(--color-blue));
+    color: #fff;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    display: none; /* Oculta a mensagem de sucesso inicialmente */
+}
+h2 {
+    text-align: center; /* Centraliza o título */
+}
+
+input[type="file"] {
+    display: none; /* Oculta o input de arquivo */
+}
+
+.file-upload-btn {
+    display: inline-block; /* Faz o botão parecer inline */
+    background-image: linear-gradient(to right, var(--color-green), var(--color-blue));
+    color: #fff; /* Cor do texto do botão */
+    padding: 10px 20px; /* Espaçamento interno do botão */
+    border: none; /* Remove a borda */
+    border-radius: 5px; /* Borda arredondada */
+    cursor: pointer; /* Muda o cursor para uma mão ao passar o mouse */
+    justify-content: center;
+    align-items: center;
+}
+
+.file-upload-btn:hover {
+    background-image: linear-gradient(to right, var(--color-green), var(--color-blue));
+}
+
+.file-upload-btn input[type="file"] {
+    display: none; /* Oculta o input de arquivo dentro do botão */
+}
+a{
+    justify-content: center;
+    align-items: center;
+    display: flex;
+}
