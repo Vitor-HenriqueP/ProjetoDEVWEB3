@@ -24,9 +24,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['logout'])) {
     <title>Estação Digital | Preço baixo e entrega expressa !</title>
     <link rel="stylesheet" type="text/css" href="./src/view/assets/css/style.css">
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
-
+ 
 
 </head>
 
@@ -59,18 +58,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['logout'])) {
             <?php if (isset($_SESSION['login'])) : ?>
                 <form method="post" action="index.php">
                     <input type="hidden" name="logout" value="1">
-
-                    <button type="submit" name="logout" value="1" class="button">
-                        <i class="fa fa-sign-out"></i> 
-                    </button>
-
+                    <input type="submit" value="Logout" class='button'>
                 </form>
             <?php endif; ?>
 
         </div>
     </div>
-
-    <nav class="nav1">
+    
+    <nav >
         <?php if (isset($_SESSION['login'])) : ?>
             <p>Bem-vindo, <?php echo htmlspecialchars($_SESSION['nome']); ?></p>
 
@@ -85,13 +80,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['logout'])) {
         <?php endif; ?>
         <?php if (isset($_SESSION['login']) && $_SESSION['tipo_usuario'] == 3) : ?>
             <a href="cadastro_adm.php">cadastrar user Adm</a>
-    </nav>
-    <nav>
-    <?php endif; ?>
-    <a href="#" class="categoria" data-categoria="Todas">Todas</a>
-    <a href="#" class="categoria" data-categoria="Eletrônicos">Eletrônicos</a>
-    <a href="#" class="categoria" data-categoria="Roupas">Roupas</a>
-    <a href="#" class="categoria" data-categoria="Acessórios">Acessórios</a>
+        <?php endif; ?>
+        <a href="#" class="categoria" data-categoria="Todas">Todas</a>
+        <a href="#" class="categoria" data-categoria="Eletrônicos">Eletrônicos</a>
+        <a href="#" class="categoria" data-categoria="Roupas">Roupas</a>
+        <a href="#" class="categoria" data-categoria="Acessórios">Acessórios</a>
 
     </nav>
     <div class="containerOferta">
@@ -116,11 +109,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['logout'])) {
 
         if ($result->num_rows > 0) {
             while ($row = $result->fetch_assoc()) {
-                echo "<form method='get' action='./src/view/produto.php'>";
-                echo "<input type='hidden' name='slug' value='" . htmlspecialchars($row["slug"]) . "'>";
-                echo "<button type='submit' style='border: none; background: none; padding: 0; text-decoration: none; color: inherit;'>";
                 echo "<div class='card " . htmlspecialchars($row["categoria"]) . "'>";
-
                 echo "<img src='data:image/jpeg;base64," . base64_encode($row["imagem"]) . "'>";
                 echo "<div class='card-content'>";
                 echo "<h3>" . htmlspecialchars($row["nome"]) . "</h3>";
