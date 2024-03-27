@@ -61,7 +61,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <input type="submit" value="Cadastrar">
         <a href="index.php">Voltar para a página inicial</a>
         <br>
-        <a href="login.php">Voltar para a página de login</a>
     </form>
 </body>
 
