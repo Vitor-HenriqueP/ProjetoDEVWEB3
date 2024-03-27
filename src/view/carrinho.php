@@ -57,7 +57,9 @@ $result_quantidade = $stmt_quantidade->get_result();
 $row_quantidade = $result_quantidade->fetch_assoc();
 $_SESSION['quantidade_carrinho'] = $row_quantidade['quantidade'];
 $stmt_quantidade->close();
-?><!DOCTYPE html>
+?>
+
+<!DOCTYPE html>
 <html lang="pt-BR">
 
 <head>
@@ -166,6 +168,22 @@ if ($result->num_rows > 0) {
     echo "<form method='post'>";
     echo "<input type='submit' name='comprar' value='Comprar' class='button'>";
     echo "</form>";
+
+    if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['comprar'])) {
+        // Limpa todos os itens do carrinho no banco de dados
+        $stmt_delete = $conn->prepare("DELETE FROM carrinho WHERE id_usuario = ?");
+        $stmt_delete->bind_param("i", $id_usuario);
+        if ($stmt_delete->execute()) {
+            // Recarrega a página após 2 segundos
+            echo "<script>setTimeout(function(){ location.reload(); }, 500);</script>";
+            echo "<div id='compra-realizada' style='background-color: #dff0d8; color: #
+                3c763d; padding: 10px; margin-top: 10px;'>Compra realizada!</div>";
+        } else {
+            echo "Erro ao realizar a compra: " . $conn->error;
+        }
+    }
+} else {
+    echo "<p>Carrinho vazio</p>";
 }
 ?>
 

@@ -14,7 +14,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['id_produto'])) {
         // Definir uma mensagem de sucesso para exibir
         $mensagem = "Produto adicionado ao carrinho.";
         // Redirecionar para o carrinho após 3 segundos
-        echo '<script>window.setTimeout(function() { window.location.href = "index.php"; }, 1000);</script>';
+        echo '<script>window.setTimeout(function() { window.location.href = "src/view/carrinho.php"; }, 1000);</script>';
     } else {
         $mensagem = "Erro ao adicionar o produto ao carrinho: " . $conn->error;
     }
