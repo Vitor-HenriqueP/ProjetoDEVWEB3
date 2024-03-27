@@ -12,7 +12,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Validação de campos
     if (empty($nome) || empty($login) || empty($senha)) {
         echo "Por favor, preencha todos os campos.";
-    } else {
+    } else { 
         // Verificar se o login já está em uso
         $stmt_verificar = $conn->prepare("SELECT id FROM usuarios WHERE login = ?");
         $stmt_verificar->bind_param("s", $login);
