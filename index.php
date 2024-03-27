@@ -22,14 +22,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['logout'])) {
 
 <head>
     <title>Estação Digital | Preço baixo e entrega expressa !</title>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
-    <link rel="stylesheet" type="text/css" href="./src/view/assets/css/estilo.css">
+    <link rel="stylesheet" type="text/css" href="./src/view/assets/css/style.css">
 
-    <style>
-        .hidden {
-            display: none;
-        }
-    </style>
+
+ 
 
 </head>
 
@@ -68,7 +64,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['logout'])) {
 
         </div>
     </div>
-    <nav>
+    
+    <nav >
         <?php if (isset($_SESSION['login'])) : ?>
             <p>Bem-vindo, <?php echo htmlspecialchars($_SESSION['nome']); ?></p>
 

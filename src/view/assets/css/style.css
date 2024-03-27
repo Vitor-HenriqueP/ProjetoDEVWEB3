@@ -9,9 +9,49 @@
     --color-blue2: #1b269c;
 }
 
+.hidden {
+    display: none;
+}
+
+nav {
+    background-color: var(--color-dark5);
+    text-align: center;
+    padding: 5px;
+
+}
+
+
+
+
+.categoria {
+    margin: 10px;
+    color: #00ffae;
+    padding: 5px;
+    text-decoration: none;
+
+}
+
+:root {
+    --color-white: #fff;
+    --color-dark1: rgb(39, 39, 39);
+    --color-dark2: #2d2d2d;
+    --color-dark3: #6b6a6a;
+    --color-dark4: #000000;
+    --color-dark5: #343434;
+    --color-purple: #0099ff;
+    --color-blue2: #1b269c;
+}
+
 * {
     margin: 0;
     padding: 0;
+}
+
+.hidden {
+    display: none;
+}
+nav{
+    background-color: black;
 }
 
 .img_logo_header {
@@ -38,6 +78,7 @@
     color: var(--color-white);
     font-weight: bold;
 }
+
 
 .navigation_header {
     gap: 3em;
@@ -322,11 +363,10 @@ menu>ul {
 
 .containerOferta {
     width: 100%;
-    margin: 0 auto;
-    padding: 20px;
+    padding-top: 20px;
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-around;
+    justify-content: center;
     background-image: linear-gradient(to right, #00ffae, #0095ff);
     height: 50px;
 }
@@ -335,7 +375,7 @@ menu>ul {
     color: white;
     font-weight: bold;
     width: 100%;
-    text-align: start;
+    text-align: center;
     justify-content: center;
     display: flex;
 }
