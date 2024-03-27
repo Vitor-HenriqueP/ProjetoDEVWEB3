@@ -24,6 +24,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['logout'])) {
     <title>Estação Digital | Preço baixo e entrega expressa !</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
     <link rel="stylesheet" type="text/css" href="./src/view/assets/css/estilo.css">
+
+    <style>
+        .hidden {
+            display: none;
+        }
+    </style>
+
 </head>
 
 <body id="body">
@@ -53,10 +60,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['logout'])) {
             </div>
 
             <?php if (isset($_SESSION['login'])) : ?>
-            <form method="post" action="index.php">
-                <input type="hidden" name="logout" value="1">
-                <input type="submit" value="Logout" class='button'>
-            </form>
+                <form method="post" action="index.php">
+                    <input type="hidden" name="logout" value="1">
+                    <input type="submit" value="Logout" class='button'>
+                </form>
             <?php endif; ?>
 
         </div>
@@ -94,7 +101,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['logout'])) {
             die("Erro ao conectar ao banco de dados: " . $conn->connect_error);
         }
 
-        $stmt = $conn->prepare("SELECT id, nome, descricao, preco, imagem, slug FROM produto");
+        $stmt = $conn->prepare("SELECT id, nome, descricao, preco, imagem, slug, categoria FROM produto");
         $stmt->execute();
         $result = $stmt->get_result();
 
@@ -114,6 +121,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['logout'])) {
                 $descricao = implode(' ', $descricao);
 
                 echo "<p>" . htmlspecialchars($descricao) . "</p>";
+                echo "<p class='hidden'>" . htmlspecialchars($row["categoria"]) . "</p>";
+
                 echo "<p class='price'>R$" . number_format($row["preco"], 2, ',', '.') . "</p>";
                 echo "</div>";
                 echo "</div>";

@@ -6,44 +6,36 @@ if (!isset($_SESSION['login']) || $_SESSION['tipo_usuario'] != 1) {
     exit();
 }
 
-include '../../conexao.php'; // Assumindo que este arquivo inclui a conexão com o banco de dados
+include '../../conexao.php';
 
-// Função para criar um slug a partir de um texto
-// Função para criar um slug a partir de um texto com uma string aleatória de 150 caracteres
 function slugify($text)
 {
-    $text = preg_replace('/[^\pL\d]+/u', '-', $text); // Substitui caracteres não alfanuméricos por '-'
-    $text = iconv('utf-8', 'us-ascii//TRANSLIT', $text); // Converte caracteres especiais para equivalentes em ASCII
-    $text = strtolower($text); // Converte para minúsculas
-    $text = preg_replace('/[^-\w]+/', '', $text); // Remove caracteres que não são letras, números ou '-'
-    $text = trim($text, '-'); // Remove '-' do início e fim do texto
-    $text = preg_replace('/-+/', '-', $text); // Remove múltiplos '-' consecutivos
+    $text = preg_replace('/[^\pL\d]+/u', '-', $text);
+    $text = iconv('utf-8', 'us-ascii//TRANSLIT', $text);
+    $text = strtolower($text);
+    $text = preg_replace('/[^-\w]+/', '', $text);
+    $text = trim($text, '-');
 
-    // Adicionar uma string aleatória de 150 caracteres ao final do slug
     $randomString = substr(str_shuffle(str_repeat($x = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', ceil(150 / strlen($x)))), 1, 150);
     $text = $text . '-' . $randomString;
 
     return $text;
 }
 
-// Função para verificar se o slug já existe no banco de dados
-
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $nome = $_POST["nome"];
-    $descricao = $_POST["descricao"];
+    $nome = htmlspecialchars($_POST["nome"]);
+    $descricao = htmlspecialchars($_POST["descricao"]);
     $preco = floatval($_POST["preco"]);
+    $categoria = htmlspecialchars($_POST["categoria"]);
 
-    // Verifica se foi enviado um arquivo de imagem
     if (isset($_FILES["imagem"]) && $_FILES["imagem"]["error"] == 0) {
         $imagem = file_get_contents($_FILES["imagem"]["tmp_name"]);
 
-        // Verifica o tipo de arquivo
         $allowed_types = array('image/jpeg', 'image/png', 'image/gif');
         if (!in_array($_FILES['imagem']['type'], $allowed_types)) {
             die("Tipo de arquivo não suportado.");
         }
 
-        // Verifica o tamanho do arquivo (máximo de 1MB)
         if ($_FILES['imagem']['size'] > 1048576) {
             die("Tamanho do arquivo excedido.");
         }
@@ -51,19 +43,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $imagem = null;
     }
 
-    // Gerar o slug a partir do nome do produto
     $slug = slugify($nome);
 
-    // Verificar se o slug já existe no banco de dados
-
-    // Preparar a query SQL usando um prepared statement
-    $sql = "INSERT INTO produto (nome, descricao, preco, imagem, slug) VALUES (?, ?, ?, ?, ?)";
+    $sql = "INSERT INTO produto (nome, descricao, preco, imagem, slug, categoria) VALUES (?, ?, ?, ?, ?, ?)";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("ssdss", $nome, $descricao, $preco, $imagem, $slug);
+    $stmt->bind_param("ssdsss", $nome, $descricao, $preco, $imagem, $slug, $categoria);
 
     if ($stmt->execute()) {
         header('Location: cadastrar_produto.php');
-
         exit();
     } else {
         echo "Erro ao cadastrar o produto: " . $stmt->error;
@@ -95,7 +82,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             document.getElementById("formProduto").reset();
             setTimeout(function() {
                 document.getElementById("successMessage").style.display = "none";
-            }, 2000); // Oculta a mensagem após 2 segundos
+            }, 2000);
         }
 
         function submitForm() {
@@ -111,7 +98,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             };
             xhr.send(formData);
 
-            return false; // Evita a recarga da página
+            return false;
         }
     </script>
 </head>
@@ -128,6 +115,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         <label for="preco">Preço:</label><br>
         <input type="number" id="preco" name="preco" step="0.01" required><br><br>
+
+        <label for="categoria">Categoria:</label><br>
+        <select id="categoria" name="categoria" required>
+            <option value="">Selecione uma categoria</option>
+            <option value="Eletrônicos">Eletrônicos</option>
+            <option value="Roupas">Roupas</option>
+            <option value="Acessórios">Acessórios</option>
+        </select><br><br>
 
         <label for="imagem">Imagem:</label><br>
         <input type="file" id="imagem" name="imagem" accept="image/*" required><br><br>
