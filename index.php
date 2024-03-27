@@ -59,7 +59,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['logout'])) {
                 <a href="src/view/carrinho.php"><span class="material-symbols-outlined">shopping_cart</span></a>
             <?php endif; ?>
             <?php if (isset($_SESSION['login'])) : ?>
-                <a href="user.php"><span class="material-symbols-outlined">person</span></a>
+                <a href="user_config.php"><span class="material-symbols-outlined">person</span></a>
             <?php endif; ?>
 
             <?php if (isset($_SESSION['login'])) : ?>
