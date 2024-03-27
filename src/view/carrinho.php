@@ -68,7 +68,22 @@ $stmt_quantidade->close();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Carrinho</title>
     <link rel="stylesheet" type="text/css" href="/config/stylecarrinho.css">
-    
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        function alterarQuantidade(id_produto, action) {
+            $.ajax({
+                type: "POST",
+                url: "alterar_quantidade.php",
+                data: {
+                    id_produto: id_produto,
+                    action: action
+                },
+                success: function(response) {
+                    location.reload(); // Recarrega a página após a atualização
+                }
+            });
+        }
+    </script>
 </head>
 
 <body>
@@ -87,7 +102,7 @@ $stmt_quantidade->close();
 
         while ($row = $result->fetch_assoc()) {
             $total += $row['preco'] *
-            $row['quantidade']; // Adiciona o preço do produto ao total
+                $row['quantidade']; // Adiciona o preço do produto ao total
             $descricao = explode(' ', $row["descricao"]);
             $descricao = array_slice($descricao, 0, 20);
             $descricao = implode(' ', $descricao);
@@ -101,17 +116,9 @@ $stmt_quantidade->close();
 
             echo "<p>{$descricao} - R$ {$row['preco']} - Quantidade: {$row['quantidade']}</p>";
 
-            echo "<form method='post'>";
-            echo "<input type='hidden' name='id_produto' value='{$row['id_produto']}'>";
-            echo "<input type='hidden' name='action' value='remove'>";
-            echo "<button type='submit' class='button'>-</button>";
-            echo "</form>";
+            echo "<button type='button' onclick='alterarQuantidade({$row['id_produto']}, \"remove\")' class='button'>-</button>";
 
-            echo "<form method='post'>";
-            echo "<input type='hidden' name='id_produto' value='{$row['id_produto']}'>";
-            echo "<input type='hidden' name='action' value='add'>";
-            echo "<button type='submit' class='button'>+</button>";
-            echo "</form>";
+            echo "<button type='button' onclick='alterarQuantidade({$row['id_produto']}, \"add\")' class='button'>+</button>";
         }
 
         // Exibe o valor total
@@ -129,7 +136,8 @@ $stmt_quantidade->close();
             if ($stmt_delete->execute()) {
                 // Recarrega a página após 2 segundos
                 echo "<script>setTimeout(function(){ location.reload(); }, 500);</script>";
-                echo "<div id='compra-realizada' style='background-color: #dff0d8; color: #3c763d; padding: 10px; margin-top: 10px;'>Compra realizada!</div>";
+                echo "<div id='compra-realizada' style='background-color: #dff0d8; color: #
+                3c763d; padding: 10px; margin-top: 10px;'>Compra realizada!</div>";
             } else {
                 echo "Erro ao realizar a compra: " . $conn->error;
             }
@@ -142,6 +150,7 @@ $stmt_quantidade->close();
     <a href="../../index.php">Voltar para a página inicial</a>
 
     <div class="card-mensagem" id="mensagem"><?php echo isset($mensagem) ? $mensagem : ''; ?></div>
+
 </body>
 
 </html>
