@@ -116,7 +116,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['logout'])) {
 
         if ($result->num_rows > 0) {
             while ($row = $result->fetch_assoc()) {
+                echo "<form method='get' action='./src/view/produto.php'>";
+                echo "<input type='hidden' name='slug' value='" . htmlspecialchars($row["slug"]) . "'>";
+                echo "<button type='submit' style='border: none; background: none; padding: 0; text-decoration: none; color: inherit;'>";
                 echo "<div class='card " . htmlspecialchars($row["categoria"]) . "'>";
+
                 echo "<img src='data:image/jpeg;base64," . base64_encode($row["imagem"]) . "'>";
                 echo "<div class='card-content'>";
                 echo "<h3>" . htmlspecialchars($row["nome"]) . "</h3>";
