@@ -23,9 +23,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['logout'])) {
 <head>
     <title>Estação Digital | Preço baixo e entrega expressa !</title>
     <link rel="stylesheet" type="text/css" href="./src/view/assets/css/style.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 
 
- 
+
 
 </head>
 
@@ -46,7 +47,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['logout'])) {
                 </svg>
             </button>
             <?php if (!isset($_SESSION['login'])) : ?>
-                <a href="login.php">login</a>
+                <a href="login.php"><span class="material-symbols-outlined">login</span></a>
             <?php endif; ?>
             <div class="pesquisar">
                 <input type="text" placeholder="Busque aqui" id="searchInput" class="txtpesquisar" />
@@ -54,26 +55,32 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['logout'])) {
                     <img class="lupa-branca" src="./src/view/assets/imagens/lupa-branca.svg" alt="Pesquisar" width="25px" height="25px" />
                 </a>
             </div>
+            <?php if (!isset($_SESSION['login']) || ($_SESSION['tipo_usuario'] == 2)) : ?>
+                <a href="src/view/carrinho.php"><span class="material-symbols-outlined">shopping_cart</span></a>
+            <?php endif; ?>
+            <?php if (isset($_SESSION['login'])) : ?>
+                <a href="user.php"><span class="material-symbols-outlined">person</span></a>
+            <?php endif; ?>
 
             <?php if (isset($_SESSION['login'])) : ?>
                 <form method="post" action="index.php">
                     <input type="hidden" name="logout" value="1">
-                    <input type="submit" value="Logout" class='button'>
+                    <button type="submit" class="button" style="background: none; border: none; cursor: pointer;">
+                        <a><span class="material-symbols-outlined" style="vertical-align: middle;">logout</span></a>
+                    </button>
                 </form>
+
             <?php endif; ?>
 
         </div>
     </div>
-    
-    <nav >
+
+    <nav>
         <?php if (isset($_SESSION['login'])) : ?>
             <p>Bem-vindo, <?php echo htmlspecialchars($_SESSION['nome']); ?></p>
 
             <?php if (isset($_SESSION['login']) && $_SESSION['tipo_usuario'] == 1) : ?>
                 <a href="src/view/cadastrar_produto.php">Cadastrar produto</a>
-            <?php endif; ?>
-            <?php if (!isset($_SESSION['login']) || ($_SESSION['tipo_usuario'] == 2)) : ?>
-                <a href="src/view/carrinho.php">Carrinho</a>
             <?php endif; ?>
             <a href="redefinir_senha.php">Redefinir Senha</a></li>
             <a href="redefinir_nome.php">Redefinir Nome</a></li>

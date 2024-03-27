@@ -27,17 +27,6 @@ nav {
     padding: 5px;
 
 }
-<<<<<<< Updated upstream
-
-.nav1 {
-    background-color: var(--color-dark4);
-    text-align: start;
-    padding: 5px;
-
-}
-
-
-=======
 a{
     text-decoration: none;
     color: var(--color-blue);
@@ -46,7 +35,6 @@ a{
 a:hover{
     color: var(--color-green);
 }
->>>>>>> Stashed changes
 
 
 .categoria {
