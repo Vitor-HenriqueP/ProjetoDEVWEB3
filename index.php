@@ -65,7 +65,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['logout'])) {
         </div>
     </div>
     
-    <nav >
+    <nav class="nav1">
         <?php if (isset($_SESSION['login'])) : ?>
             <p>Bem-vindo, <?php echo htmlspecialchars($_SESSION['nome']); ?></p>
 
@@ -80,12 +80,30 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['logout'])) {
         <?php endif; ?>
         <?php if (isset($_SESSION['login']) && $_SESSION['tipo_usuario'] == 3) : ?>
             <a href="cadastro_adm.php">cadastrar user Adm</a>
+            </nav>
+<nav>
         <?php endif; ?>
         <a href="#" class="categoria" data-categoria="Todas">Todas</a>
         <a href="#" class="categoria" data-categoria="Eletrônicos">Eletrônicos</a>
         <a href="#" class="categoria" data-categoria="Roupas">Roupas</a>
         <a href="#" class="categoria" data-categoria="Acessórios">Acessórios</a>
 
+    </nav>
+    <?php if (isset($_SESSION['login'])) : ?>
+            <p>Bem-vindo, <?php echo htmlspecialchars($_SESSION['nome']); ?></p>
+
+            <?php if (isset($_SESSION['login']) && $_SESSION['tipo_usuario'] == 1) : ?>
+                <a href="src/view/cadastrar_produto.php">Cadastrar produto</a>
+            <?php endif; ?>
+            <?php if (!isset($_SESSION['login']) || ($_SESSION['tipo_usuario'] == 2)) : ?>
+                <a href="src/view/carrinho.php">Carrinho</a>
+            <?php endif; ?>
+            <a href="redefinir_senha.php">Redefinir Senha</a></li>
+            <a href="redefinir_nome.php">Redefinir Nome</a></li>
+        <?php endif; ?>
+        <?php if (isset($_SESSION['login']) && $_SESSION['tipo_usuario'] == 3) : ?>
+            <a href="cadastro_adm.php">cadastrar user Adm</a>
+        <?php endif; ?>
     </nav>
     <div class="containerOferta">
         <span class="oferta">FRETE GRÁTIS PARA COMPRAS ACIMA DE R$99,99!!!</span>
@@ -109,7 +127,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['logout'])) {
 
         if ($result->num_rows > 0) {
             while ($row = $result->fetch_assoc()) {
-                echo "<div class='card " . htmlspecialchars($row["categoria"]) . "'>";
+                echo "<form method='get' action='./src/view/produto.php'>";
+                echo "<input type='hidden' name='slug' value='" . htmlspecialchars($row["slug"]) . "'>";
+                echo "<button type='submit' style='border: none; background: none; padding: 0; text-decoration: none; color: inherit;'>";
+                echo "<div class='card'>";
                 echo "<img src='data:image/jpeg;base64," . base64_encode($row["imagem"]) . "'>";
                 echo "<div class='card-content'>";
                 echo "<h3>" . htmlspecialchars($row["nome"]) . "</h3>";
@@ -125,6 +146,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['logout'])) {
                 echo "<p class='price'>R$" . number_format($row["preco"], 2, ',', '.') . "</p>";
                 echo "</div>";
                 echo "</div>";
+                echo "</button>";
+                echo "</form>";
             }
         } else {
             echo "Nenhum produto encontrado.";

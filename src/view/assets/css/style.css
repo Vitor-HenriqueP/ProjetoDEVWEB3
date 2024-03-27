@@ -20,6 +20,13 @@ nav {
 
 }
 
+.nav1 {
+    background-color: var(--color-dark4);
+    text-align: start;
+    padding: 5px;
+
+}
+
 
 
 
