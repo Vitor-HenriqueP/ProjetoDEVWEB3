@@ -84,6 +84,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['logout'])) {
         <?php if (isset($_SESSION['login']) && $_SESSION['tipo_usuario'] == 3) : ?>
             <a href="cadastro_adm.php">cadastrar user Adm</a>
         <?php endif; ?>
+        <a href="#" class="categoria" data-categoria="Todas">Todas</a>
+        <a href="#" class="categoria" data-categoria="Eletrônicos">Eletrônicos</a>
+        <a href="#" class="categoria" data-categoria="Roupas">Roupas</a>
+        <a href="#" class="categoria" data-categoria="Acessórios">Acessórios</a>
+
     </nav>
     <div class="containerOferta">
         <span class="oferta">FRETE GRÁTIS PARA COMPRAS ACIMA DE R$99,99!!!</span>
@@ -107,10 +112,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['logout'])) {
 
         if ($result->num_rows > 0) {
             while ($row = $result->fetch_assoc()) {
-                echo "<form method='get' action='./src/view/produto.php'>";
-                echo "<input type='hidden' name='slug' value='" . htmlspecialchars($row["slug"]) . "'>";
-                echo "<button type='submit' style='border: none; background: none; padding: 0; text-decoration: none; color: inherit;'>";
-                echo "<div class='card'>";
+                echo "<div class='card " . htmlspecialchars($row["categoria"]) . "'>";
                 echo "<img src='data:image/jpeg;base64," . base64_encode($row["imagem"]) . "'>";
                 echo "<div class='card-content'>";
                 echo "<h3>" . htmlspecialchars($row["nome"]) . "</h3>";
@@ -126,8 +128,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['logout'])) {
                 echo "<p class='price'>R$" . number_format($row["preco"], 2, ',', '.') . "</p>";
                 echo "</div>";
                 echo "</div>";
-                echo "</button>";
-                echo "</form>";
             }
         } else {
             echo "Nenhum produto encontrado.";
@@ -138,6 +138,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['logout'])) {
     </div>
 
     <script>
+        document.querySelectorAll('.categoria').forEach(item => {
+            item.addEventListener('click', event => {
+                const categoria = event.target.getAttribute('data-categoria');
+                const cards = document.querySelectorAll('.card');
+
+                cards.forEach(card => {
+                    if (categoria === 'Todas' || card.classList.contains(categoria)) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+        });
+
         document.getElementById("searchInput").addEventListener("input", function() {
             var input, filter, cards, card, i, txtValue;
             input = document.getElementById("searchInput");
@@ -153,6 +168,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['logout'])) {
                 }
             }
         });
+
         var header = document.getElementById('header');
         var navigationHeader = document.getElementById('navigation_header');
         var content = document.getElementById('content');
@@ -193,7 +209,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['logout'])) {
             }
         }
     </script>
-
 
 </body>
 
