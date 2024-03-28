@@ -111,12 +111,11 @@ input[type="file"] {
 }
 
 .file-upload-btn:hover {
-    background-image: linear-gradient(to right, var(--color-green), var(--color-blue));
+    background-image: linear-gradient(to right, var(--color-blue), var(--color-green));
 }
 
 .file-upload-btn input[type="file"] {
     display: none;
-    /* Oculta o input de arquivo dentro do botão */
 }
 
 a {

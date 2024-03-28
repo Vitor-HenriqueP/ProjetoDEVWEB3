@@ -1,69 +1,3 @@
-<?php
-include 'conexao.php'; // Assumindo que este arquivo inclui a conexão com o banco de dados
-include 'src/models/User.php';
-
-$usuario = new Usuario_Padrao($conn);
-
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $nome = filter_input(INPUT_POST, 'nome', FILTER_SANITIZE_STRING);
-    $login = filter_input(INPUT_POST, 'login', FILTER_SANITIZE_STRING);
-    $senha = filter_input(INPUT_POST, 'senha', FILTER_SANITIZE_STRING);
-
-    // Validação de campos
-    if (empty($nome) || empty($login) || empty($senha)) {
-        echo "Por favor, preencha todos os campos.";
-    } else {
-        // Verificar se o login já está em uso
-        $stmt_verificar = $conn->prepare("SELECT id FROM usuarios WHERE login = ?");
-        $stmt_verificar->bind_param("s", $login);
-        $stmt_verificar->execute();
-        $result_verificar = $stmt_verificar->get_result();
-
-        if ($result_verificar->num_rows > 0) {
-            echo "Login já está em uso. Por favor, escolha outro.";
-        } else {
-            $senha_hash = password_hash($senha, PASSWORD_DEFAULT);
-            if ($usuario->cadastrarUsuario($nome, $login, $senha_hash)) {
-                // Cadastro bem-sucedido
-                header('Location: login.php?cadastro=success');
-                exit();
-            } else {
-                echo "Erro ao cadastrar o usuário.";
-            }
-        }
-    }
-}
-
-session_start();
-
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $login = $_POST['login'];
-    $senha = $_POST['senha'];
-
-    $stmt = $conn->prepare("SELECT id, nome, login, senha, tipo_usuario FROM usuarios WHERE login = ?");
-    $stmt->bind_param("s", $login);
-    $stmt->execute();
-    $result = $stmt->get_result();
-
-    if ($result->num_rows == 1) {
-        $usuarioEncontrado = $result->fetch_assoc();
-        if (password_verify($senha, $usuarioEncontrado['senha'])) {
-            // Login bem-sucedido
-            $_SESSION['id'] = $usuarioEncontrado['id'];
-            $_SESSION['nome'] = $usuarioEncontrado['nome']; // Adicione esta linha para armazenar o nome do usuário na sessão
-            $_SESSION['login'] = $login;
-            $_SESSION['tipo_usuario'] = $usuarioEncontrado['tipo_usuario']; // Corrigido para 'tipo_user'
-            header('Location: index.php');
-            exit();
-        } else {
-            $erro = "Login ou senha incorretos";
-        }
-    } else {
-        $erro = "Login ou senha incorretos";
-    }
-}
-?>
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 
@@ -76,6 +10,69 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </head>
 
 <body>
+    <?php
+    include 'conexao.php'; // Assumindo que este arquivo inclui a conexão com o banco de dados
+    include 'src/models/User.php';
+
+    $usuario = new Usuario_Padrao($conn);
+
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        $nome = filter_input(INPUT_POST, 'nome', FILTER_SANITIZE_STRING);
+        $login = filter_input(INPUT_POST, 'login', FILTER_SANITIZE_STRING);
+        $senha = filter_input(INPUT_POST, 'senha', FILTER_SANITIZE_STRING);
+
+        // Validação de campos
+        if (empty($nome) || empty($login) || empty($senha)) {
+            echo "<p style='color:red;'>Dados inválidos.</p>";
+        } else {
+            // Verificar se o login já está em uso
+            $stmt_verificar = $conn->prepare("SELECT id FROM usuarios WHERE login = ?");
+            $stmt_verificar->bind_param("s", $login);
+            $stmt_verificar->execute();
+            $result_verificar = $stmt_verificar->get_result();
+
+            if ($result_verificar->num_rows > 0) {
+                echo "Login já está em uso. Por favor, escolha outro.";
+            } else {
+                $senha_hash = password_hash($senha, PASSWORD_DEFAULT);
+                if ($usuario->cadastrarUsuario($nome, $login, $senha_hash)) {
+                    // Cadastro bem-sucedido
+                    header('Location: login.php?cadastro=success');
+                    exit();
+                } else {
+                    echo "Erro ao cadastrar o usuário.";
+                }
+            }
+        }
+    }
+
+    session_start();
+
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        $login = $_POST['login'];
+        $senha = $_POST['senha'];
+
+        $stmt = $conn->prepare("SELECT id, nome, login, senha, tipo_usuario FROM usuarios WHERE login = ?");
+        $stmt->bind_param("s", $login);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        if ($result->num_rows == 1) {
+            $usuarioEncontrado = $result->fetch_assoc();
+            if (password_verify($senha, $usuarioEncontrado['senha'])) {
+                // Login bem-sucedido
+                $_SESSION['id'] = $usuarioEncontrado['id'];
+                $_SESSION['nome'] = $usuarioEncontrado['nome']; // Adicione esta linha para armazenar o nome do usuário na sessão
+                $_SESSION['login'] = $login;
+                $_SESSION['tipo_usuario'] = $usuarioEncontrado['tipo_usuario']; // Corrigido para 'tipo_user'
+                header('Location: index.php');
+                exit();
+            } else {
+                $erro = "Login ou senha incorretos";
+            }
+        } 
+    }
+    ?>
     <div class="container" id="container">
         <div class="form-container sign-up">
             <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
