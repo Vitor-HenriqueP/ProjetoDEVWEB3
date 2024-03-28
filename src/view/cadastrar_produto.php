@@ -103,7 +103,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </div>
     <script src="./assets/js/scriptcadastro.js"></script>
 </body>
-
 </html>
 
 
