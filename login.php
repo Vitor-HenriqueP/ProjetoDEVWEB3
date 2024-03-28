@@ -20,23 +20,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $result_verificar = $stmt_verificar->get_result();
 
         if ($result_verificar->num_rows > 0) {
-            echo '<div id="popup" style="position: fixed;align-text = center; top: 10%; left: 50%; transform: translate(-50%, -50%); background-color: white; padding: 10px; border: 1px solid #ccc; border-radius: 5px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); z-index: 9999;">';
-            echo 'Conteúdo do Pop-up Aqui';
-            echo '</div>';
-
-            // Adiciona um script para mostrar o pop-up
-            echo '<script>
-                      function fecharPopup() {
-                          document.getElementById("popup").remove();
-                      }
-                      setTimeout(function() {
-                          fecharPopup();
-                      }, 3000);
-                  </script>';
+            echo "Login já está em uso. Por favor, escolha outro.";
         } else {
             $senha_hash = password_hash($senha, PASSWORD_DEFAULT);
             if ($usuario->cadastrarUsuario($nome, $login, $senha_hash)) {
                 // Cadastro bem-sucedido
+                header('Location: login.php?cadastro=success');
+                exit();
+            } else {
+                echo "Erro ao cadastrar o usuário.";
             }
         }
     }
@@ -61,6 +53,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION['nome'] = $usuarioEncontrado['nome']; // Adicione esta linha para armazenar o nome do usuário na sessão
             $_SESSION['login'] = $login;
             $_SESSION['tipo_usuario'] = $usuarioEncontrado['tipo_usuario']; // Corrigido para 'tipo_user'
+            header('Location: index.php');
             exit();
         } else {
             $erro = "Login ou senha incorretos";
@@ -85,7 +78,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <body>
     <div class="container" id="container">
         <div class="form-container sign-up">
-            <form id="form-cadastro">
+            <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
                 <h1>Cadastro de usuário</h1>
                 <input type="text" id="nome" name="nome" required placeholder="Nome">
                 <input type="text" id="login" name="login" required placeholder="E-mail">
@@ -94,9 +87,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <input type="submit" value="Cadastrar" class="button">
             </form>
         </div>
-        <div id="mensagem-erro"></div>
+        <?php if (isset($erro)) {
+            echo "<p>$erro</p>";
+        } ?>
         <div class="form-container sign-in">
-            <form id="form-login">
+            <form method="post" action="login.php">
                 <h1>Entrar</h1>
                 <input type="text" id="login" name="login" required placeholder="E-mail"><br><br>
                 <input type="password" id="senha" name="senha" required placeholder="Senha"><br><br>
@@ -121,10 +116,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
         </div>
     </div>
-
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <div id="popup" class="popup">
+        <div class="popup-content">
+            <span class="close">&times;</span>
+            <p>Cadastro bem-sucedido!</p>
+        </div>
+    </div>
     <script src="./src/view/assets/js/scriptlogin.js"></script>
-
 </body>
 
 </html>
