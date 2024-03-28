@@ -85,7 +85,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['logout'])) {
       
         <?php endif; ?>
         <?php if (isset($_SESSION['login']) && $_SESSION['tipo_usuario'] == 3) : ?>
-            <a href="cadastro_adm.php" class="categoria">cadastrar user Adm</a>
+            <a href="cadastro_adm.php" class="categoria">Cadastrar novo administrador.</a>
         <?php endif; ?>
         <a href="#" class="categoria" data-categoria="Todas">Todas</a>
         <a href="#" class="categoria" data-categoria="Eletrônicos">Eletrônicos</a>
