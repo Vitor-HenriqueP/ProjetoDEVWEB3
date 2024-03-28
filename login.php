@@ -122,8 +122,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </div>
     </div>
 
-
-    <button onclick="fecharPopup()">Fechar</button>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="./src/view/assets/js/scriptlogin.js"></script>
 

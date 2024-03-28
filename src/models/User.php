@@ -49,7 +49,23 @@ class Usuario_Adm extends Usuario
         $stmt->bind_param("sss", $nome, $login, $senha); // 'sss' indica que são três strings
         return $stmt->execute();
     }
+
+    public function excluirUsuario($id)
+    {
+        $query = "DELETE FROM usuarios WHERE id = ?";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bind_param("i", $id); // 'i' indica um inteiro
+        return $stmt->execute();
+    }
+
+    public function listarAdministradores()
+    {
+        $query = "SELECT * FROM usuarios WHERE tipo_usuario = 1"; // Tipo de usuário 1 para administradores
+        $result = $this->conn->query($query);
+        return $result->fetch_all(MYSQLI_ASSOC);
+    }
 }
+
 class Usuario_Master extends Usuario
 {
 

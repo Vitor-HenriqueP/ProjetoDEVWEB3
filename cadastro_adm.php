@@ -21,7 +21,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Verificar se os campos estão preenchidos
     if (empty($nome) || empty($login) || empty($senha)) {
-        echo "Por favor, preencha todos os campos.";
+        
     } else {
         // Verificar se o login já está em uso
         $stmt_verificar = $conn->prepare("SELECT id FROM usuarios WHERE login = ?");
@@ -44,6 +44,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     }
 }
+if (isset($_POST['excluir']) && isset($_POST['id'])) {
+    $id = $_POST['id'];
+    if ($usuario->excluirUsuario($id)) {
+        echo '<script>alert("Usuário excluído com sucesso!");</script>';
+    } else {
+        echo "Erro ao excluir o usuário.";
+    }
+}
+$administradores = $usuario->listarAdministradores();
 
 ?>
 
@@ -54,25 +63,52 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cadastro de Usuário</title>
+    <link rel="stylesheet" type="text/css" href="./src/view/assets/css/stylecadastroadm.css">
+    <title>Cadastro de administrador</title>
 </head>
 
 <body>
-    <h1>Cadastro de Usuário Administrador</h1>
-    <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
-        <label for="nome">Nome:</label><br>
-        <input type="text" id="nome" name="nome" required><br><br>
-
-        <label for="login">Login:</label><br>
-        <input type="text" id="login" name="login" required><br><br>
-
-        <label for="senha">Senha:</label><br>
-        <input type="password" id="senha" name="senha" required><br><br>
-
-        <input type="submit" value="Cadastrar">
-        <a href="index.php">Voltar para a página inicial</a>
-        <br>
-    </form>
+    <div class="container" id="container">
+        <div class="form-container sign-up">
+            <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
+                <h1>Cadastro de Usuário Administrador</h1>
+                <input type="text" id="nome" name="nome" required placeholder="Nome">
+                <input type="text" id="login" name="login" required placeholder="E-mail">
+                <input type="password" id="senha" name="senha" required placeholder="Senha">
+                <input type="submit" value="Cadastrar">
+            </form>
+        </div>
+        <div class="form-container sign-in">
+            <form id="form-login" method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
+                <h1>Administradores existentes.</h1>
+                <?php foreach ($administradores as $admin) : ?>
+                    <div class="background-container">
+                        <p>Administrador:</p>
+                        <p><?php echo substr($admin['nome'], 0, 5); ?></p>
+                        <p><?php echo substr($admin['login'], 0, 5); ?></p>
+                    </div>
+                    <input type="hidden" name="id" value="<?php echo $admin['id']; ?>">
+                    <input type="submit" name="excluir" value="Excluir" class="button">
+                <?php endforeach; ?>
+                <a href="index.php">Voltar para a página inicial</a>
+            </form>
+        </div>
+        <div class="toggle-container">
+            <div class="toggle">
+                <div class="toggle-panel toggle-left">
+                    <h1>Lista de admnistradores</h1>
+                    <p>Deseja visualizar ou excluir algum admnistrador existente?</p>
+                    <button class="hidden" id="signInBtn">Visualizar</button>
+                </div>
+                <div class="toggle-panel toggle-right">
+                    <h1>Cadastre um novo administrador</h1>
+                    <p>Existe um novo administrador na loja?</p>
+                    <button class="hidden" id="signUpBtn">Cadastre-o</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="./src/view/assets/js/scriptlogin.js"></script>
 </body>
 
-</html> 
+</html>
