@@ -32,7 +32,7 @@
             $result_verificar = $stmt_verificar->get_result();
 
             if ($result_verificar->num_rows > 0) {
-                echo "Login já está em uso. Por favor, escolha outro.";
+                echo "<p style='color:red;'>Dados inválidos.</p>";
             } else {
                 $senha_hash = password_hash($senha, PASSWORD_DEFAULT);
                 if ($usuario->cadastrarUsuario($nome, $login, $senha_hash)) {
@@ -40,7 +40,6 @@
                     header('Location: login.php?cadastro=success');
                     exit();
                 } else {
-                    echo "Erro ao cadastrar o usuário.";
                 }
             }
         }
@@ -67,7 +66,7 @@
                 $_SESSION['tipo_usuario'] = $usuarioEncontrado['tipo_usuario']; // Corrigido para 'tipo_user'
                 header('Location: index.php');
                 exit();
-            } else {
+            } else if ($result->num_rows == 0) {
                 $erro = "Login ou senha incorretos";
             }
         } 
