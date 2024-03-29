@@ -1,3 +1,71 @@
+<?php
+include 'conexao.php'; // Assumindo que este arquivo inclui a conexão com o banco de dados
+include 'src/models/User.php';
+
+$usuario = new Usuario_Padrao($conn);
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $nome = filter_input(INPUT_POST, 'nome', FILTER_SANITIZE_STRING);
+    $login = filter_input(INPUT_POST, 'login', FILTER_SANITIZE_STRING);
+    $senha = filter_input(INPUT_POST, 'senha', FILTER_SANITIZE_STRING);
+
+    // Validação de campos
+    if (empty($nome) || empty($login) || empty($senha)) {
+        $mensagem = "Dados inválidos.";
+        echo json_encode(array("status" => "error", "mensagem" => $mensagem));
+    } else {
+        // Verificar se o login já está em uso
+        $stmt_verificar = $conn->prepare("SELECT id FROM usuarios WHERE login = ?");
+        $stmt_verificar->bind_param("s", $login);
+        $stmt_verificar->execute();
+        $result_verificar = $stmt_verificar->get_result();
+
+        if ($result_verificar->num_rows > 0) {
+
+            $mensagem = "Login já está em uso.";
+            echo json_encode(array("status" => "error", "mensagem" => $mensagem));
+            exit();
+        } else {
+            $senha_hash = password_hash($senha, PASSWORD_DEFAULT);
+            if ($usuario->cadastrarUsuario($nome, $login, $senha_hash)) {
+                // Cadastro bem-sucedido
+                $mensagem = "Cadastro bem-sucedido.";
+                echo json_encode(array("status" => "success", "mensagem" => $mensagem));
+                exit();
+            } else {
+                // Caso ocorra algum erro no cadastro
+            }
+        }
+    }
+}
+session_start();
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $login = $_POST['login'];
+    $senha = $_POST['senha'];
+
+    $stmt = $conn->prepare("SELECT id, nome, login, senha, tipo_usuario FROM usuarios WHERE login = ?");
+    $stmt->bind_param("s", $login);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result->num_rows == 1) {
+        $usuarioEncontrado = $result->fetch_assoc();
+        if (password_verify($senha, $usuarioEncontrado['senha'])) {
+            // Login bem-sucedido
+            $_SESSION['id'] = $usuarioEncontrado['id'];
+            $_SESSION['nome'] = $usuarioEncontrado['nome']; // Adicione esta linha para armazenar o nome do usuário na sessão
+            $_SESSION['login'] = $login;
+            $_SESSION['tipo_usuario'] = $usuarioEncontrado['tipo_usuario']; // Corrigido para 'tipo_user'
+            header('Location: index.php');
+            exit();
+        } else if ($result->num_rows == 0) {
+            $erro = "Login ou senha incorretos";
+        }
+    }
+}
+?>
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 
@@ -12,11 +80,11 @@
 </head>
 
 <body>
-<div id="mensagem"></div>
+    <div id="mensagem"></div>
 
     <div class="container" id="container">
         <div class="form-container sign-up">
-        <form id="cadastroForm" method="post">
+            <form id="cadastroForm" method="post">
                 <h1>Cadastro de usuário</h1>
                 <input type="text" id="nome" name="nome" required placeholder="Nome">
                 <input type="text" id="login" name="login" required placeholder="E-mail">
@@ -67,7 +135,7 @@
                 var senha = document.querySelector("#senha").value;
 
                 var xhr = new XMLHttpRequest();
-                xhr.open("POST", "cadastrar.php", true);
+                xhr.open("POST", "login.php", true);
                 xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
                 xhr.onreadystatechange = function() {
                     if (xhr.readyState == 4 && xhr.status == 200) {
