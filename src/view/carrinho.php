@@ -83,61 +83,6 @@ $stmt_quantidade->close();
                 }
             });
         }
-
-        $(document).ready(function() {
-                    $('#cep').on('input', function() {
-                        var cep = $(this).val();
-                        if (cep.length === 5) {
-                            $(this).val(cep + '-');
-                        }
-                        if (cep.length > 9) {
-                            $(this).val(cep.substring(0, 9));
-                        }
-                    });
-
-                    $('#calcular-frete').click(function() {
-                        var cep = $('#cep').val().replace('-', '');
-
-                        $.getJSON('https://viacep.com.br/ws/' + cep + '/json/', function(data) {
-                            if (!("erro" in data)) {
-                                if (data.localidade) {
-                                    $('#cidade').val(data.localidade);
-                                } else {
-                                    $('#cidade').removeAttr('readonly').val('');
-                                }
-
-                                if (data.logradouro) {
-                                    $('#rua').val(data.logradouro);
-                                } else {
-                                    $('#rua').removeAttr('readonly').val('');
-                                }
-
-                                if (data.uf) {
-                                    $('#estado').val(data.uf);
-                                } else {
-                                    $('#estado').removeAttr('readonly').val('');
-                                }
-
-                                if (data.bairro) {
-                                    $('#bairro').val(data.bairro);
-                                } else {
-                                    $('#bairro').removeAttr('readonly').val('');
-                                }
-
-                                // Exibe o valor do frete
-                                var total = <?php echo $total; ?>;
-                                var frete = 10.00; // Valor fixo do frete
-                                var totalComFrete = total + frete;
-                                $('#frete').val('R$ ' + frete.toFixed(2).replace('.', ','));
-                                $('#total-com-frete').val('R$ ' + totalComFrete.toFixed(2).replace('.', ','));
-
-                                // Exibe o campo do frete
-                                $('#frete').show();
-                            } else {
-                                alert("CEP não encontrado.");
-                            }
-                        });
-                    });
     </script>
 </head>
 
@@ -156,7 +101,8 @@ $stmt_quantidade->close();
         $total = 0; // Variável para armazenar o total dos produtos no carrinho
 
         while ($row = $result->fetch_assoc()) {
-            $total += $row['preco'] * $row['quantidade']; // Adiciona o preço do produto ao total
+            $total += $row['preco'] *
+                $row['quantidade']; // Adiciona o preço do produto ao total
             $descricao = explode(' ', $row["descricao"]);
             $descricao = array_slice($descricao, 0, 20);
             $descricao = implode(' ', $descricao);
@@ -164,7 +110,6 @@ $stmt_quantidade->close();
             echo "<form method='post' action='../../src/view/produto.php'>";
             echo "<input type='hidden' name='id' value='" . $row["id_produto"] . "'>";
             echo "<button type='submit' style='background: none; border: none; padding: 0; margin: 0;' class='product-image-button'>";
-
             echo "<img src='data:image/jpeg;base64," . base64_encode($row['imagem']) . "' alt='" . $row['nome'] . "' class='product-image'>";
             echo "</button>";
             echo "</form>";
@@ -191,7 +136,8 @@ $stmt_quantidade->close();
             if ($stmt_delete->execute()) {
                 // Recarrega a página após 2 segundos
                 echo "<script>setTimeout(function(){ location.reload(); }, 500);</script>";
-                echo "<div id='compra-realizada' style='background-color: #dff0d8; color: #3c763d; padding: 10px; margin-top: 10px;'>Compra realizada!</div>";
+                echo "<div id='compra-realizada' style='background-color: #dff0d8; color: #
+                3c763d; padding: 10px; margin-top: 10px;'>Compra realizada!</div>";
             } else {
                 echo "Erro ao realizar a compra: " . $conn->error;
             }
