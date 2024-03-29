@@ -11,8 +11,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Validação de campos
     if (empty($nome) || empty($login) || empty($senha)) {
-        $mensagem = "Dados inválidos.";
-        echo json_encode(array("status" => "error", "mensagem" => $mensagem));
+      
+
     } else {
         // Verificar se o login já está em uso
         $stmt_verificar = $conn->prepare("SELECT id FROM usuarios WHERE login = ?");
@@ -59,8 +59,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION['tipo_usuario'] = $usuarioEncontrado['tipo_usuario']; // Corrigido para 'tipo_user'
             header('Location: index.php');
             exit();
-        } else if ($result->num_rows == 0) {
-            $erro = "Login ou senha incorretos";
+        } else  {
+            $mensagem = "Login inválido";
+            echo json_encode(array("status" => "error", "mensagem" => $mensagem));
         }
     }
 }
