@@ -1,5 +1,61 @@
 <?php
+
 session_start();
+
+class Produto {
+    private $nome;
+    private $descricao;
+    private $preco;
+    private $categoria;
+    private $imagem;
+    private $slug;
+
+    public function __construct($nome, $descricao, $preco, $categoria, $imagem = null) {
+        $this->nome = $nome;
+        $this->descricao = $descricao;
+        $this->preco = $preco;
+        $this->categoria = $categoria;
+        $this->imagem = $imagem;
+        $this->slug = $this->slugify($nome);
+    }
+
+    public function getNome() {
+        return $this->nome;
+    }
+
+    public function getDescricao() {
+        return $this->descricao;
+    }
+
+    public function getPreco() {
+        return $this->preco;
+    }
+
+    public function getCategoria() {
+        return $this->categoria;
+    }
+
+    public function getImagem() {
+        return $this->imagem;
+    }
+
+    public function getSlug() {
+        return $this->slug;
+    }
+
+    private function slugify($text) {
+        $text = preg_replace('/[^\pL\d]+/u', '-', $text);
+        $text = iconv('utf-8', 'us-ascii//TRANSLIT', $text);
+        $text = strtolower($text);
+        $text = preg_replace('/[^-\w]+/', '', $text);
+        $text = trim($text, '-');
+
+        $randomString = substr(str_shuffle(str_repeat($x = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', ceil(150 / strlen($x)))), 1, 150);
+        $text = $text . '-' . $randomString;
+
+        return $text;
+    }
+}
 
 if (!isset($_SESSION['login']) || $_SESSION['tipo_usuario'] != 1) {
     header('Location: ../../index.php');
@@ -7,20 +63,6 @@ if (!isset($_SESSION['login']) || $_SESSION['tipo_usuario'] != 1) {
 }
 
 include '../../conexao.php';
-
-function slugify($text)
-{
-    $text = preg_replace('/[^\pL\d]+/u', '-', $text);
-    $text = iconv('utf-8', 'us-ascii//TRANSLIT', $text);
-    $text = strtolower($text);
-    $text = preg_replace('/[^-\w]+/', '', $text);
-    $text = trim($text, '-');
-
-    $randomString = substr(str_shuffle(str_repeat($x = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', ceil(150 / strlen($x)))), 1, 150);
-    $text = $text . '-' . $randomString;
-
-    return $text;
-}
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $nome = htmlspecialchars($_POST["nome"]);
@@ -43,11 +85,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $imagem = null;
     }
 
-    $slug = slugify($nome);
+    $produto = new Produto($nome, $descricao, $preco, $categoria, $imagem);
 
     $sql = "INSERT INTO produto (nome, descricao, preco, imagem, slug, categoria) VALUES (?, ?, ?, ?, ?, ?)";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("ssdsss", $nome, $descricao, $preco, $imagem, $slug, $categoria);
+    $stmt->bind_param("ssdsss", $produto->getNome(), $produto->getDescricao(), $produto->getPreco(), $produto->getImagem(), $produto->getSlug(), $produto->getCategoria());
 
     if ($stmt->execute()) {
         header('Location: cadastrar_produto.php');
@@ -72,7 +114,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <div class="container">
         <h2>Cadastro de Produto</h2>
         <div id="successMessage" class="success-message">Produto cadastrado com sucesso!</div>
-        <form id="formProduto" method="post" enctype="multipart/form-data" action="index.php">
+        <form id="formProduto" method="post" enctype="multipart/form-data" action="cadastrar_produto.php">
             <label for="nome">Nome:</label><br>
             <input type="text" id="nome" name="nome" required><br><br>
 
@@ -103,8 +145,5 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </div>
     <script src="./assets/js/scriptcadastro.js"></script>
 </body>
+
 </html>
-
-
-
-
