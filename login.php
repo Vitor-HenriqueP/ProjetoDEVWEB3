@@ -83,8 +83,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </head>
 
 <body>
-    <div id="mensagem"></div>
-    <div id="error-message"></div>
+    <div style="color: red id=" mensagem"></div>
+    <div style="color: red;" id="error-message"></div>
 
     <div class="container" id="container">
         <div class="form-container sign-up">
@@ -167,7 +167,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     data: formData,
                     success: function(response) {
                         if (response === 'fail') {
-                            
+
                             $('#error-message').text(response);
                         }
                     }
@@ -177,27 +177,27 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-    $(document).ready(function() {
-        $('form').submit(function(event) {
-            event.preventDefault();
-            var formData = $(this).serialize();
-            $.ajax({
-                type: 'POST',
-                url: 'login.php',
-                data: formData,
-                success: function(response) {
-                    if (response === 'sucesso') {
-                        window.location.href = 'index.php';
-                    } else if (response === 'success') {
-                        
-                    } else {
-                        $('#error-message').text(response);
+        $(document).ready(function() {
+            $('form').submit(function(event) {
+                event.preventDefault();
+                var formData = $(this).serialize();
+                $.ajax({
+                    type: 'POST',
+                    url: 'login.php',
+                    data: formData,
+                    success: function(response) {
+                        if (response === 'sucesso') {
+                            window.location.href = 'index.php';
+                        } else if (response === 'success') {
+
+                        } else {
+                            $('#error-message').text(response);
+                        }
                     }
-                }
+                });
             });
         });
-    });
-</script>
+    </script>
 
 
     <script src="./src/view/assets/js/scriptlogin.js"></script>
