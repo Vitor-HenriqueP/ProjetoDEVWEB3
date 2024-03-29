@@ -9,13 +9,31 @@ function submitForm() {
     xhr.onreadystatechange = function () {
         if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
             showSuccessMessage();
-        }+3
-        
+        } +3
+
     };
     xhr.send(formData);
 
     return false;
 }
+
+document.getElementById("formProduto").addEventListener("submit", function (event) {
+    event.preventDefault();
+    var formData = new FormData(this);
+
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "cadastrar_produto.php", true);
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            document.getElementById("mensagem").innerHTML = "<p>Produto cadastrado com sucesso!</p>";
+            document.getElementById("formProduto").reset();
+            document.getElementById("imagem").value = ""; // Limpa o campo de upload de arquivo
+            document.getElementById("imagem-preview").style.display = "none"; // Oculta o preview da imagem
+        }   
+    };
+    xhr.send(formData);
+});
+
 function previewImage(input) {
     var preview = document.getElementById('imagem-preview');
     var file = input.files[0];

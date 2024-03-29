@@ -2,7 +2,8 @@
 
 session_start();
 
-class Produto {
+class Produto
+{
     private $nome;
     private $descricao;
     private $preco;
@@ -10,7 +11,8 @@ class Produto {
     private $imagem;
     private $slug;
 
-    public function __construct($nome, $descricao, $preco, $categoria, $imagem = null) {
+    public function __construct($nome, $descricao, $preco, $categoria, $imagem = null)
+    {
         $this->nome = $nome;
         $this->descricao = $descricao;
         $this->preco = $preco;
@@ -19,31 +21,38 @@ class Produto {
         $this->slug = $this->slugify($nome);
     }
 
-    public function getNome() {
+    public function getNome()
+    {
         return $this->nome;
     }
 
-    public function getDescricao() {
+    public function getDescricao()
+    {
         return $this->descricao;
     }
 
-    public function getPreco() {
+    public function getPreco()
+    {
         return $this->preco;
     }
 
-    public function getCategoria() {
+    public function getCategoria()
+    {
         return $this->categoria;
     }
 
-    public function getImagem() {
+    public function getImagem()
+    {
         return $this->imagem;
     }
 
-    public function getSlug() {
+    public function getSlug()
+    {
         return $this->slug;
     }
 
-    private function slugify($text) {
+    private function slugify($text)
+    {
         $text = preg_replace('/[^\pL\d]+/u', '-', $text);
         $text = iconv('utf-8', 'us-ascii//TRANSLIT', $text);
         $text = strtolower($text);
@@ -92,11 +101,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt->bind_param("ssdsss", $produto->getNome(), $produto->getDescricao(), $produto->getPreco(), $produto->getImagem(), $produto->getSlug(), $produto->getCategoria());
 
     if ($stmt->execute()) {
-        header('Location: cadastrar_produto.php');
-        exit();
+        echo json_encode(array("success" => true));
     } else {
-        echo "Erro ao cadastrar o produto: " . $stmt->error;
+        echo json_encode(array("success" => false, "message" => "Erro ao cadastrar o produto: " . $stmt->error));
     }
+
 
     $stmt->close();
     $conn->close();
@@ -113,7 +122,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <body>
     <div class="container">
         <h2>Cadastro de Produto</h2>
-        <div id="successMessage" class="success-message">Produto cadastrado com sucesso!</div>
         <form id="formProduto" method="post" enctype="multipart/form-data" action="cadastrar_produto.php">
             <label for="nome">Nome:</label><br>
             <input type="text" id="nome" name="nome" required><br><br>
@@ -136,14 +144,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 Upload Imagem
                 <input type="file" id="imagem" name="imagem" accept="image/*" required onchange="previewImage(this)">
             </label><br><br>
-            
+
             <img id="imagem-preview" src="" alt="Preview da Imagem" style="max-width: 100%; display: none;"><br><br>
 
             <input type="submit" value="Cadastrar">
         </form>
+        <di style="color: greenyellow;" id="mensagem"></div>
+
         <a href="../../index.php">Voltar</a>
     </div>
     <script src="./assets/js/scriptcadastro.js"></script>
+
+
 </body>
 
 </html>
