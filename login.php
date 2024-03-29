@@ -32,14 +32,20 @@
             $result_verificar = $stmt_verificar->get_result();
 
             if ($result_verificar->num_rows > 0) {
+                header('Location: login.php?cadastro=inv');
+
                 echo "<p style='color:red;'>Dados inválidos.</p>";
+                exit();
+
             } else {
                 $senha_hash = password_hash($senha, PASSWORD_DEFAULT);
-                if ($usuario->cadastrarUsuario($nome, $login, $senha_hash)) {
+                if ($usuario->cadastrarUsuario($nome, $login, $senha_hash)) {   
                     // Cadastro bem-sucedido
                     header('Location: login.php?cadastro=success');
                     exit();
                 } else {
+                    // Caso ocorra algum erro no cadastro
+                    echo "<p style='color:red;'>Erro ao cadastrar usuário.</p>";
                 }
             }
         }
@@ -69,7 +75,7 @@
             } else if ($result->num_rows == 0) {
                 $erro = "Login ou senha incorretos";
             }
-        } 
+        }
     }
     ?>
     <div class="container" id="container">
@@ -116,6 +122,13 @@
         <div class="popup-content">
             <span class="close">&times;</span>
             <p>Cadastro bem-sucedido!</p>
+        </div>
+    </div>
+
+    <div id="popupRed" class="popup" style="background-color: red; color:white;">    
+        <div class="popup-content">
+            <span class="close">&times;</span>
+            <p>Cadastro Inválido</p>
         </div>
     </div>
     <script src="./src/view/assets/js/scriptlogin.js"></script>

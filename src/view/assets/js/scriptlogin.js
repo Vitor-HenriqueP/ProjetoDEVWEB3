@@ -20,6 +20,16 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
+document.addEventListener('DOMContentLoaded', function() {
+    if (window.location.search.indexOf('cadastro=inv') !== -1) {
+        var popup = document.getElementById('popupRed');
+        popup.style.display = 'block';
+        
+        setTimeout(function() {
+            popup.style.display = 'none';
+        }, 10000);
+    }
+});
 
 document.addEventListener('click', function(event) {
     if (event.target.classList.contains('close')) {
