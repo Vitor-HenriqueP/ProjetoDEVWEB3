@@ -107,7 +107,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <head>
     <title>Cadastro de Produto</title>
-    <link rel="stylesheet" type="text/css" href="./assets/css/stylecadastro.css">
+    <link rel="stylesheet" type="text/css" href="./assets/css/stylecadastrar.css">
 </head>
 
 <body>

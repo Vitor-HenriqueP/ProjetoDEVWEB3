@@ -16,7 +16,8 @@ body {
     /* Define a largura do container */
     margin: 50px auto;
     /* Centraliza o container na página */
-    background-color: white;
+    background: linear-gradient(to right, #414141, black);
+    color: white;
     /* Define o fundo do container como branco */
     padding: 20px;
     border-radius: 10px;
