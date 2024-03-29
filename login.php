@@ -27,8 +27,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $senha_hash = password_hash($senha, PASSWORD_DEFAULT);
             if ($usuario->cadastrarUsuario($nome, $login, $senha_hash)) {
                 // Cadastro bem-sucedido
-                $mensagem = "Cadastro bem-sucedido.";
-                echo json_encode(array("status" => "success", "mensagem" => $mensagem));
+             
+            $mensagem2 = "Cadastro bem-sucedido";
+            echo  $mensagem2;
                 exit();
             } else {
                 // Caso ocorra algum erro no cadastro
@@ -83,7 +84,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </head>
 
 <body>
-    <div style="color: red id=" mensagem"></div>
+<div style="color: red;" id="mensagem"></div>
+<div style="color: red;" id="mensagem2"></div>
+
     <div style="color: red;" id="error-message"></div>
 
     <div class="container" id="container">
@@ -145,7 +148,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     if (xhr.readyState == 4 && xhr.status == 200) {
                         var response = JSON.parse(xhr.responseText);
                         if (response.status == "success") {
-                            document.querySelector("#mensagem").innerHTML = "<p style='color:green;'>" + response.mensagem + "</p>";
+                            document.querySelector("#mensagem2").innerHTML = "<p style='color:green;'>" + response.mensagem2 + "</p>";
                         } else {
                             document.querySelector("#mensagem").innerHTML = "<p style='color:red;'>" + response.mensagem + "</p>";
                         }
@@ -156,25 +159,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         });
     </script>
 
-    <script>
-        $(document).ready(function() {
-            $('form').submit(function(event) {
-                event.preventDefault();
-                var formData = $(this).serialize();
-                $.ajax({
-                    type: 'POST',
-                    url: 'login.php',
-                    data: formData,
-                    success: function(response) {
-                        if (response === 'fail') {
 
-                            $('#error-message').text(response);
-                        }
-                    }
-                });
-            });
-        });
-    </script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         $(document).ready(function() {
