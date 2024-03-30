@@ -11,6 +11,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Validação de campos
     if (empty($nome) || empty($login) || empty($senha)) {
+        
     } else {
         // Verificar se o login já está em uso
         $stmt_verificar = $conn->prepare("SELECT id FROM usuarios WHERE login = ?");
@@ -21,15 +22,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if ($result_verificar->num_rows > 0) {
 
             $mensagem = "Login já está em uso.";
-            echo  $mensagem;
+            echo json_encode(array("status" => "error", "mensagem" => $mensagem));
             exit();
         } else {
             $senha_hash = password_hash($senha, PASSWORD_DEFAULT);
             if ($usuario->cadastrarUsuario($nome, $login, $senha_hash)) {
                 // Cadastro bem-sucedido
-             
-            $mensagem2 = "Cadastro bem-sucedido";
-            echo  $mensagem2;
+                $mensagem = "Cadastro bem-sucedido.";
+                echo json_encode(array("status" => "success", "mensagem" => $mensagem));
                 exit();
             } else {
                 // Caso ocorra algum erro no cadastro
@@ -37,7 +37,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     }
 }
-
 session_start();
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -57,15 +56,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION['nome'] = $usuarioEncontrado['nome']; // Adicione esta linha para armazenar o nome do usuário na sessão
             $_SESSION['login'] = $login;
             $_SESSION['tipo_usuario'] = $usuarioEncontrado['tipo_usuario']; // Corrigido para 'tipo_user'
-            echo 'sucesso'; // Retorna 'success' se o login for bem-sucedido
+            header('Location: index.php');
             exit();
-        } else {
-            echo 'fail';
-            exit();
+        } else if ($result->num_rows == 0) {
+            $erro = "Login ou senha incorretos";
         }
-    } else {
-        echo 'Login ou senha incorretos';
-        exit();
     }
 }
 ?>
@@ -84,10 +79,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </head>
 
 <body>
-<div style="color: red;" id="mensagem"></div>
-<div style="color: red;" id="mensagem2"></div>
-
-    <div style="color: red;" id="error-message"></div>
+    <div id="mensagem"></div>
 
     <div class="container" id="container">
         <div class="form-container sign-up">
@@ -105,7 +97,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 
         <div class="form-container sign-in">
-            <form id="formLogin" method="post" action="login.php">
+            <form method="post" action="login.php">
                 <h1>Entrar</h1>
                 <input type="text" id="login" name="login" required placeholder="E-mail"><br><br>
                 <input type="password" id="senha" name="senha" required placeholder="Senha"><br><br>
@@ -148,7 +140,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     if (xhr.readyState == 4 && xhr.status == 200) {
                         var response = JSON.parse(xhr.responseText);
                         if (response.status == "success") {
-                            document.querySelector("#mensagem2").innerHTML = "<p style='color:green;'>" + response.mensagem2 + "</p>";
+                            document.querySelector("#mensagem").innerHTML = "<p style='color:green;'>" + response.mensagem + "</p>";
                         } else {
                             document.querySelector("#mensagem").innerHTML = "<p style='color:red;'>" + response.mensagem + "</p>";
                         }
@@ -158,33 +150,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             });
         });
     </script>
-
-
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script>
-        $(document).ready(function() {
-            $('form').submit(function(event) {
-                event.preventDefault();
-                var formData = $(this).serialize();
-                $.ajax({
-                    type: 'POST',
-                    url: 'login.php',
-                    data: formData,
-                    success: function(response) {
-                        if (response === 'sucesso') {
-                            window.location.href = 'index.php';
-                        } else if (response === 'success') {
-
-                        } else {
-                            $('#error-message').text(response);
-                        }
-                    }
-                });
-            });
-        });
-    </script>
-
-
     <script src="./src/view/assets/js/scriptlogin.js"></script>
 
 </body>
