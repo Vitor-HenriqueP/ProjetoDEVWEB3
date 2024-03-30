@@ -32,7 +32,7 @@ document.addEventListener("DOMContentLoaded", function () {
         xhr.send("nome=" + nome + "&login=" + login + "&senha=" + senha);
     });
 
-    document.querySelector(".form-container.sign-in form").addEventListener("submit", function (e) {
+    document.querySelector("formLogin").addEventListener("submit", function (e) {
         e.preventDefault();
         var login = document.querySelector("#login").value;
         var senha = document.querySelector("#senha").value;
@@ -42,8 +42,8 @@ document.addEventListener("DOMContentLoaded", function () {
         xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         xhr.onreadystatechange = function () {
             if (xhr.readyState == 4 && xhr.status == 200) {
-                if (xhr.responseText.trim() === 'success') {
-                    window.location.href = 'dashboard.php';
+                if ($t == 'sim') {
+                    window.location.href = 'index.php';
                 } else {
                     document.querySelector("#mensagem").innerHTML = "<p style='color:red;'>Login ou senha incorretos</p>";
                 }

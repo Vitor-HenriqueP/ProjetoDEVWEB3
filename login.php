@@ -46,16 +46,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt->bind_param("s", $login);
     $stmt->execute();
     $result = $stmt->get_result();
-
+    
     if ($result->num_rows == 1) {
         $usuarioEncontrado = $result->fetch_assoc();
-        if (password_verify($senha, $usuarioEncontrado['senha'])) {
+        // Você precisa selecionar a senha hash para comparar com password_verify
+        $senha_hash = $usuarioEncontrado['senha'];
+        if (password_verify($senha, $senha_hash)) {
             // Login bem-sucedido
             $_SESSION['id'] = $usuarioEncontrado['id'];
             $_SESSION['nome'] = $usuarioEncontrado['nome']; // Adicione esta linha para armazenar o nome do usuário na sessão
             $_SESSION['login'] = $login;
             $_SESSION['tipo_usuario'] = $usuarioEncontrado['tipo_usuario']; // Corrigido para 'tipo_user'
-            echo 'success'; // Retorna 'success' se o login for bem-sucedido
+
+            $t = "sim";
+            header('Location: index.php');
             exit();
         } else {
             echo 'Login ou senha incorretos';
@@ -65,7 +69,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo 'Login ou senha incorretos';
         exit();
     }
-}
+}    
 ?>
 
 <!DOCTYPE html>
@@ -100,7 +104,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 
         <div class="form-container sign-in">
-            <form method="post" action="login.php">
+            <form method="post" id="formLogin" action="login.php">
                 <h1>Entrar</h1>
                 <input type="text" id="login" name="login" required placeholder="E-mail"><br><br>
                 <input type="password" id="senha" name="senha" required placeholder="Senha"><br><br>
