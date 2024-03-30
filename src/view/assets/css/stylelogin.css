@@ -13,9 +13,7 @@
     --color-green: #00ffae;
 }
 
-#uno{
-    color: green;
-}
+
 
 body {
     background-color: black;
@@ -238,4 +236,12 @@ body {
     top: 5px;
     right: 10px;
     cursor: pointer;
+}
+
+.success {
+    color: green;
+}
+
+.error {
+    color: red;
 }

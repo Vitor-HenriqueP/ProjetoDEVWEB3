@@ -46,7 +46,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt->bind_param("s", $login);
     $stmt->execute();
     $result = $stmt->get_result();
-    
+
     if ($result->num_rows == 1) {
         $usuarioEncontrado = $result->fetch_assoc();
         // Você precisa selecionar a senha hash para comparar com password_verify
@@ -58,18 +58,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION['login'] = $login;
             $_SESSION['tipo_usuario'] = $usuarioEncontrado['tipo_usuario']; // Corrigido para 'tipo_user'
 
-            $t = "sim";
-            header('Location: index.php');
-            exit();
+            $response = array("success" => true, "message" => "Login bem-sucedido");
         } else {
-            echo 'Login ou senha incorretos';
-            exit();
+            $response = array("success" => false, "message" => "Login ou senha incorretos");
         }
     } else {
-        echo 'Login ou senha incorretos';
-        exit();
+        $response = array("success" => false, "message" => "Login ou senha incorretos");
     }
-}    
+
+    echo json_encode($response);
+    exit();
+}
 ?>
 
 <!DOCTYPE html>
@@ -87,6 +86,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <body>
     <div id="mensagem"></div>
+    <div  id="message"></div>
+
 
     <div class="container" id="container">
         <div class="form-container sign-up">
@@ -113,6 +114,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <a href="index.php">Voltar para a página inicial</a>
                 <br>
             </form>
+
+
+
         </div>
         <div class="toggle-container">
             <div class="toggle">

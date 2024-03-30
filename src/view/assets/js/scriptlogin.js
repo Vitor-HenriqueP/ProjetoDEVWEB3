@@ -31,47 +31,30 @@ document.addEventListener("DOMContentLoaded", function () {
         };
         xhr.send("nome=" + nome + "&login=" + login + "&senha=" + senha);
     });
-
-    document.querySelector("formLogin").addEventListener("submit", function (e) {
-        e.preventDefault();
-        var login = document.querySelector("#login").value;
-        var senha = document.querySelector("#senha").value;
-
-        var xhr = new XMLHttpRequest();
-        xhr.open("POST", "login.php", true);
-        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-        xhr.onreadystatechange = function () {
-            if (xhr.readyState == 4 && xhr.status == 200) {
-                if ($t == 'sim') {
-                    window.location.href = 'index.php';
-                } else {
-                    document.querySelector("#mensagem").innerHTML = "<p style='color:red;'>Login ou senha incorretos</p>";
-                }
-            }
-        };
-        xhr.send("login=" + login + "&senha=" + senha);
-    });
 });
-document.addEventListener("DOMContentLoaded", function () {
-    document.querySelector("#cadastroForm").addEventListener("submit", function (e) {
-        e.preventDefault();
-        var nome = document.querySelector("#nome").value;
-        var login = document.querySelector("#login").value;
-        var senha = document.querySelector("#senha").value;
 
-        var xhr = new XMLHttpRequest();
-        xhr.open("POST", "login.php", true);
-        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-        xhr.onreadystatechange = function () {
-            if (xhr.readyState == 4 && xhr.status == 200) {
-                var response = JSON.parse(xhr.responseText);
-                if (response.status == "success") {
-                    document.querySelector("#mensagem").innerHTML = "<p style='color:green;'>" + response.mensagem + "</p>";
-                } else {
-                    document.querySelector("#mensagem").innerHTML = "<p style='color:red;'>" + response.mensagem + "</p>";
-                }
+document.getElementById('formLogin').addEventListener('submit', function (event) {
+    event.preventDefault(); // Evita o envio do formulário tradicional
+
+    var form = this;
+    var formData = new FormData(form);
+
+    fetch(form.action, {
+        method: form.method,
+        body: formData
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                document.getElementById('message').innerHTML = "<div  class='success'>" + data.message + "</div>";
+                setTimeout(function () {
+                    window.location.href = 'index.php'; // Redireciona após 1 segundo
+                }, 1000);
+            } else {
+                document.getElementById('message').innerHTML = "<div class='error'>" + data.message + "</div>";
             }
-        };
-        xhr.send("nome=" + nome + "&login=" + login + "&senha=" + senha);
-    });
+        })
+        .catch(error => {
+            console.error('Erro:', error);
+        });
 });
