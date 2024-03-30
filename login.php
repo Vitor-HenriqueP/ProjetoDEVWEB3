@@ -11,7 +11,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Validação de campos
     if (empty($nome) || empty($login) || empty($senha)) {
-        
     } else {
         // Verificar se o login já está em uso
         $stmt_verificar = $conn->prepare("SELECT id FROM usuarios WHERE login = ?");
@@ -56,11 +55,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION['nome'] = $usuarioEncontrado['nome']; // Adicione esta linha para armazenar o nome do usuário na sessão
             $_SESSION['login'] = $login;
             $_SESSION['tipo_usuario'] = $usuarioEncontrado['tipo_usuario']; // Corrigido para 'tipo_user'
-            header('Location: index.php');
+            echo 'success'; // Retorna 'success' se o login for bem-sucedido
             exit();
-        } else if ($result->num_rows == 0) {
-            $erro = "Login ou senha incorretos";
+        } else {
+            echo 'Login ou senha incorretos';
+            exit();
         }
+    } else {
+        echo 'Login ou senha incorretos';
+        exit();
     }
 }
 ?>
