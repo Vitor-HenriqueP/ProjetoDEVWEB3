@@ -238,33 +238,7 @@ $result = $stmt->get_result();
             <th>Número</th>
             <th>Selecionar</th>
         </tr>
-        <?php
-        function listarEnderecos($conn, $usuario_id)
-        {
-            $stmt = $conn->prepare("SELECT * FROM enderecos WHERE usuario_id = ?");
-            $stmt->bind_param("i", $usuario_id);
-            $stmt->execute();
-            $result = $stmt->get_result();
 
-            if ($result->num_rows > 0) {
-                while ($row = $result->fetch_assoc()) {
-                    echo "<tr>";
-                    echo "<td>" . $row['cep'] . "</td>";
-                    echo "<td>" . $row['cidade'] . "</td>";
-                    echo "<td>" . $row['estado'] . "</td>";
-                    echo "<td>" . $row['rua'] . "</td>";
-                    echo "<td>" . $row['bairro'] . "</td>";
-                    echo "<td>" . $row['numero'] . "</td>";
-                    echo "<td><button class='selecionarEndereco' data-cep='" . $row['cep'] . "' data-cidade='" . $row['cidade'] . "' data-estado='" . $row['estado'] . "' data-rua='" . $row['rua'] . "' data-bairro='" . $row['bairro'] . "' data-numero='" . $row['numero'] . "'>Selecionar</button></td>";
-                    echo "</tr>";
-                }
-            } else {
-                echo "<tr><td colspan='7'>Nenhum endereço encontrado.</td></tr>";
-            }
-        }
-
-        listarEnderecos($conn, $_SESSION['id']);
-        ?>
     </table>
 
     <script>
@@ -274,6 +248,7 @@ $result = $stmt->get_result();
                 url: 'listar_enderecos.php', // Arquivo PHP para listar os endereços
                 success: function(data) {
                     $('#listaEnderecos').html(data);
+                    $('.selecionarEndereco').show();
                 }
             });
         }
@@ -285,6 +260,7 @@ $result = $stmt->get_result();
                 $('#listaEnderecos, #enderecoSelecionado').hide();
                 $('#cep, #cidade, #estado, #rua, #bairro, #numero').val('');
                 $('#mensagem').text('');
+
             });
 
             // Ao clicar no botão "Usar Endereço Existente"
@@ -293,6 +269,7 @@ $result = $stmt->get_result();
                 $('#listaEnderecos').show();
                 $('#enderecoSelecionado').text('');
                 $('#mensagem').text('');
+                atualizarListaEnderecos();
             });
 
             // Ao clicar em um botão "Selecionar" da tabela de endereços
@@ -342,6 +319,9 @@ $result = $stmt->get_result();
 
                         // Atualiza a lista de endereços
                         atualizarListaEnderecos();
+
+                        // Limpa os campos do formulário após cadastrar o endereço
+                        $('#cep, #cidade, #estado, #rua, #bairro, #numero').val('');
                     },
                     error: function() {
                         $('#mensagem').text('Erro ao salvar endereço');
