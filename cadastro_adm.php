@@ -1,27 +1,16 @@
 <?php
-include 'conexao.php';
+include 'conexao.php'; // Assumindo que este arquivo inclui a conexão com o banco de dados
 include 'src/models/User.php';
-session_start();
 
-if (!isset($_SESSION['login']) || $_SESSION['tipo_usuario'] != 3) {
-    header('Location: index.php');
-    exit();
-}
 $usuario = new Usuario_Adm($conn);
-
-
-
-
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $nome = filter_input(INPUT_POST, 'nome', FILTER_SANITIZE_STRING);
     $login = filter_input(INPUT_POST, 'login', FILTER_SANITIZE_STRING);
     $senha = filter_input(INPUT_POST, 'senha', FILTER_SANITIZE_STRING);
-    $senha_hash = password_hash($senha, PASSWORD_DEFAULT);
 
-    // Verificar se os campos estão preenchidos
+    // Validação de campos
     if (empty($nome) || empty($login) || empty($senha)) {
-        
     } else {
         // Verificar se o login já está em uso
         $stmt_verificar = $conn->prepare("SELECT id FROM usuarios WHERE login = ?");
@@ -30,16 +19,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $result_verificar = $stmt_verificar->get_result();
 
         if ($result_verificar->num_rows > 0) {
-            echo "Login já está em uso. Por favor, escolha outro.";
+
+            $mensagem = "Login já está em uso.";
+            echo json_encode(array("status" => "error", "mensagem" => $mensagem));
+            exit();
         } else {
+            $senha_hash = password_hash($senha, PASSWORD_DEFAULT);
             if ($usuario->cadastrarUsuario($nome, $login, $senha_hash)) {
-                // Exibir alerta de sucesso em JavaScript
-                echo '<script>alert("Usuário cadastrado com sucesso!");</script>';
-                // Redirecionar após o alerta
-                echo '<meta http-equiv="refresh" content="0;url=login.php">';
-                exit(); // Interrompe a execução do código após o redirecionamento
+                // Cadastro bem-sucedido
+                $mensagem = "Cadastro bem-sucedido.";
+                echo json_encode(array("status" => "success", "mensagem" => $mensagem));
+                exit();
             } else {
-                echo "Erro ao cadastrar o usuário.";
+                // Caso ocorra algum erro no cadastro
             }
         }
     }
@@ -65,12 +57,14 @@ $administradores = $usuario->listarAdministradores();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="./src/view/assets/css/stylecadastroadm.css">
     <title>Cadastro de administrador</title>
+    <script src="src/view/assets/js/scriptCadastroAdm.js"></script>
 </head>
 
 <body>
+    <div id="mensagem"></div>
     <div class="container" id="container">
         <div class="form-container sign-up">
-            <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
+            <form method="post" id="formCadastroAdm" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
                 <h1>Cadastro de Usuário Administrador</h1>
                 <input type="text" id="nome" name="nome" required placeholder="Nome">
                 <input type="text" id="login" name="login" required placeholder="E-mail">
