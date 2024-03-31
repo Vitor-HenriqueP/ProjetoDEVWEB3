@@ -136,11 +136,11 @@ $stmt_quantidade->close();
             if ($stmt_delete->execute()) {
                 // Recarrega a página após 2 segundos
                 echo "<script>setTimeout(function(){ location.reload(); }, 500);</script>";
-                echo "<div id='compra-realizada' style='background-color: #dff0d8; color: #
-                3c763d; padding: 10px; margin-top: 10px;'>Compra realizada!</div>";
+                echo "<div id='compra-realizada' style='background-color: #dff0d8; color: #3c763d; padding: 10px; margin-top: 10px;'>Compra realizada!</div>";
             } else {
                 echo "Erro ao realizar a compra: " . $conn->error;
             }
+            exit(); // Adiciona esta linha para interromper a execução após a compra ser realizada
         }
     } else {
         echo "<p>Carrinho vazio</p>";
@@ -162,13 +162,7 @@ include '../../conexao.php'; // Assumindo que este arquivo inclui a conexão com
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Se o formulário foi submetido, processa o salvamento do endereço
-    $cep = $_POST['cep'];
-    $cidade = $_POST['cidade'];
-    $estado = $_POST['estado'];
-    $rua = $_POST['rua'];
-    $bairro = $_POST['bairro'];
-    $numero = $_POST['numero'];
-    $usuario_id = $_SESSION['id'];
+  
 
     // Verifica se todos os campos estão preenchidos
     if (empty($cep) || empty($cidade) || empty($estado) || empty($rua) || empty($bairro) || empty($numero) || empty($usuario_id)) {
