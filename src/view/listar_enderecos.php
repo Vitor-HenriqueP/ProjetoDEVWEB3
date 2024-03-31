@@ -49,6 +49,22 @@ $result = $stmt->get_result();
 <body>
     <div id="selectedAddress"></div> <!-- Div para exibir o endereço selecionado -->
 
+    <form method="post" action="">
+        <label for="cep">CEP:</label>
+        <input type="text" id="cep" name="cep" required><br><br>
+        <label for="cidade">Cidade:</label>
+        <input type="text" id="cidade" name="cidade" required><br><br>
+        <label for="estado">Estado:</label>
+        <input type="text" id="estado" name="estado" required><br><br>
+        <label for="rua">Rua:</label>
+        <input type="text" id="rua" name="rua" required><br><br>
+        <label for="bairro">Bairro:</label>
+        <input type="text" id="bairro" name="bairro" required><br><br>
+        <label for="numero">Número:</label>
+        <input type="text" id="numero" name="numero" required><br><br>
+        <input type="submit" value="Salvar">
+    </form>
+
     <?php
     if ($result->num_rows > 0) {
         echo "<h2>Seus Endereços</h2>";
@@ -90,7 +106,8 @@ $result = $stmt->get_result();
             });
 
             // Captura o evento de click nos botões de "Excluir"
-            $('.deleteAddress').click(function() {
+
+                $('.deleteAddress').click(function() {
                 var id = $(this).data('id');
 
                 $.ajax({
@@ -100,12 +117,20 @@ $result = $stmt->get_result();
                         id: id
                     },
                     success: function(response) {
-                        alert(response);
-                        // Recarrega a página após excluir o endereço
-                        location.reload();
+                        if (response === "success") {
+                            // Atualiza a lista de endereços e mantém a tabela aberta
+                            atualizarListaEnderecos();
+                        } else {
+                            $('#message').text("Erro ao excluir endereço.");
+                        }
+                    },
+                    error: function() {
+                        $('#message').text("Erro ao excluir endereço.");
                     }
                 });
             });
+
+
 
             // Captura o evento de click nos botões de "Editar"
             $('.editAddress').click(function() {
@@ -115,8 +140,6 @@ $result = $stmt->get_result();
                 window.location.href = 'edit_address.php?id=' + id;
             });
         });
-
-        
     </script>
 </body>
 
