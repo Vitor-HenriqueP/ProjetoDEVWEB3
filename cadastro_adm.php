@@ -39,9 +39,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 if (isset($_POST['excluir']) && isset($_POST['id'])) {
     $id = $_POST['id'];
     if ($usuario->excluirUsuario($id)) {
-        echo "<script>alert('Administrador excluido') </script>";
+        echo "Administrador excluído";
     } else {
-        echo "<script>alert('erro ao excluir Administrador') </script>";
+        echo "Erro ao excluir administrador";
 
     }
 }
