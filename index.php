@@ -118,7 +118,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['logout'])) {
                 echo "<form method='get' action='./src/view/produto.php'>";
                 echo "<input type='hidden' name='slug' value='" . htmlspecialchars($row["slug"]) . "'>";
                 echo "<button type='submit' style='border: none; background: none; padding: 0; text-decoration: none; color: inherit;'>";
-                echo "<div class='card'>";
+                echo "<div class='card " . htmlspecialchars($row["categoria"]) . "'>";
                 echo "<img src='data:image/jpeg;base64," . base64_encode($row["imagem"]) . "'>";
                 echo "<div class='card-content'>";
                 echo "<h3>" . htmlspecialchars($row["nome"]) . "</h3>";
@@ -129,6 +129,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['logout'])) {
                 $descricao = implode(' ', $descricao);
 
                 echo "<p>" . htmlspecialchars($descricao) . "</p>";
+                echo "<p class='hidden'>" . htmlspecialchars($row["categoria"]) . "</p>";
+
                 echo "<p class='price'>R$" . number_format($row["preco"], 2, ',', '.') . "</p>";
                 echo "</div>";
                 echo "</div>";
