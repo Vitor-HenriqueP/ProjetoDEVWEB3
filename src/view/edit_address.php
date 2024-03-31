@@ -3,21 +3,24 @@ session_start();
 include '../../conexao.php'; // Assumindo que este arquivo inclui a conexão com o banco de dados
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Recebe o ID do endereço a ser editado
     $id = $_POST['id'];
+    $cep = $_POST['cep_edit'];
+    $cidade = $_POST['cidade_edit'];
+    $estado = $_POST['estado_edit'];
+    $rua = $_POST['rua_edit'];
+    $bairro = $_POST['bairro_edit'];
+    $numero = $_POST['numero_edit'];
 
-    // Consulta o endereço no banco de dados
-    $stmt = $conn->prepare("SELECT * FROM enderecos WHERE id = ?");
-    $stmt->bind_param("i", $id);
-    $stmt->execute();
-    $result = $stmt->get_result();
+    // Atualiza os dados do endereço no banco de dados
+    $stmt = $conn->prepare("UPDATE enderecos SET cep = ?, cidade = ?, estado = ?, rua = ?, bairro = ?, numero = ? WHERE id = ?");
+    $stmt->bind_param("sssssii", $cep, $cidade, $estado, $rua, $bairro, $numero, $id);
 
-    // Retorna os dados do endereço como JSON
-    if ($result->num_rows > 0) {
-        $row = $result->fetch_assoc();
-        echo json_encode($row);
+    if ($stmt->execute()) {
+        echo "success";
     } else {
         echo "error";
     }
+} else {
+    echo "Método não permitido.";
 }
 ?>

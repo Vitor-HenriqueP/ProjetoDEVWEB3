@@ -45,6 +45,8 @@ $result = $stmt->get_result();
     <title>Consulta de Endereço por CEP</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
+<body>
+
 <form method="post" action="">
     <label for="cep">CEP:</label>
     <input type="text" id="cep" name="cep" required><br><br>
@@ -78,6 +80,28 @@ if ($result->num_rows > 0) {
         echo "<td><button class='editAddress' data-id='" . $row['id'] . "'>Editar</button></td>";
         echo "<td><button class='deleteAddress' data-id='" . $row['id'] . "'>Excluir</button></td>";
         echo "</tr>";
+
+        // Adicione um formulário oculto para edição
+        echo "<tr class='editAddressFormRow' style='display: none;'>";
+        echo "<td colspan='6'>";
+        echo "<form class='editAddressForm'>";
+        echo "<input type='hidden' name='id' value='" . $row['id'] . "'>";
+        echo "<label for='cep_edit'>CEP:</label>";
+        echo "<input type='text' id='cep_edit' name='cep_edit' value='" . $row['cep'] . "' required><br><br>";
+        echo "<label for='cidade_edit'>Cidade:</label>";
+        echo "<input type='text' id='cidade_edit' name='cidade_edit' value='" . $row['cidade'] . "' required><br><br>";
+        echo "<label for='estado_edit'>Estado:</label>";
+        echo "<input type='text' id='estado_edit' name='estado_edit' value='" . $row['estado'] . "' required><br><br>";
+        echo "<label for='rua_edit'>Rua:</label>";
+        echo "<input type='text' id='rua_edit' name='rua_edit' value='" . $row['rua'] . "' required><br><br>";
+        echo "<label for='bairro_edit'>Bairro:</label>";
+        echo "<input type='text' id='bairro_edit' name='bairro_edit' value='" . $row['bairro'] . "' required><br><br>";
+        echo "<label for='numero_edit'>Número:</label>";
+        echo "<input type='text' id='numero_edit' name='numero_edit' value='" . $row['numero'] . "' required><br><br>";
+        echo "<input type='submit' value='Salvar Edição'>";
+        echo "</form>";
+        echo "</td>";
+        echo "</tr>";
     }
     echo "</table>";
 } else {
@@ -85,6 +109,7 @@ if ($result->num_rows > 0) {
 }
 ?>
 
+<div id="message"></div>
 
 <script>
     $(document).ready(function() {
@@ -101,8 +126,43 @@ if ($result->num_rows > 0) {
             $('#selectedAddress').text(addressText);
         });
 
-        // Captura o evento de click nos botões de "Excluir"
+        // Captura o evento de click nos botões de "Editar"
+        $('.editAddress').click(function() {
+            // Oculta todos os formulários de edição que possam estar visíveis
+            $('.editAddressFormRow').hide();
 
+            var id = $(this).data('id');
+            var editFormRow = $(this).closest('tr').next('.editAddressFormRow');
+            editFormRow.show();
+
+            // Adiciona um listener para o formulário de edição
+            $('.editAddressForm').submit(function(event) {
+                event.preventDefault();
+
+                // Obtém os dados do formulário de edição
+                var formData = $(this).serialize();
+
+                // Envia os dados via AJAX para salvar a edição
+                $.ajax({
+                    url: 'edit_address.php',
+                    type: 'POST',
+                    data: formData,
+                    success: function(response) {
+                        if (response === "success") {
+                            // Atualiza a lista de endereços e mantém a tabela aberta
+                            atualizarListaEnderecos();
+                        } else {
+                            $('#message').text("Erro ao salvar edição.");
+                        }
+                    },
+                    error: function() {
+                        $('#message').text("Erro ao salvar edição.");
+                    }
+                });
+            });
+        });
+
+        // Captura o evento de click nos botões de "Excluir"
         $('.deleteAddress').click(function() {
             var id = $(this).data('id');
 
@@ -125,6 +185,21 @@ if ($result->num_rows > 0) {
                 }
             });
         });
+
+        // Função para atualizar a lista de endereços sem recarregar a página
+        function atualizarListaEnderecos() {
+            $.ajax({
+                url: 'listar_enderecos.php',
+                type: 'GET',
+                success: function(response) {
+                    // Atualiza a tabela de endereços com os novos dados
+                    $('#listaEnderecos').html(response);
+                },
+                error: function() {
+                    $('#message').text("Erro ao atualizar lista de endereços.");
+                }
+            });
+        }
     });
 </script>
 </body>
