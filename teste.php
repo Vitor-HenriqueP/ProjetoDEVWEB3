@@ -42,7 +42,6 @@ if (isset($_POST['excluir']) && isset($_POST['id'])) {
         echo "<script>alert('Administrador excluido') </script>";
     } else {
         echo "<script>alert('erro ao excluir Administrador') </script>";
-
     }
 }
 
@@ -63,11 +62,39 @@ $administradores = $usuario->listarAdministradores();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="./src/view/assets/css/stylecadastroadm.css">
     <title>Cadastro de administrador</title>
-    <script src="src/view/assets/js/scriptCadastroAdm.js"></script>
 
 </head>
 
 <body>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            document.querySelectorAll(".button").forEach(function(button) {
+                button.addEventListener("click", function(event) {
+                    event.preventDefault();
+                    var form = this.closest("form");
+                    var formData = new FormData(form);
+                    var xhr = new XMLHttpRequest();
+                    xhr.onreadystatechange = function() {
+                        if (xhr.readyState === XMLHttpRequest.DONE) {
+                            if (xhr.status === 200) {
+                                var response = JSON.parse(xhr.responseText);
+                                alert(response.message);
+                                if (response.status === 'success') {
+                                    form.reset();
+                                }
+                            } else {
+                                alert('Erro ao processar a solicitação');
+                            }
+                        }
+                    };
+                    xhr.open("POST", "teste.php", true); // ajuste aqui para o nome do arquivo PHP correto
+                    xhr.send(formData);
+                });
+            });
+        });
+    </script>
+
     <div id="mensagem"></div>
 
     <div class="container" id="container">
@@ -95,22 +122,7 @@ $administradores = $usuario->listarAdministradores();
                 <a href="index.php">Voltar para a página inicial</a>
             </form>
         </div>
-        <div class="toggle-container">
-            <div class="toggle">
-                <div class="toggle-panel toggle-left">
-                    <h1>Lista de admnistradores</h1>
-                    <p>Deseja visualizar ou excluir algum admnistrador existente?</p>
-                    <button class="hidden" id="signInBtn">Visualizar</button>
-                </div>
-                <div class="toggle-panel toggle-right">
-                    <h1>Cadastre um novo administrador</h1>
-                    <p>Existe um novo administrador na loja?</p>
-                    <button class="hidden" id="signUpBtn">Cadastre-o</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    <script src="./src/view/assets/js/scriptlogin.js"></script>
+
 </body>
 
 </html>

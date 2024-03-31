@@ -58,6 +58,7 @@ class Usuario_Adm extends Usuario
         return $stmt->execute();
     }
 
+
     public function listarAdministradores()
     {
         $query = "SELECT * FROM usuarios WHERE tipo_usuario = 1"; // Tipo de usuário 1 para administradores

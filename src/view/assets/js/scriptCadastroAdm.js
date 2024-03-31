@@ -14,6 +14,9 @@ document.addEventListener("DOMContentLoaded", function () {
                 var response = JSON.parse(xhr.responseText);
                 if (response.status == "success") {
                     document.querySelector("#mensagem").innerHTML = "<p style='color:green;'>" + response.mensagem + "</p>";
+                    setTimeout(function () {
+                        window.location.href = 'cadastro_adm.php'; // Redireciona após 1 segundo
+                    }, 1000);
                 } else {
                     document.querySelector("#mensagem").innerHTML = "<p style='color:red;'>" + response.mensagem + "</p>";
                 }
