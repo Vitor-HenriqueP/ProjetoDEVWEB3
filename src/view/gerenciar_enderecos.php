@@ -43,6 +43,7 @@ $result = $stmt->get_result();
 <head>
     <title>Consulta de Endereço por CEP</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="./assets/css/stylecart.css">
 </head>
 
 <body>
@@ -50,7 +51,7 @@ $result = $stmt->get_result();
 
     <button id="cadastrarNovoEndereco">Cadastrar Novo Endereço</button>
     <button id="usarEnderecoExistente">Usar Endereço Existente</button>
-
+    <div class="form-table">
     <form id="enderecoForm" method="post" style="display: none;">
         <h2>Endereço</h2>
         <label for="cep">CEP:</label>
@@ -68,7 +69,7 @@ $result = $stmt->get_result();
         <input type="submit" value="Salvar Endereço" class="button">
         <div id="mensagem"></div> <!-- Div para exibir mensagem de sucesso ou erro -->
     </form>
-
+    </div>
     <div id="enderecoSelecionado"></div>
 
     <table id="listaEnderecos" border="1" style="display: none;">

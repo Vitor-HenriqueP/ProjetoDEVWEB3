@@ -2,7 +2,18 @@
 session_start(); // Inicie a sessão no início do arquivo
 
 include '../../conexao.php'; // Inclua o arquivo de conexão com o banco de dados
+function logout()
+{
+    session_unset();
+    session_destroy();
+    header('Location: login.php');
+    exit();
+}
 
+// Verifica se o logout foi solicitado
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['logout'])) {
+    logout();
+}
 // Verifique se o usuário está logado
 if (!isset($_SESSION['login'])) {
     echo '<script>alert("Faça login para acessar o carrinho");</script>';
@@ -67,7 +78,8 @@ $stmt_quantidade->close();
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Carrinho</title>
-    <link rel="stylesheet" type="text/css" href="assets/css/stylecarrinho.css">
+    <link rel="stylesheet" type="text/css" href="./assets/css/stylecart.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         function alterarQuantidade(id_produto, action) {
@@ -87,7 +99,43 @@ $stmt_quantidade->close();
 </head>
 
 <body>
-    <h1>Carrinho</h1>
+    <div class="header" id="header">
+        <button onclick="toggleSidebar()" class="btn_icon_header">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-list" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z" />
+            </svg>
+        </button>
+        <div class="logo_header">
+            <a href="../../index.php"><img src="./assets/imagens/newlogo.png" alt="Logo Estação Digital" class="img_logo_header"></a>
+        </div>
+        <div class="navigation_header" id="navigation_header">
+            <button onclick="toggleSidebar()" class="btn_icon_header">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16">
+                    <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" />
+                </svg>
+            </button>
+            <?php if (!isset($_SESSION['login'])) : ?>
+                <a href="../../login.php"><span class="material-symbols-outlined">login</span></a>
+            <?php endif; ?>
+            <?php if (isset($_SESSION['login'])) : ?>
+                <a href="../../user_config.php"><span class="material-symbols-outlined">person</span></a>
+            <?php endif; ?>
+
+            <?php if (isset($_SESSION['login'])) : ?>
+                <form method="post" action="../../index.php">
+                    <input type="hidden" name="logout" value="1">
+                    <button type="submit" class="button" style="background: none; border: none; cursor: pointer;">
+                        <a><span class="material-symbols-outlined" style="vertical-align: middle;">logout</span></a>
+                    </button>
+                </form>
+
+            <?php endif; ?>
+
+        </div>
+    </div>
+    <div class="containerOferta">
+        <span class="oferta">Carrinho</span>
+    </div>
 
     <?php
     // Consulta SQL para obter os produtos no carrinho do usuário logado
@@ -103,31 +151,40 @@ $stmt_quantidade->close();
         while ($row = $result->fetch_assoc()) {
             $total += $row['preco'] *
                 $row['quantidade']; // Adiciona o preço do produto ao total
+            $nome = $row['nome'];
             $descricao = explode(' ', $row["descricao"]);
             $descricao = array_slice($descricao, 0, 20);
             $descricao = implode(' ', $descricao);
 
+            echo "<div class='product-container'>";
+            echo "<div class='product-image-wrapper'>";
             echo "<form method='post' action='../../src/view/produto.php'>";
             echo "<input type='hidden' name='id' value='" . $row["id_produto"] . "'>";
             echo "<button type='submit' style='background: none; border: none; padding: 0; margin: 0;' class='product-image-button'>";
             echo "<img src='data:image/jpeg;base64," . base64_encode($row['imagem']) . "' alt='" . $row['nome'] . "' class='product-image'>";
             echo "</button>";
             echo "</form>";
-
-            echo "<p>{$descricao} - R$ {$row['preco']} - Quantidade: {$row['quantidade']}</p>";
-
+            echo "</div>";
+            echo "<div class='product-details'>";
+            echo "<p class='product-name'>{$nome}</p>";
+            echo "<p class='product-description'>{$descricao}</p>";
+            echo "<p class='product-price'>R$ {$row['preco']}</p>";
+            echo "<div class='product-quantity-wrapper'>";
             echo "<button type='button' onclick='alterarQuantidade({$row['id_produto']}, \"remove\")' class='button'>-</button>";
-
+            echo "<span class='product-quantity'>{$row['quantidade']}</span>";
             echo "<button type='button' onclick='alterarQuantidade({$row['id_produto']}, \"add\")' class='button'>+</button>";
+            echo "</div>";
+            echo "</div>";
+            echo "</div>";
         }
 
         // Exibe o valor total
-        echo "<p><strong>Total: R$ $total</strong></p>";
-
-        // Botão Comprar
+        echo "<div class='total-wrapper'>";
+        echo "<p>Total: R$ $total</p>";
         echo "<form method='post'>";
         echo "<input type='submit' name='comprar' value='Comprar' class='button'>";
         echo "</form>";
+        echo "</div>";
 
         if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['comprar'])) {
             // Limpa todos os itens do carrinho no banco de dados
@@ -140,8 +197,7 @@ $stmt_quantidade->close();
                     window.location.href = '../../index.php';
                 }, 500);
             </script>";
-                echo "<div id='compra-realizada' style='background-color: #dff0d8; color: #
-                3c763d; padding: 10px; margin-top: 10px;'>Compra realizada!</div>";
+                echo "<div id='compra-realizada' style='background-color: #dff0d8; color: #3c763d; padding: 10px; margin-top: 10px;'>Compra realizada!</div>";
             } else {
                 echo "Erro ao realizar a compra: " . $conn->error;
             }
@@ -150,12 +206,6 @@ $stmt_quantidade->close();
         echo "<p>Carrinho vazio</p>";
     }
     ?>
-
-
-    <a href="../../index.php">Voltar para a página inicial</a>
-
-
-
 </body>
 
 </html>
@@ -195,38 +245,39 @@ $result = $stmt->get_result();
 </head>
 
 <body>
-    <button id="cadastrarNovoEndereco">Cadastrar Novo Endereço</button>
-    <button id="usarEnderecoExistente">Usar Endereço Existente</button>
-    <form id="enderecoForm" method="post" style="display: none;">
-        <h2>Endereço</h2>
-        <label for="cep">CEP:</label>
-        <input type="text" id="cep" name="cep" maxlength="9" required><br>
-        <label for="cidade">Cidade:</label>
-        <input type="text" id="cidade" name="cidade" required><br>
-        <label for="estado">Estado:</label>
-        <input type="text" id="estado" name="estado" required><br>
-        <label for="rua">Rua:</label>
-        <input type="text" id="rua" name="rua" required><br>
-        <label for="bairro">Bairro:</label>
-        <input type="text" id="bairro" name="bairro" required><br>
-        <label for="numero">Número:</label>
-        <input type="number" text-decoration="none" id="numero" name="numero" required><br>
-        <input type="submit" value="Salvar Endereço" class="button">
-        <div id="mensagem"></div> <!-- Div para exibir mensagem de sucesso ou erro -->
-    </form>
-    <div id="enderecoSelecionado"></div>
+    <div>
+        <button id="cadastrarNovoEndereco" class="button">Cadastrar Novo Endereço</button>
+        <button id="usarEnderecoExistente" class="button">Usar Endereço Existente</button>
+        <div class="form-endereço">
+        <form id="enderecoForm" method="post">
+            <h2>Endereço</h2>
+            <input type="text" id="cep" name="cep" placeholder="CEP" maxlength="9" required><br>
+            <input type="text" id="cidade" name="cidade" placeholder="Cidade" required><br>
+            <input type="text" id="estado" name="estado" placeholder="Estado" required><br>
+            <input type="text" id="rua" name="rua" placeholder="Rua" required><br>
+            <input type="text" id="bairro" name="bairro" placeholder="Bairro" required><br>
+            <input type="number" id="numero" name="numero" placeholder="Número" required><br>
+            <input type="submit" value="Salvar Endereço" class="button">
+            <div id="mensagem"></div> <!-- Div para exibir mensagem de sucesso ou erro -->
+        </form>
+        </div>
+        <div id="enderecoSelecionado"></div>
 
-    <table id="listaEnderecos" border="1" style="display: none;">
-        <tr>
-            <th>CEP</th>
-            <th>Cidade</th>
-            <th>Estado</th>
-            <th>Rua</th>
-            <th>Bairro</th>
-            <th>Número</th>
-            <th>Selecionar</th>
-        </tr>
-    </table>
+        <table id="listaEnderecos" style="display: none;">
+            <tr>
+                <th>CEP</th>
+                <th>Cidade</th>
+                <th>Estado</th>
+                <th>Rua</th>
+                <th>Bairro</th>
+                <th>Número</th>
+                <th>Selecionar</th>
+            </tr>
+        </table>
+    </div>
+    <div class="container">
+        <a href="../../index.php">Voltar para a página inicial</a>
+    </div>
     <script>
         // Função para atualizar a lista de endereços
         function atualizarListaEnderecos() {
