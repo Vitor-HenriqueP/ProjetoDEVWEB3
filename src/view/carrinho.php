@@ -241,44 +241,65 @@ $result = $stmt->get_result();
 <html>
 
 <head>
+    <style>
+        /* Estilo para remover as setas do campo número */
+        input[type="number"]::-webkit-inner-spin-button,
+        input[type="number"]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        input[type="number"] {
+            -moz-appearance: textfield;
+            /* Firefox */
+        }
+    </style>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="./assets/css/stylecart.css">
 </head>
 
 <body>
     <div>
         <button id="cadastrarNovoEndereco" class="button">Cadastrar Novo Endereço</button>
         <button id="usarEnderecoExistente" class="button">Usar Endereço Existente</button>
-        <div class="form-endereço">
-        <form id="enderecoForm" method="post">
+        <form id="enderecoForm" method="post" style="display: none;">
             <h2>Endereço</h2>
             <input type="text" id="cep" name="cep" placeholder="CEP" maxlength="9" required><br>
             <input type="text" id="cidade" name="cidade" placeholder="Cidade" required><br>
             <input type="text" id="estado" name="estado" placeholder="Estado" required><br>
             <input type="text" id="rua" name="rua" placeholder="Rua" required><br>
             <input type="text" id="bairro" name="bairro" placeholder="Bairro" required><br>
-            <input type="number" id="numero" name="numero" placeholder="Número" required><br>
-            <input type="submit" value="Salvar Endereço" class="button">
+            <input type="number" text-decoration="none" placeholder="Número" id="numero" name="numero" required><br> <input type="submit" value="Salvar Endereço" class="button">
             <div id="mensagem"></div> <!-- Div para exibir mensagem de sucesso ou erro -->
         </form>
-        </div>
-        <div id="enderecoSelecionado"></div>
+    </div>
+    <div id="enderecoSelecionado"></div>
 
-        <table id="listaEnderecos" style="display: none;">
-            <tr>
-                <th>CEP</th>
-                <th>Cidade</th>
-                <th>Estado</th>
-                <th>Rua</th>
-                <th>Bairro</th>
-                <th>Número</th>
-                <th>Selecionar</th>
-            </tr>
-        </table>
+    <table id="listaEnderecos" style="display: none;">
+        <tr>
+            <th>CEP</th>
+            <th>Cidade</th>
+            <th>Estado</th>
+            <th>Rua</th>
+            <th>Bairro</th>
+            <th>Número</th>
+            <th>Selecionar</th>
+        </tr>
+    </table>
     </div>
     <div class="container">
         <a href="../../index.php">Voltar para a página inicial</a>
     </div>
     <script>
+        const cepInput = document.getElementById('cep');
+        cepInput.addEventListener('input', function(event) {
+            let cep = event.target.value;
+            cep = cep.replace(/\D/g, ''); // Remove todos os caracteres não numéricos
+            if (cep.length > 5) {
+                cep = cep.replace(/^(\d{5})(\d{1,3})/, '$1-$2'); // Adiciona o hífen após o quinto dígito
+            }
+            event.target.value = cep;
+        });
         // Função para atualizar a lista de endereços
         function atualizarListaEnderecos() {
             $.ajax({
