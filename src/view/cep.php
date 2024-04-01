@@ -34,6 +34,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <head>
     <title>Consulta de Endereço por CEP</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="src/view/assets/css/stylecarrinho.css">
 </head>
 
 <body>

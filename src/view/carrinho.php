@@ -67,7 +67,7 @@ $stmt_quantidade->close();
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Carrinho</title>
-    <link rel="stylesheet" type="text/css" href="/config/stylecarrinho.css">
+    <link rel="stylesheet" type="text/css" href="assets/css/stylecarrinho.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         function alterarQuantidade(id_produto, action) {
@@ -200,17 +200,17 @@ $result = $stmt->get_result();
     <form id="enderecoForm" method="post" style="display: none;">
         <h2>Endereço</h2>
         <label for="cep">CEP:</label>
-        <input type="text" id="cep" name="cep" maxlength="9"><br>
+        <input type="text" id="cep" name="cep" maxlength="9" required><br>
         <label for="cidade">Cidade:</label>
-        <input type="text" id="cidade" name="cidade" readonly><br>
+        <input type="text" id="cidade" name="cidade" required><br>
         <label for="estado">Estado:</label>
-        <input type="text" id="estado" name="estado" readonly><br>
+        <input type="text" id="estado" name="estado" required><br>
         <label for="rua">Rua:</label>
-        <input type="text" id="rua" name="rua"><br>
+        <input type="text" id="rua" name="rua" required><br>
         <label for="bairro">Bairro:</label>
-        <input type="text" id="bairro" name="bairro"><br>
+        <input type="text" id="bairro" name="bairro" required><br>
         <label for="numero">Número:</label>
-        <input type="text" id="numero" name="numero"><br>
+        <input type="number" text-decoration="none" id="numero" name="numero" required><br>
         <input type="submit" value="Salvar Endereço" class="button">
         <div id="mensagem"></div> <!-- Div para exibir mensagem de sucesso ou erro -->
     </form>
