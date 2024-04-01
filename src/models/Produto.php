@@ -1,8 +1,6 @@
 <?php
-
-session_start();
-
-class Produto {
+class Produto
+{
     private $nome;
     private $descricao;
     private $preco;
@@ -10,7 +8,8 @@ class Produto {
     private $imagem;
     private $slug;
 
-    public function __construct($nome, $descricao, $preco, $categoria, $imagem = null) {
+    public function __construct($nome, $descricao, $preco, $categoria, $imagem = null)
+    {
         $this->nome = $nome;
         $this->descricao = $descricao;
         $this->preco = $preco;
@@ -19,31 +18,38 @@ class Produto {
         $this->slug = $this->slugify($nome);
     }
 
-    public function getNome() {
+    public function getNome()
+    {
         return $this->nome;
     }
 
-    public function getDescricao() {
+    public function getDescricao()
+    {
         return $this->descricao;
     }
 
-    public function getPreco() {
+    public function getPreco()
+    {
         return $this->preco;
     }
 
-    public function getCategoria() {
+    public function getCategoria()
+    {
         return $this->categoria;
     }
 
-    public function getImagem() {
+    public function getImagem()
+    {
         return $this->imagem;
     }
 
-    public function getSlug() {
+    public function getSlug()
+    {
         return $this->slug;
     }
 
-    private function slugify($text) {
+    private function slugify($text)
+    {
         $text = preg_replace('/[^\pL\d]+/u', '-', $text);
         $text = iconv('utf-8', 'us-ascii//TRANSLIT', $text);
         $text = strtolower($text);
@@ -56,4 +62,3 @@ class Produto {
         return $text;
     }
 }
-?>
