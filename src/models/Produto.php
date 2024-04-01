@@ -62,3 +62,4 @@ class Produto
         return $text;
     }
 }
+?>
