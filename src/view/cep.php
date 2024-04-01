@@ -41,7 +41,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <form id="enderecoForm" method="post">
         <h2>Endereço</h2>
         <label for="cep">CEP:</label>
-        <input type="text" id="cep" name="cep" maxlength="8"><br>
+        <input type="text" id="cep" name="cep" maxlength="9"><br>
         <label for="cidade">Cidade:</label>
         <input type="text" id="cidade" name="cidade" readonly><br>
         <label for="estado">Estado:</label>
@@ -80,7 +80,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             $('#cep').keyup(function() {
                 var cep = $(this).val().replace(/\D/g, '');
-                if (cep.length === 8) {
+                if (cep.length === 9) {
                     $('#mensagem').html(""); // Limpa a mensagem de erro
                     $('#cidade, #estado, #rua, #bairro').val(""); // Limpa os campos do endereço
                     $('#numero').val(""); // Limpa o campo do número

@@ -200,7 +200,7 @@ $result = $stmt->get_result();
     <form id="enderecoForm" method="post" style="display: none;">
         <h2>Endereço</h2>
         <label for="cep">CEP:</label>
-        <input type="text" id="cep" name="cep" maxlength="8"><br>
+        <input type="text" id="cep" name="cep" maxlength="9"><br>
         <label for="cidade">Cidade:</label>
         <input type="text" id="cidade" name="cidade" readonly><br>
         <label for="estado">Estado:</label>
@@ -323,7 +323,7 @@ $result = $stmt->get_result();
                                 $('#estado').val(data.uf);
                                 $('#rua').val(data.logradouro);
                                 $('#bairro').val(data.bairro);
-                                $('#numero').focus(); // Coloca o foco no campo do número
+                                $('#numero') // Coloca o foco no campo do número
                             }
                         },
                         complete: function() {
