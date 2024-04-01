@@ -195,7 +195,6 @@ $result = $stmt->get_result();
 </head>
 
 <body>
-    <h1>Consulta de Endereço por CEP</h1>
     <button id="cadastrarNovoEndereco">Cadastrar Novo Endereço</button>
     <button id="usarEnderecoExistente">Usar Endereço Existente</button>
     <form id="enderecoForm" method="post" style="display: none;">
