@@ -117,18 +117,39 @@ if (isset($_GET['slug'])) {
                 </div>
             </div>
             <div class="containerDesc">
-                <label class="toggle-label arrow-down" onclick="toggleDescription()">Descrição</label>
+                <label class="toggle-label" onclick="toggleDescription()">
+                    <div class="description-toggle">
+                        <a>
+                            <span class="material-symbols-outlined description-icon">description</span>
+                        </a>
+                        <a>
+                            <label class="description">Descrição</label>
+                        </a>
+                        <a>
+                            <span class="material-symbols-outlined expand-more-icon">expand_more</span>
+                        </a>
+                        <a>
+                            <span class="material-symbols-outlined expand-less-icon">expand_less</span>
+                        </a>
+                    </div>
+                </label>
                 <p class="product-description"><?php echo htmlspecialchars($row['descricao']); ?></p>
             </div>
+
+
             <div class="container">
         <?php
+                                echo "<div id='comentarios' class='comments'></div>"; // Adicionando a classe 'hidden' para esconder os comentários inicialmente
+
                                 // Formulário para adicionar comentário
                                 echo "<form id='form1' method='post' action='inserir.php'>";
                                 echo "<input type='hidden' name='id_produto' value='{$row['id']}'>";
-                                echo "<label for='comment'>Comentário</label><br>";
-                                echo "<textarea name='comentario' id='comment' required></textarea><br><br>";
-                                echo "<input type='submit' name='enviar_comentario' value='Enviar Comentário'>";
+                                echo "<div class= 'adicionarContainer'>";
+                                echo "<label for='comment'>Adicionar comentário</label><br>";
+                                echo "<textarea name='comentario' id='comment' class='textAdd' required></textarea><br><br>";
+                                echo "<input type='submit' name='enviar_comentario' value='Enviar Comentário' class='buttonAdd'>";
                                 echo "</form>";
+                                echo "</div>";
                             }
                             // Botões de editar e excluir (para usuários do tipo 1)
                             if ($_SESSION['tipo_usuario'] == 1) {
@@ -142,9 +163,6 @@ if (isset($_GET['slug'])) {
                                 echo "<input type='submit' value='Excluir' onclick='return confirm(\"Tem certeza que deseja excluir este produto?\")'>";
                                 echo "</form>";
                             }
-
-                            // Div para carregar os comentários
-                            echo "<div id='comentarios'></div>";
                         } else {
                             // Mostra mensagem e redireciona para a página de login
                             echo "<p>Faça login para adicionar ao carrinho ou comentar</p>";
@@ -186,10 +204,10 @@ if (isset($_GET['slug'])) {
                         dataType: 'json',
                         success: function(response) {
                             if (response.length > 0) {
-                                var comentariosHtml = '<h2>Comentários</h2>';
+                                var comentariosHtml = '<h2><a>Comentários</a></h2>';
                                 response.forEach(function(comentario) {
-                                    comentariosHtml += '<p><strong>' + comentario.nome + '</strong> em ' + comentario.data_comentario + ':<br>';
-                                    comentariosHtml += comentario.comentario + '</p>';
+                                    comentariosHtml += '<br><p><strong>' + comentario.nome + '</strong> em ' + comentario.data_comentario + ':<br> <br>';
+                                    comentariosHtml += 'Comentario: '+comentario.comentario + '</p>';
                                 });
                                 $('#comentarios').html(comentariosHtml); // Atualiza a div de comentários
                             } else {
@@ -221,18 +239,35 @@ if (isset($_GET['slug'])) {
                     loadComentarios(<?php echo $row['id']; ?>);
                 });
 
-                function toggleDescription() {
-                    const description = document.querySelector('.product-description');
-                    const toggleLabel = document.querySelector('.toggle-label');
+                document.addEventListener("DOMContentLoaded", function() {
+                    var container = document.querySelector('.containerDesc');
+                    var expandMoreIcon = container.querySelector('.expand-more-icon');
+                    var expandLessIcon = container.querySelector('.expand-less-icon');
+                    var productDescription = container.querySelector('.product-description');
 
-                    if (description.style.display === "none") {
-                        description.style.display = "block";
-                        toggleLabel.classList.remove('arrow-down');
-                        toggleLabel.classList.add('arrow-up');
+                    expandMoreIcon.style.display = 'inline';
+                    expandLessIcon.style.display = 'none';
+                    productDescription.style.display = 'none';
+                });
+
+                function toggleDescription() {
+                    var container = document.querySelector('.containerDesc');
+                    var descriptionIcon = container.querySelector('.description-icon');
+                    var expandMoreIcon = container.querySelector('.expand-more-icon');
+                    var expandLessIcon = container.querySelector('.expand-less-icon');
+                    var productDescription = container.querySelector('.product-description');
+
+                    container.classList.toggle('expanded');
+                    container.classList.toggle('collapsed');
+
+                    if (container.classList.contains('expanded')) {
+                        expandMoreIcon.style.display = 'none';
+                        expandLessIcon.style.display = 'inline';
+                        productDescription.style.display = 'block';
                     } else {
-                        description.style.display = "none";
-                        toggleLabel.classList.remove('arrow-up');
-                        toggleLabel.classList.add('arrow-down');
+                        expandMoreIcon.style.display = 'inline';
+                        expandLessIcon.style.display = 'none';
+                        productDescription.style.display = 'none';
                     }
                 }
             </script>

@@ -319,11 +319,12 @@ body {
 
 .product-info {
     margin-top: 60px;
-    background-color: rgb(223, 221, 221);
+    background-color: rgb(255, 255, 255);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Adiciona um sombreamento */
     border-radius: 10px;
     display: grid;
-    justify-content: flex-start;
-    align-items: flex-start;
+    justify-content: center;
+    align-items: center;
     width: 30%;
     padding: 20px;
 }
@@ -343,13 +344,8 @@ body {
 }
 
 .description {
-    margin-top: 20px;
+    cursor: pointer;
 }
-
-.description h2 {
-    margin-bottom: 10px;
-}
-
 .product-description {
     margin-top: 10px;
 }
@@ -402,26 +398,98 @@ menu>ul {
 .containerDesc {
     position: relative;
     margin-top: 20px;
-    background-color: var(--color-dark3);
+    background-color: rgb(255, 255, 255);
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Adiciona um sombreamento */
+    padding: 30px;
 }
-
+.description-toggle {
+    display: flex;
+    align-items: center;
+}
+.description-icon {
+    transition: transform 0.3s ease-in-out;
+    display: flex;
+    margin-right: 15px;
+    justify-content: flex-start;
+    align-items: flex-start;
+    color:var (--color-blue);
+}
   .product-description {
     display: none;
     margin-top: 10px;
+    padding: 20px;
   }
   .toggle-label {
     cursor: pointer;
     font-size: 20px;
     font-weight: bold;
   }
-  .arrow-up::before {
-    content: "\25B2";
-    font-family: Arial, sans-serif;
-    font-size: 12px;
+  .expand-more-icon,
+  .expand-less-icon {
+    display: none;
+    text-align: right;
+    display: flex;
+    cursor: pointer;
+  }
+  .expand-more-icon,
+.expand-less-icon {
+    transition: transform 0.3s ease-in-out;
 }
-.arrow-down::before {
-    content: "\25BC";
-    font-family: Arial, sans-serif;
-    font-size: 12px;
+.expanded .expand-more-icon {
+    display: none;
+}
+
+.expanded .expand-less-icon {
+    display: inline;
+}
+
+.collapsed .expand-more-icon {
+    display: inline;
+}
+
+.collapsed .expand-less-icon {
+    display: none;
+}
+.comments{
+    background-color: rgb(255, 255, 255);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Adiciona um sombreamento */
+    width: 100%;
+    padding: 30px;
+    display: grid;
+    margin-top: 20px;
+}
+.adicionarContainer{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 30px;
+    margin-top: 20px;
+}
+.adicionarContainer > * {
+    flex-grow: 1; /* Para distribuir igualmente o espaço entre os itens */
+    margin: 0 10px; /* Adicionando margem entre os itens (opcional) */
+    max-width: calc(33.33% - 20px); /* Definindo a largura máxima para cada item */
+    box-sizing: border-box; /* Considerar a largura máxima incluindo a margem */
+}
+.buttonAdd{
+}
+.textAdd {
+    width: 1000px; /* Faz a textarea ocupar toda a largura disponível */
+    height: 200px; /* Define a altura da textarea */
+    resize: none; /* Impede que o usuário redimensione a textarea */
+    border: none; /* Remove a borda */
+    padding: 10px; /* Adiciona um espaço interno para o conteúdo */
+    font-family: Arial, sans-serif; /* Define a família de fontes */
+    font-size: 16px; /* Define o tamanho da fonte */
+    background-color: #f0f0f0; /* Define uma cor de fundo */
+    color: #333; /* Define a cor do texto */
+    border-radius: 8px; /* Adiciona bordas arredondadas */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Adiciona uma sombra suave */
+}
+
+/* Adiciona um efeito de transição suave */
+.textAdd:focus {
+    outline: none;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
+    transition: box-shadow 0.3s ease;
 }
