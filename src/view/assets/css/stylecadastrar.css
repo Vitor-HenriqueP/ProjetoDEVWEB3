@@ -147,3 +147,7 @@ a {
     right: 10px;
     cursor: pointer;
 }
+textarea{
+    font-family: Arial, sans-serif;
+    font-size: 12px;
+}

@@ -39,7 +39,7 @@ if (isset($_GET['slug'])) {
                     </svg>
                 </button>
                 <div class="logo_header">
-                    <a href="index.php"><img src="./assets/imagens/newlogo.png" alt="Logo Estação Digital" class="img_logo_header"></a>
+                    <a href="../../index.php"><img src="./assets/imagens/newlogo.png" alt="Logo Estação Digital" class="img_logo_header"></a>
                 </div>
                 <div class="navigation_header" id="navigation_header">
                     <button onclick="toggleSidebar()" class="btn_icon_header">
@@ -48,25 +48,19 @@ if (isset($_GET['slug'])) {
                         </svg>
                     </button>
                     <?php if (!isset($_SESSION['login'])) : ?>
-                        <a href="login.php"><span class="material-symbols-outlined">login</span></a>
+                        <a href="../../login.php"><span class="material-symbols-outlined">login</span></a>
                     <?php endif; ?>
-                    <div class="pesquisar">
-                        <input type="text" placeholder="Busque aqui" id="searchInput" class="txtpesquisar" />
-                        <a class="btpesquisar">
-                            <img class="lupa-branca" src="./assets/imagens/lupa-branca.svg" alt="Pesquisar" width="25px" height="25px" />
-                        </a>
-                    </div>
                     <?php if (!isset($_SESSION['login']) || ($_SESSION['tipo_usuario'] == 2)) : ?>
                         <a href="src/view/carrinho.php"><span class="material-symbols-outlined">shopping_cart</span></a>
                     <?php endif; ?>
                     <?php if (isset($_SESSION['login'])) : ?>
-                        <a href="user_config.php"><span class="material-symbols-outlined">person</span></a>
+                        <a href="../../user_config.php"><span class="material-symbols-outlined">person</span></a>
                     <?php endif; ?>
 
                     <?php if (isset($_SESSION['login'])) : ?>
-                        <form method="post" action="index.php">
+                        <form method="post" action="../../index.php">
                             <input type="hidden" name="logout" value="1">
-                            <button type="submit" class="button" style="background: none; border: none; cursor: pointer;">
+                            <button type="submit"  style="background: none; border: none; cursor: pointer;">
                                 <a><span class="material-symbols-outlined" style="vertical-align: middle;">logout</span></a>
                             </button>
                         </form>
@@ -75,25 +69,6 @@ if (isset($_GET['slug'])) {
 
                 </div>
             </div>
-
-            <nav>
-                <?php if (isset($_SESSION['login'])) : ?>
-                    <p>Bem-vindo, <?php echo htmlspecialchars($_SESSION['nome']); ?></p>
-
-                    <?php if (isset($_SESSION['login']) && $_SESSION['tipo_usuario'] == 1) : ?>
-                        <a href="src/view/cadastrar_produto.php" class="categoria">Cadastrar produto</a>
-                    <?php endif; ?>
-
-                <?php endif; ?>
-                <?php if (isset($_SESSION['login']) && $_SESSION['tipo_usuario'] == 3) : ?>
-                    <a href="cadastro_adm.php" class="categoria">Cadastrar novo administrador</a>
-                <?php endif; ?>
-                <a href="#" class="categoria" data-categoria="Todas">Todas</a>
-                <a href="#" class="categoria" data-categoria="Eletrônicos">Eletrônicos</a>
-                <a href="#" class="categoria" data-categoria="Roupas">Roupas</a>
-                <a href="#" class="categoria" data-categoria="Acessórios">Acessórios</a>
-
-            </nav>
             <div class="container">
                 <div class="product">
                     <div class="product-image">
@@ -145,7 +120,7 @@ if (isset($_GET['slug'])) {
                                 echo "<form id='form1' method='post' action='inserir.php'>";
                                 echo "<input type='hidden' name='id_produto' value='{$row['id']}'>";
                                 echo "<div class= 'adicionarContainer'>";
-                                echo "<label for='comment'>Adicionar comentário</label><br>";
+                                echo "<a><h2 for='comment'>Adicionar comentário</h2></a><br>";
                                 echo "<textarea name='comentario' id='comment' class='textAdd' required></textarea><br><br>";
                                 echo "<input type='submit' name='enviar_comentario' value='Enviar Comentário' class='buttonAdd'>";
                                 echo "</form>";
@@ -155,12 +130,13 @@ if (isset($_GET['slug'])) {
                             if ($_SESSION['tipo_usuario'] == 1) {
                                 echo "<form method='post' action='editar_produto.php'>";
                                 echo "<input type='hidden' name='id' value='{$row['id']}'>";
-                                echo "<input type='submit' value='Editar'>";
+                                echo "<input type='submit' value='Editar'class='button'>";
                                 echo "</form>";
 
                                 echo "<form method='post' action='excluir_produto.php'>";
                                 echo "<input type='hidden' name='id' value='{$row['id']}'>";
-                                echo "<input type='submit' value='Excluir' onclick='return confirm(\"Tem certeza que deseja excluir este produto?\")'>";
+                                echo "<input type='submit' value='Excluir' class='button' onclick='return confirm(\"Tem certeza que deseja excluir este produto?\")'>";
+                                echo "<div id='comentarios' class='commentsAdmin'></div>";
                                 echo "</form>";
                             }
                         } else {

@@ -36,10 +36,12 @@ if ($result->num_rows > 0) {
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="./assets/css/stylecadastrar.css">
     <title>Editar Produto</title>
 </head>
 
 <body>
+<div class="container">
     <h2>Editar Produto</h2>
     <form id="editForm" method="post" enctype="multipart/form-data" action="editar_produto_action.php">
         <input type="hidden" name="id" value="<?php echo $id; ?>">
@@ -52,14 +54,14 @@ if ($result->num_rows > 0) {
         <label for="preco">Preço:</label><br>
         <input type="number" id="preco" name="preco" step="0.01" value="<?php echo $row['preco']; ?>" required><br><br>
 
-        <label for="imagem">Imagem:</label><br>
+        <label for="imagem" class="file-upload-btn">Imagem:</label><br>
         <input type="file" id="imagem" name="imagem" accept="image/*" onchange="previewImage(event)"><br>
         <img id="imagemAtual" src="data:image/jpeg;base64,<?php echo base64_encode($row['imagem']); ?>" alt="Imagem Atual" style="max-width: 100px;"><br><br>
 
         <input type="submit" value="Salvar">
     </form>
     <a href="../../index.php">Voltar para a página inicial</a>
-
+    </div>
     <script>
         // Preencher os campos com os valores do produto
         var produto = {

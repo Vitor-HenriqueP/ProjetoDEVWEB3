@@ -85,7 +85,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             <input type="submit" value="Cadastrar">
         </form>
-        <di style="color: greenyellow;" id="mensagem"></div>
+        <div style="color: greenyellow;" id="mensagem"></div>
 
         <a href="../../index.php">Voltar</a>
     </div>

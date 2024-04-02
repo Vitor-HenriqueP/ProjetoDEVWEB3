@@ -493,3 +493,11 @@ menu>ul {
     box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
     transition: box-shadow 0.3s ease;
 }
+.commentsAdmin{
+    background-color: rgb(255, 255, 255);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Adiciona um sombreamento */
+    width: 50%;
+    padding: 30px;
+    display: grid;
+    margin-top: 20px;
+}

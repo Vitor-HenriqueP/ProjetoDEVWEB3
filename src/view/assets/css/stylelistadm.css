@@ -1,0 +1,107 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+    display: flex;
+}
+
+.container {
+    width: 80%;
+    margin: 20px auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+h1 {
+    text-align: center;
+}
+
+.admin-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+.admin-item {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    margin-bottom: 10px;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.admin-item:hover {
+    background-color: #f9f9f9;
+}
+
+.delete-btn {
+    background-color: #dc3545;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+.delete-btn:hover {
+    background-color: #c82333;
+}
+
+.header,
+.navigation_header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.header {
+    background-color: var(--color-dark4);
+    justify-content: space-between;
+    padding: 0 10%;
+    height: 100px;
+    backdrop-filter: blur(10px);
+}
+
+.header p {
+    color: var(--color-white);
+    font-weight: bold;
+}
+
+
+.navigation_header {
+    gap: 3em;
+    z-index: 2;
+}
+
+.content {
+    padding-top: 5em;
+    text-align: center;
+    height: 100vh;
+    transition: 1s;
+}
+
+.navigation_header a {
+    text-decoration: none;
+    color: var(--color-blue);
+    transition: 1s;
+}
+
+.navigation_header a:hover {
+    color: var(--color-green);
+}
+
+.active {
+    background: var(--color-dark3);
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.btn_icon_header {
+    background: transparent;
+    border: none;
+    color: var(--color-dark4);
+    cursor: pointer;
+    display: none;
+}
