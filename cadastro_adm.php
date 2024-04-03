@@ -42,7 +42,6 @@ if (isset($_POST['excluir']) && isset($_POST['id'])) {
         echo "Administrador excluído";
     } else {
         echo "Erro ao excluir administrador";
-
     }
 }
 
@@ -92,6 +91,8 @@ $administradores = $usuario->listarAdministradores();
                     <input type="hidden" name="id" value="<?php echo $admin['id']; ?>">
                     <input type="submit" name="excluir" value="Excluir" class="button">
                 <?php endforeach; ?>
+                <a class="test" href="listaradm.php">Ver lista de administradores</a>
+
                 <a href="index.php">Voltar para a página inicial</a>
             </form>
         </div>

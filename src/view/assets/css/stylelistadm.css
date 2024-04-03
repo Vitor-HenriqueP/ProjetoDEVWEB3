@@ -1,52 +1,70 @@
-body {
-    font-family: Arial, sans-serif;
+:root {
+    --color-white: #fff;
+    --color-dark1: rgb(39, 39, 39);
+    --color-dark2: #2d2d2d;
+    --color-dark3: #e4e4e4;
+    --color-dark4: #000000;
+    --color-dark5: #343434;
+    --color-blue: #0099ff;
+    --color-blue2: #1b269c;
+    --color-green: #00ffae;
+}
+.material-symbols-outlined {
+  font-variation-settings:
+  'FILL' 0,
+  'wght' 400,
+  'GRAD' 0,
+  'opsz' 24
+}
+
+.hidden {
+    display: none;
+}
+
+nav {
+    background-color: var(--color-dark5);
+    text-align: center;
+    padding: 5px;
+
+}
+a{
+    text-decoration: none;
+    color: var(--color-blue);
+    transition: 1s;
+}
+a:hover{
+    color: var(--color-green);
+}
+
+
+.categoria {
+    margin: 10px;
+    color: var(--color-blue);
+    padding: 5px;
+    text-decoration: none;
+
+}
+* {
     margin: 0;
     padding: 0;
-    background-color: #f4f4f4;
+}
+
+.hidden {
+    display: none;
+}
+nav{
+    background-color: black;
     display: flex;
 }
+nav a{
+    flex: 1;
+    text-align: center;
 
-.container {
-    width: 80%;
-    margin: 20px auto;
-    display: flex;
-    align-items: center;
-    justify-content: center;
 }
 
-h1 {
-    text-align: center;
-}
-
-.admin-list {
-    list-style-type: none;
-    padding: 0;
-}
-
-.admin-item {
-    background-color: #fff;
-    border: 1px solid #ccc;
-    margin-bottom: 10px;
-    padding: 10px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.admin-item:hover {
-    background-color: #f9f9f9;
-}
-
-.delete-btn {
-    background-color: #dc3545;
-    color: #fff;
-    border: none;
-    padding: 5px 10px;
-    cursor: pointer;
-}
-
-.delete-btn:hover {
-    background-color: #c82333;
+.img_logo_header {
+    width: 50%;
+    height: 50%;
 }
 
 .header,
@@ -104,4 +122,53 @@ h1 {
     color: var(--color-dark4);
     cursor: pointer;
     display: none;
+}
+
+@media screen and(max-width: 1920px) {
+    .img_logo_header {
+        width: 100%;
+        height: 100%;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .navigation_header {
+        position: absolute;
+        flex-direction: column !important;
+        top: 0;
+        background: var(--color-dark5);
+        height: 100%;
+        width: 35vw;
+        padding: 1em;
+        animation-duration: 1s;
+        margin-left: -100vw;
+    }
+
+    .btn_icon_header {
+        display: block;
+    }
+}
+
+@keyframes showSidebar {
+    from {
+        margin-left: -100vw;
+    }
+
+    to {
+        margin-left: -10vw;
+    }
+}
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #ffffff;
+}
+
+.container{
+display: flex;
+justify-content: center;
+align-items: center;
+text-align: center;
 }
