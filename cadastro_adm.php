@@ -60,7 +60,7 @@ $administradores = $usuario->listarAdministradores();
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" type="text/css" href="./src/view/assets/css/stylecadastroadm.css">
+    <link rel="stylesheet" type="text/css" href="src/view/assets/css/stylecadastroAdm.css">
     <title>Cadastro de administrador</title>
     <script src="src/view/assets/js/scriptCadastroAdm.js"></script>
 
@@ -74,7 +74,7 @@ $administradores = $usuario->listarAdministradores();
             <form method="post" id="formCadastroAdm" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
                 <h1>Cadastro de Usuário Administrador</h1>
                 <input type="text" id="nome" name="nome" required placeholder="Nome">
-                <input type="text" id="login" name="login" required placeholder="E-mail">
+                <input type="email" id="login" name="login" required placeholder="E-mail" oninput="validarEmail()">
                 <input type="password" id="senha" name="senha" required placeholder="Senha">
                 <input type="submit" value="Cadastrar">
             </form>
@@ -82,7 +82,7 @@ $administradores = $usuario->listarAdministradores();
         <div class="form-container sign-in">
             <form id="excluiAdm" method="post">
                 <div class="central">
-                <h2>Administradores existentes.</h2>
+                    <h2>Administradores existentes.</h2>
                 </div>
                 <a class="button2" href="listaradm.php">Ver lista de administradores</a>
                 <a href="index.php">Voltar para a página inicial</a>

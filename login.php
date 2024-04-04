@@ -94,7 +94,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <form id="cadastroForm" method="post">
                 <h1>Cadastro de usuário</h1>
                 <input type="text" id="nome" name="nome" required placeholder="Nome">
-                <input type="text" id="login" name="login" required placeholder="E-mail">
+                <input type="email" id="login" name="login" required placeholder="E-mail">
                 <input type="password" id="senha" name="senha" required placeholder="Senha">
 
                 <input type="submit" value="Cadastrar" class="button">

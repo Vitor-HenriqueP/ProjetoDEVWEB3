@@ -58,3 +58,13 @@ document.getElementById('formLogin').addEventListener('submit', function (event)
             console.error('Erro:', error);
         });
 });
+
+
+function validarEmail() {
+    var email = document.getElementById("login").value;
+    if (email.includes("@estacaodigital")) {
+        document.getElementById("login").setCustomValidity("");
+    } else {
+        document.getElementById("login").setCustomValidity("O e-mail deve conter '@estacaodigital'");
+    }
+}

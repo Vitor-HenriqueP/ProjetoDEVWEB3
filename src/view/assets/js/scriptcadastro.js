@@ -29,7 +29,7 @@ document.getElementById("formProduto").addEventListener("submit", function (even
             document.getElementById("formProduto").reset();
             document.getElementById("imagem").value = ""; // Limpa o campo de upload de arquivo
             document.getElementById("imagem-preview").style.display = "none"; // Oculta o preview da imagem
-        }   
+        }
     };
     xhr.send(formData);
 });
@@ -56,4 +56,12 @@ function showPopup(message) {
     var popupMessage = document.getElementById("popup-message");
     popupMessage.textContent = message;
     popup.style.display = "block";
+}
+function validarFormulario() {
+    var login = document.getElementById('login').value;
+    if (login.indexOf('@') === -1 || login.indexOf('.') === -1) {
+        alert('O login deve conter o caractere "@" e pelo menos um ponto ".".');
+        return false;
+    }
+    return true;
 }
