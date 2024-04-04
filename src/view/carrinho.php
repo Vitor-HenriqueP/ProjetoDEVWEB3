@@ -60,6 +60,37 @@ if (isset($_POST['id_produto']) && isset($_POST['action'])) {
     }
 }
 
+// Verifique se o ID do produto foi enviado por POST
+if (isset($_POST['slug']) && isset($_POST['action'])) {
+    $slug = $_POST['slug'];
+    $id_usuario = intval($_SESSION['id']); // Obter o ID do usuário da sessão
+
+    if ($_POST['action'] === 'remove') {
+        // Remove um item do carrinho
+        $stmt = $conn->prepare("DELETE FROM carrinho WHERE id_usuario = ? AND id_produto IN (SELECT id FROM produto WHERE slug = ?) LIMIT 1");
+        $stmt->bind_param("is", $id_usuario, $slug);
+        $stmt->execute();
+
+        // Redireciona o usuário para a mesma página usando GET
+        header("Location: $_SERVER[PHP_SELF]");
+        exit();
+    } elseif ($_POST['action'] === 'add') {
+        // Adiciona um item ao carrinho
+        $stmt = $conn->prepare("INSERT INTO carrinho (id_usuario, id_produto) SELECT ?, id FROM produto WHERE slug = ?");
+        $stmt->bind_param("is", $id_usuario, $slug);
+        $stmt->execute();
+
+        // Definir uma mensagem de sucesso para exibir
+        $mensagem = "Produto adicionado ao carrinho.";
+        // Exibir a mensagem de produto adicionado ao carrinho por 3 segundos
+        echo "<script>setTimeout(function() { document.getElementById('mensagem').style.display = 'none'; }, 3000);</script>";
+
+        // Redireciona o usuário para a mesma página usando GET
+        header("Location: $_SERVER[PHP_SELF]");
+        exit();
+    }
+}
+
 // Atualizar a quantidade de itens no carrinho na sessão
 $stmt_quantidade = $conn->prepare("SELECT COUNT(id_produto) as quantidade FROM carrinho WHERE id_usuario = ?");
 $stmt_quantidade->bind_param("i", $id_usuario);
@@ -140,7 +171,7 @@ $stmt_quantidade->close();
     <?php
     // Consulta SQL para obter os produtos no carrinho do usuário logado
     $id_usuario = intval($_SESSION['id']);
-    $stmt = $conn->prepare("SELECT c.id_produto, COUNT(c.id_produto) as quantidade, p.nome, p.descricao, p.preco, p.imagem FROM carrinho c INNER JOIN produto p ON c.id_produto = p.id WHERE c.id_usuario = ? GROUP BY c.id_produto");
+    $stmt = $conn->prepare("SELECT p.slug,c.id_produto, COUNT(c.id_produto) as quantidade, p.nome, p.descricao, p.preco, p.imagem FROM carrinho c INNER JOIN produto p ON c.id_produto = p.id WHERE c.id_usuario = ? GROUP BY c.id_produto");
     $stmt->bind_param("i", $id_usuario);
     $stmt->execute();
     $result = $stmt->get_result();
@@ -158,9 +189,9 @@ $stmt_quantidade->close();
 
             echo "<div class='product-container'>";
             echo "<div class='product-image-wrapper'>";
-            echo "<form method='post' action='../../src/view/produto.php'>";
-            echo "<input type='hidden' name='id' value='" . $row["id_produto"] . "'>";
-            echo "<button type='submit' style='background: none; border: none; padding: 0; margin: 0;' class='product-image-button'>";
+            echo "<form method='get' action='produto.php'>";
+            echo "<input type='hidden' name='slug' value='" . htmlspecialchars($row["slug"]) . "'>";
+            echo "<button type='submit' style='border: none; background: none; padding: 0; text-decoration: none; color: inherit;'>";
             echo "<img src='data:image/jpeg;base64," . base64_encode($row['imagem']) . "' alt='" . $row['nome'] . "' class='product-image'>";
             echo "</button>";
             echo "</form>";
