@@ -12,7 +12,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Validação de campos
     if (empty($nome) || empty($login) || empty($senha)) {
     } else {
-        // Verificar se o login já está em uso
+        // Verificar se o login já está em us
         $stmt_verificar = $conn->prepare("SELECT id FROM usuarios WHERE login = ?");
         $stmt_verificar->bind_param("s", $login);
         $stmt_verificar->execute();
@@ -81,18 +81,10 @@ $administradores = $usuario->listarAdministradores();
         </div>
         <div class="form-container sign-in">
             <form id="excluiAdm" method="post">
-                <h1>Administradores existentes.</h1>
-                <?php foreach ($administradores as $admin) : ?>
-                    <div class="background-container">
-                        <p>Administrador:</p>
-                        <p><?php echo substr($admin['nome'], 0, 5); ?></p>
-                        <p><?php echo substr($admin['login'], 0, 5); ?></p>
-                    </div>
-                    <input type="hidden" name="id" value="<?php echo $admin['id']; ?>">
-                    <input type="submit" name="excluir" value="Excluir" class="button">
-                <?php endforeach; ?>
-                <a class="test" href="listaradm.php">Ver lista de administradores</a>
-
+                <div class="central">
+                <h2>Administradores existentes.</h2>
+                </div>
+                <a class="button2" href="listaradm.php">Ver lista de administradores</a>
                 <a href="index.php">Voltar para a página inicial</a>
             </form>
         </div>
