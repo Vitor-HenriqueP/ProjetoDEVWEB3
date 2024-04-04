@@ -72,7 +72,7 @@ if (isset($_GET['slug'])) {
             <div class="container">
                 <div class="product">
                     <div class="product-image">
-                        <img src="data:image/jpeg;base64,<?php echo base64_encode($row['imagem']); ?>" alt="<?php echo htmlspecialchars($row['nome']); ?>">
+                        <img width="600px" height="600px" src="data:image/jpeg;base64,<?php echo base64_encode($row['imagem']); ?>" alt="<?php echo htmlspecialchars($row['nome']); ?>">
                     </div>
                     <div class="product-info">
                         <h1 class="product-title"><?php echo htmlspecialchars($row['nome']); ?></h1>
@@ -142,7 +142,7 @@ if (isset($_GET['slug'])) {
                         } else {
                             // Mostra mensagem e redireciona para a página de login
                             echo "<p>Faça login para adicionar ao carrinho ou comentar</p>";
-                            echo "<button onclick='redirectToLogin()'>Login</button>";
+                            echo "<button onclick='redirectToLogin()' class='button'>Login</button>";
                         }
         ?>
             </div>
