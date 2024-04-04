@@ -51,7 +51,7 @@ if (isset($_GET['slug'])) {
                         <a href="../../login.php"><span class="material-symbols-outlined">login</span></a>
                     <?php endif; ?>
                     <?php if (!isset($_SESSION['login']) || ($_SESSION['tipo_usuario'] == 2)) : ?>
-                        <a href="src/view/carrinho.php"><span class="material-symbols-outlined">shopping_cart</span></a>
+                        <a href="carrinho.php"><span class="material-symbols-outlined">shopping_cart</span></a>
                     <?php endif; ?>
                     <?php if (isset($_SESSION['login'])) : ?>
                         <a href="../../user_config.php"><span class="material-symbols-outlined">person</span></a>
