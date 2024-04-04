@@ -37,4 +37,3 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_SESSION['id'])) {
 } else {
     echo json_encode('Você precisa estar logado para comentar.');
 }
-?>

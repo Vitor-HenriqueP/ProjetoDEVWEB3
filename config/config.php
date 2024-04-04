@@ -1,3 +1,2 @@
 <?php
-define('Title','Estação Digital');
-?>
+define('Title', 'Estação Digital');

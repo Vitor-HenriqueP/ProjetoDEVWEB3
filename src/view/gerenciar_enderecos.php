@@ -52,23 +52,23 @@ $result = $stmt->get_result();
     <button id="cadastrarNovoEndereco">Cadastrar Novo Endereço</button>
     <button id="usarEnderecoExistente">Usar Endereço Existente</button>
     <div class="form-table">
-    <form id="enderecoForm" method="post" style="display: none;">
-        <h2>Endereço</h2>
-        <label for="cep">CEP:</label>
-        <input type="text" id="cep" name="cep" maxlength="8"><br>
-        <label for="cidade">Cidade:</label>
-        <input type="text" id="cidade" name="cidade" readonly><br>
-        <label for="estado">Estado:</label>
-        <input type="text" id="estado" name="estado" readonly><br>
-        <label for="rua">Rua:</label>
-        <input type="text" id="rua" name="rua"><br>
-        <label for="bairro">Bairro:</label>
-        <input type="text" id="bairro" name="bairro"><br>
-        <label for="numero">Número:</label>
-        <input type="text" id="numero" name="numero"><br>
-        <input type="submit" value="Salvar Endereço" class="button">
-        <div id="mensagem"></div> <!-- Div para exibir mensagem de sucesso ou erro -->
-    </form>
+        <form id="enderecoForm" method="post" style="display: none;">
+            <h2>Endereço</h2>
+            <label for="cep">CEP:</label>
+            <input type="text" id="cep" name="cep" maxlength="8"><br>
+            <label for="cidade">Cidade:</label>
+            <input type="text" id="cidade" name="cidade" readonly><br>
+            <label for="estado">Estado:</label>
+            <input type="text" id="estado" name="estado" readonly><br>
+            <label for="rua">Rua:</label>
+            <input type="text" id="rua" name="rua"><br>
+            <label for="bairro">Bairro:</label>
+            <input type="text" id="bairro" name="bairro"><br>
+            <label for="numero">Número:</label>
+            <input type="text" id="numero" name="numero"><br>
+            <input type="submit" value="Salvar Endereço" class="button">
+            <div id="mensagem"></div> <!-- Div para exibir mensagem de sucesso ou erro -->
+        </form>
     </div>
     <div id="enderecoSelecionado"></div>
 
@@ -215,7 +215,7 @@ $result = $stmt->get_result();
 
         });
     </script>
-w
+    w
 </body>
 
 </html>

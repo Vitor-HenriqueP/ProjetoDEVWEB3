@@ -60,7 +60,7 @@ if (isset($_GET['slug'])) {
                     <?php if (isset($_SESSION['login'])) : ?>
                         <form method="post" action="../../index.php">
                             <input type="hidden" name="logout" value="1">
-                            <button type="submit"  style="background: none; border: none; cursor: pointer;">
+                            <button type="submit" style="background: none; border: none; cursor: pointer;">
                                 <a><span class="material-symbols-outlined" style="vertical-align: middle;">logout</span></a>
                             </button>
                         </form>
@@ -183,7 +183,7 @@ if (isset($_GET['slug'])) {
                                 var comentariosHtml = '<h2><a>Comentários</a></h2>';
                                 response.forEach(function(comentario) {
                                     comentariosHtml += '<br><p><strong>' + comentario.nome + '</strong> em ' + comentario.data_comentario + ':<br> <br>';
-                                    comentariosHtml += 'Comentario: '+comentario.comentario + '</p>';
+                                    comentariosHtml += 'Comentario: ' + comentario.comentario + '</p>';
                                 });
                                 $('#comentarios').html(comentariosHtml); // Atualiza a div de comentários
                             } else {

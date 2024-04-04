@@ -21,4 +21,3 @@ if (isset($_POST['id_produto']) && isset($_POST['action'])) {
         $stmt->execute();
     }
 }
-?>

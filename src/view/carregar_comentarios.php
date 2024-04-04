@@ -27,4 +27,3 @@ if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET['id']) && is_numeric($_GE
 
 $stmt_comentarios->close();
 $conn->close();
-?>

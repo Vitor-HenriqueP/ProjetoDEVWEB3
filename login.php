@@ -86,7 +86,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <body>
     <div id="mensagem"></div>
-    <div  id="message"></div>
+    <div id="message"></div>
 
 
     <div class="container" id="container">
