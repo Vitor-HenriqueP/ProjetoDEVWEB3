@@ -62,7 +62,7 @@ $administradores = $usuario->listarAdministradores();
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Estação Digital | Lista de Administradores</title>
-    <link rel="stylesheet" type="text/css" href="./src/view/assets/css/stylelistadm.css">
+    <link rel="stylesheet" type="text/css" href="./src/view/assets/css/stylelistaradm.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="src/view/assets/js/scriptCadastroAdm.js"></script>
@@ -86,13 +86,13 @@ $administradores = $usuario->listarAdministradores();
                 </svg>
             </button>
             <?php if (!isset($_SESSION['login'])) : ?>
-                <a href="../../login.php"><span class="material-symbols-outlined">login</span></a>
+                <a href="login.php"><span class="material-symbols-outlined">login</span></a>
             <?php endif; ?>
             <?php if (!isset($_SESSION['login']) || ($_SESSION['tipo_usuario'] == 2)) : ?>
                 <a href="src/view/carrinho.php"><span class="material-symbols-outlined">shopping_cart</span></a>
             <?php endif; ?>
             <?php if (isset($_SESSION['login'])) : ?>
-                <a href="../../user_config.php"><span class="material-symbols-outlined">person</span></a>
+                <a href="user_config.php"><span class="material-symbols-outlined">person</span></a>
             <?php endif; ?>
 
             <?php if (isset($_SESSION['login'])) : ?>

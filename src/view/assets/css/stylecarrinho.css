@@ -41,3 +41,12 @@ input[type=number]::-webkit-outer-spin-button {
 input[type=number] {
     -moz-appearance: textfield; /* Firefox */
 }
+input[type=text] {
+    border: none;
+    border-bottom: 1px solid white; /* Adiciona uma linha branca na parte inferior */
+    background-color: black; /* Background preto */
+    color: white; /* Cor do texto */
+    margin-bottom: 10px; /* Espaçamento inferior entre os inputs */
+    padding: 5px; /* Espaçamento interno */
+    outline: none; /* Remove o contorno do input */
+}
