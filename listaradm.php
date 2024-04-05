@@ -63,6 +63,7 @@ $administradores = $usuario->listarAdministradores();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Estação Digital | Lista de Administradores</title>
     <link rel="stylesheet" type="text/css" href="./src/view/assets/css/stylelistaradm.css">
+    <link rel="shortcut icon" type="image/png" href="./src/view/assets/imagens/cart2.png">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="src/view/assets/js/scriptCadastroAdm.js"></script>
@@ -77,7 +78,7 @@ $administradores = $usuario->listarAdministradores();
             </svg>
         </button>
         <div class="logo_header">
-            <a href="../../index.php"><img src="./src/view/assets/imagens/newlogo.png" alt="Logo Estação Digital" class="img_logo_header"></a>
+            <a href="index.php"><img src="./src/view/assets/imagens/newlogo.png" alt="Logo Estação Digital" class="img_logo_header"></a>
         </div>
         <div class="navigation_header" id="navigation_header">
             <button onclick="toggleSidebar()" class="btn_icon_header">

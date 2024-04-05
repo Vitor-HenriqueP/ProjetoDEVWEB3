@@ -5,7 +5,8 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Confirmação</title>
+    <link rel="shortcut icon" type="image/png" href="./src/view/assets/imagens/cart2.png">
+    <title>Estação Digital | CConfirmação</title>
 </head>
 
 <body>

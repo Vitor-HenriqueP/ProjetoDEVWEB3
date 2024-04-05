@@ -108,8 +108,9 @@ $stmt_quantidade->close();
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carrinho</title>
+    <title>Estação Digital | Carrinho</title>
     <link rel="stylesheet" type="text/css" href="./assets/css/stylecart.css">
+    <link rel="shortcut icon" type="image/png" href="assets/imagens/cart2.png">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>

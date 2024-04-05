@@ -31,7 +31,8 @@ $conn->close();
 <html>
 
 <head>
-    <title>Minha Loja</title>
+    <link rel="shortcut icon" type="image/png" href="./src/view/assets/imagens/cart2.png">
+    <title>Estação Digital | Carrinho</title>
     <style>
         .card-mensagem {
             border: 1px solid #ccc;

@@ -51,8 +51,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <html>
 
 <head>
-    <title>Cadastro de Produto</title>
+    <title>Estação Digital | Cadastro de Produto</title>
     <link rel="stylesheet" type="text/css" href="./assets/css/stylecadastrar.css">
+    <link rel="shortcut icon" type="image/png" href="assets/imagens/cart2.png">
 </head>
 
 <body>

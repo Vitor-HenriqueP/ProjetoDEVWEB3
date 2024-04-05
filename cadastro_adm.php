@@ -61,6 +61,7 @@ $administradores = $usuario->listarAdministradores();
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="src/view/assets/css/stylecadastroAdm.css">
+    <link rel="shortcut icon" type="image/png" href="./src/view/assets/imagens/cart2.png">
     <title>Cadastro de administrador</title>
     <script src="src/view/assets/js/scriptCadastroAdm.js"></script>
 

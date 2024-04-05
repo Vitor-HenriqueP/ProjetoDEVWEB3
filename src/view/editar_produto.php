@@ -37,12 +37,13 @@ if ($result->num_rows > 0) {
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" type="text/css" href="./assets/css/stylecadastrar.css">
+        <link rel="shortcut icon" type="image/png" href="assets/imagens/cart2.png">
         <title>Editar Produto</title>
     </head>
 
     <body>
         <div class="container">
-            <h2>Editar Produto</h2>
+            <h2>Estação Digital | Editar Produto</h2>
             <form id="editForm" method="post" enctype="multipart/form-data" action="editar_produto_action.php">
                 <input type="hidden" name="id" value="<?php echo $id; ?>">
                 <label for="nome">Nome:</label><br>

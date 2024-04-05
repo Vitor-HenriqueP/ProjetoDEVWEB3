@@ -23,6 +23,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['logout'])) {
 <head>
     <title>Estação Digital | Preço baixo e entrega expressa !</title>
     <link rel="stylesheet" type="text/css" href="./src/view/assets/css/style.css">
+    <link rel="shortcut icon" type="image/png" href="./src/view/assets/imagens/cart2.png">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 
 

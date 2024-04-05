@@ -65,7 +65,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="./src/view/assets/css/stylecard.css">
-    <title>Redefinir nome</title>
+    <link rel="shortcut icon" type="image/png" href="./src/view/assets/imagens/cart2.png">
+    <title>Estação Digital | Configurações de usuario.</title>
 </head>
 
 <body>

@@ -32,7 +32,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <html>
 
 <head>
-    <title>Consulta de Endereço por CEP</title>
+    <title>Estação Digital | Consulta de Endereço por CEP</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link rel="stylesheet" href="src/view/assets/css/stylecarrinho.css">
 </head>
