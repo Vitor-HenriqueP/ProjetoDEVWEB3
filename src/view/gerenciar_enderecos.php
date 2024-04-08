@@ -215,7 +215,7 @@ $result = $stmt->get_result();
 
         });
     </script>
-    w
+    
 </body>
 
 </html>

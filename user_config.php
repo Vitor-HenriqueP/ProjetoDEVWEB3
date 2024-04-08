@@ -75,7 +75,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <?php if (isset($erro)) {
                 echo "<p>$erro</p>";
             } ?>
-            <form method="post" action="redefinir_nome.php">
+            <form method="post" action="confirmacao_redefinir.php">
                 <h1>Redefinir nome</h1>
                 <input value="<?php echo htmlspecialchars($_SESSION['nome']); ?>" type="text" id="novo_nome" name="novo_nome" required placeholder="Novo nome"><br><br>
 
@@ -88,7 +88,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <?php if (isset($erro)) {
                 echo "<p>$erro</p>";
             } ?>
-            <form method="post" action="redefinir_senha.php">
+            <form method="post" action="confirmacao_redefinir.php">
                 <h1>Redefinir senha</h1>
                 <input type="password" id="nova_senha" name="nova_senha" required placeholder="Nova senha"><br><br>
 

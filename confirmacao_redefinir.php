@@ -1,18 +1,34 @@
+<?php
+include './conexao.php'; // Inclua o arquivo de conexão
+session_start();
+
+$mensagem = "Dados redefinidos.";
+        echo '<script>window.setTimeout(function() { window.location.href = "user_config.php"; }, 1000);</script>';
+  
+?>
+
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html>
 
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" type="image/png" href="./src/view/assets/imagens/cart2.png">
-    <title>Estação Digital | CConfirmação</title>
+    <title>Estação Digital | Carrinho</title>
+    <style>
+        .card-mensagem {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 10px;
+            margin: 20px auto;
+            max-width: 400px;
+            background-color: #f9f9f9;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            display: <?php echo isset($mensagem) ? 'block' : 'none'; ?>;
+        }
+    </style>
 </head>
 
 <body>
-    <h1>Dados redefinidos com sucesso!</h1>
-    <p>Seus dados foram atualizados com sucesso. Você pode <a href="index.php">voltar para a página inicial</a>.</p>
+    <div class="card-mensagem" id="mensagem"><?php echo $mensagem; ?></div>
 </body>
 
 </html>
-?>
