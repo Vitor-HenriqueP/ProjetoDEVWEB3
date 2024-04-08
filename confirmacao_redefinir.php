@@ -3,7 +3,7 @@ include './conexao.php'; // Inclua o arquivo de conexão
 session_start();
 
 $mensagem = "Dados redefinidos.";
-        echo '<script>window.setTimeout(function() { window.location.href = "user_config.php"; }, 1000);</script>';
+        echo '<script>window.setTimeout(function() { window.location.href = "index.php"; }, 1000);</script>';
   
 ?>
 
