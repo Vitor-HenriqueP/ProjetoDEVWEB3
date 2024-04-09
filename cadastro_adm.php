@@ -1,5 +1,5 @@
 <?php
-include 'conexao.php'; // Assumindo que este arquivo inclui a conexão com o banco de dados
+include 'conexao.php'; 
 include 'src/models/User.php';
 
 $usuario = new Usuario_Adm($conn);
@@ -9,10 +9,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $login = filter_input(INPUT_POST, 'login', FILTER_SANITIZE_STRING);
     $senha = filter_input(INPUT_POST, 'senha', FILTER_SANITIZE_STRING);
 
-    // Validação de campos
+    
     if (empty($nome) || empty($login) || empty($senha)) {
     } else {
-        // Verificar se o login já está em us
+        
         $stmt_verificar = $conn->prepare("SELECT id FROM usuarios WHERE login = ?");
         $stmt_verificar->bind_param("s", $login);
         $stmt_verificar->execute();
@@ -26,12 +26,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         } else {
             $senha_hash = password_hash($senha, PASSWORD_DEFAULT);
             if ($usuario->cadastrarUsuario($nome, $login, $senha_hash)) {
-                // Cadastro bem-sucedido
+                
                 $mensagem = "Cadastro bem-sucedido.";
                 echo json_encode(array("status" => "success", "mensagem" => $mensagem));
                 exit();
             } else {
-                // Caso ocorra algum erro no cadastro
+                
             }
         }
     }

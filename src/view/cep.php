@@ -1,6 +1,6 @@
 <?php
 session_start();
-include '../../conexao.php'; // Assumindo que este arquivo inclui a conexão com o banco de dados
+include '../../conexao.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $cep = $_POST['cep'];
@@ -11,13 +11,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $numero = $_POST['numero'];
     $usuario_id = $_SESSION['id'];
 
-    // Verifica se todos os campos estão preenchidos
     if (empty($cep) || empty($cidade) || empty($estado) || empty($rua) || empty($bairro) || empty($numero) || empty($usuario_id)) {
         echo "Todos os campos são obrigatórios.";
         exit;
     }
 
-    // Insira os dados do endereço no banco de dados
     $stmt = $conn->prepare("INSERT INTO enderecos (cep, cidade, estado, rua, bairro, numero, usuario_id) VALUES (?, ?, ?, ?, ?, ?, ?)");
     $stmt->bind_param("ssssssi", $cep, $cidade, $estado, $rua, $bairro, $numero, $usuario_id);
 
@@ -54,18 +52,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <label for="numero">Número:</label>
         <input type="text" id="numero" name="numero"><br>
         <input type="submit" value="Salvar Endereço" class="button">
-        <div id="mensagem"></div> <!-- Div para exibir mensagem de sucesso ou erro -->
+        <div id="mensagem"></div> 
     </form>
     <a href="listar_enderecos.php">Listar Endereços</a>
 
     <script>
         $(document).ready(function() {
             $('#enderecoForm').submit(function(e) {
-                e.preventDefault(); // Evita que o formulário seja enviado normalmente
-                var formData = new FormData(this); // Cria um objeto FormData com os dados do formulário
+                e.preventDefault(); 
+                var formData = new FormData(this); 
                 $.ajax({
                     type: 'POST',
-                    url: 'cep.php', // Seu arquivo PHP para salvar o endereço
+                    url: 'cep.php', 
                     data: formData,
                     contentType: false,
                     processData: false,
@@ -82,11 +80,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $('#cep').keyup(function() {
                 var cep = $(this).val().replace(/\D/g, '');
                 if (cep.length === 9) {
-                    $('#mensagem').html(""); // Limpa a mensagem de erro
-                    $('#cidade, #estado, #rua, #bairro').val(""); // Limpa os campos do endereço
-                    $('#numero').val(""); // Limpa o campo do número
-
-                    // Desabilita o botão de "Salvar Endereço"
+                    $('#mensagem').html("");
+                    $('#cidade, #estado, #rua, #bairro').val("");
+                    $('#numero').val("");
                     $('.button').prop('disabled', true);
 
                     $.ajax({
@@ -98,11 +94,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 $('#estado').val(data.uf);
                                 $('#rua').val(data.logradouro);
                                 $('#bairro').val(data.bairro);
-                                $('#numero').focus(); // Coloca o foco no campo do número
+                                $('#numero').focus();
                             }
                         },
                         complete: function() {
-                            // Habilita o botão de "Salvar Endereço" após a requisição do CEP ser concluída
                             $('.button').prop('disabled', false);
                         }
                     });

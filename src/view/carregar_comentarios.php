@@ -1,10 +1,9 @@
 <?php
-include '../../conexao.php'; // Inclua o arquivo de conexão
+include '../../conexao.php'; 
 
 if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET['id']) && is_numeric($_GET['id'])) {
     $id_produto = $_GET['id'];
 
-    // Consulta SQL para obter os comentários relacionados ao produto
     $comentarios_sql = "SELECT c.comentario, c.data_comentario, u.nome FROM comentario c JOIN usuarios u ON c.id_usuario = u.id WHERE id_produto = ?";
     $stmt_comentarios = $conn->prepare($comentarios_sql);
     $stmt_comentarios->bind_param('i', $id_produto);

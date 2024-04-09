@@ -1,5 +1,5 @@
 <?php
-include './conexao.php'; // Inclua o arquivo de conexão
+include './conexao.php'; 
 session_start();
 
 $mensagem = "Dados redefinidos.";

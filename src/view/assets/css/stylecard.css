@@ -223,7 +223,7 @@ body{
     top: 0;
     left: 50%;
     transform: translateX(-50%);
-    background-color: #a3d1a8; /* Cor verde clara */
+    background-color: #a3d1a8;
     border: 1px solid #000000;
     padding: 20px;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);

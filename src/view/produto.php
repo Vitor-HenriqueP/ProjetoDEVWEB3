@@ -1,13 +1,11 @@
 <?php
 session_start();
 
-include '../../conexao.php'; // Inclua o arquivo de conexão
+include '../../conexao.php';
 
-// Verifica se o slug do produto foi enviado via GET
 if (isset($_GET['slug'])) {
     $slug = $_GET['slug'];
 
-    // Consulta SQL para obter os detalhes do produto com base no slug
     $sql = "SELECT * FROM produto WHERE slug = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param('s', $slug);
@@ -81,9 +79,7 @@ if (isset($_GET['slug'])) {
 
 
                         <?php
-                        // Verifica se o usuário está logado antes de mostrar os botões de editar e excluir
                         if (isset($_SESSION['login'])) {
-                            // Formulário para adicionar ao carrinho
                             if ($_SESSION['tipo_usuario'] == 2) {
                                 echo "<form method='post' action='../../adicionar_carrinho.php' onsubmit='return checkLogin()'>";
                                 echo "<input type='hidden' name='id_produto' value='{$row['id']}'>";
@@ -115,9 +111,7 @@ if (isset($_GET['slug'])) {
 
             <div class="container">
         <?php
-                                echo "<div id='comentarios' class='comments'></div>"; // Adicionando a classe 'hidden' para esconder os comentários inicialmente
-
-                                // Formulário para adicionar comentário
+                                echo "<div id='comentarios' class='comments'></div>";
                                 echo "<form id='form1' method='post' action='inserir.php'>";
                                 echo "<input type='hidden' name='id_produto' value='{$row['id']}'>";
                                 echo "<div class= 'adicionarContainer'>";
@@ -127,7 +121,6 @@ if (isset($_GET['slug'])) {
                                 echo "</form>";
                                 echo "</div>";
                             }
-                            // Botões de editar e excluir (para usuários do tipo 1)
                             if ($_SESSION['tipo_usuario'] == 1) {
                                 echo "<form method='post' action='editar_produto.php'>";
                                 echo "<input type='hidden' name='id' value='{$row['id']}'>";
@@ -141,36 +134,30 @@ if (isset($_GET['slug'])) {
                                 echo "</form>";
                             }
                         } else {
-                            // Mostra mensagem e redireciona para a página de login
                             echo "<p>Faça login para adicionar ao carrinho ou comentar</p>";
                             echo "<button onclick='redirectToLogin()' class='button'>Login</button>";
                         }
         ?>
             </div>
             <script>
-                // Função para enviar o formulário via AJAX
                 $('#form1').submit(function(e) {
-                    e.preventDefault(); // Evita o envio tradicional do formulário
+                    e.preventDefault();
                     $.ajax({
                         type: 'POST',
                         url: $(this).attr('action'),
                         data: $(this).serialize(),
                         success: function(response) {
                             if (response === 'Comentário Salvo com Sucesso') {
-                                // Recarrega os comentários após o envio bem-sucedido
                                 loadComentarios(<?php echo $row['id']; ?>);
-                                // Limpa o campo de comentário após o envio bem-sucedido
                                 $('#comment').val('');
                             }
                         },
                         error: function(xhr, status, error) {
-                            console.error(xhr.responseText); // Exibe a mensagem de erro no console
-                            alert('Erro ao enviar o comentário'); // Exibe uma mensagem de erro genérica
+                            console.error(xhr.responseText); 
+                            alert('Erro ao enviar o comentário');
                         }
                     });
                 });
-
-                // Função para carregar os comentários via AJAX
                 function loadComentarios(idProduto) {
                     $.ajax({
                         type: 'GET',
@@ -186,14 +173,14 @@ if (isset($_GET['slug'])) {
                                     comentariosHtml += '<br><p><strong>' + comentario.nome + '</strong> em ' + comentario.data_comentario + ':<br> <br>';
                                     comentariosHtml += 'Comentario: ' + comentario.comentario + '</p>';
                                 });
-                                $('#comentarios').html(comentariosHtml); // Atualiza a div de comentários
+                                $('#comentarios').html(comentariosHtml);
                             } else {
                                 $('#comentarios').html('<p>Ainda não há comentários para este produto.</p>');
                             }
                         },
                         error: function(xhr, status, error) {
-                            console.error(xhr.responseText); // Exibe a mensagem de erro no console
-                            alert('Erro ao carregar os comentários'); // Exibe uma mensagem de erro genérica
+                            console.error(xhr.responseText);
+                            alert('Erro ao carregar os comentários');
                         }
                     });
                 }
@@ -210,8 +197,6 @@ if (isset($_GET['slug'])) {
                 function redirectToLogin() {
                     window.location.href = '../../login.php';
                 }
-
-                // Carrega os comentários ao carregar a página
                 $(document).ready(function() {
                     loadComentarios(<?php echo $row['id']; ?>);
                 });

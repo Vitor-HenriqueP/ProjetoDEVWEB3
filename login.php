@@ -1,5 +1,5 @@
 <?php
-include 'conexao.php'; // Assumindo que este arquivo inclui a conexão com o banco de dados
+include 'conexao.php'; 
 include 'src/models/User.php';
 
 $usuario = new Usuario_Padrao($conn);
@@ -9,10 +9,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $login = filter_input(INPUT_POST, 'login', FILTER_SANITIZE_STRING);
     $senha = filter_input(INPUT_POST, 'senha', FILTER_SANITIZE_STRING);
 
-    // Validação de campos
     if (empty($nome) || empty($login) || empty($senha)) {
     } else {
-        // Verificar se o login já está em uso
         $stmt_verificar = $conn->prepare("SELECT id FROM usuarios WHERE login = ?");
         $stmt_verificar->bind_param("s", $login);
         $stmt_verificar->execute();
@@ -26,12 +24,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         } else {
             $senha_hash = password_hash($senha, PASSWORD_DEFAULT);
             if ($usuario->cadastrarUsuario($nome, $login, $senha_hash)) {
-                // Cadastro bem-sucedido
                 $mensagem = "Cadastro bem-sucedido.";
                 echo json_encode(array("status" => "success", "mensagem" => $mensagem));
                 exit();
             } else {
-                // Caso ocorra algum erro no cadastro
             }
         }
     }
@@ -49,14 +45,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if ($result->num_rows == 1) {
         $usuarioEncontrado = $result->fetch_assoc();
-        // Você precisa selecionar a senha hash para comparar com password_verify
         $senha_hash = $usuarioEncontrado['senha'];
         if (password_verify($senha, $senha_hash)) {
-            // Login bem-sucedido
             $_SESSION['id'] = $usuarioEncontrado['id'];
-            $_SESSION['nome'] = $usuarioEncontrado['nome']; // Adicione esta linha para armazenar o nome do usuário na sessão
+            $_SESSION['nome'] = $usuarioEncontrado['nome'];
             $_SESSION['login'] = $login;
-            $_SESSION['tipo_usuario'] = $usuarioEncontrado['tipo_usuario']; // Corrigido para 'tipo_user'
+            $_SESSION['tipo_usuario'] = $usuarioEncontrado['tipo_usuario']; 
 
             $response = array("success" => true, "message" => "Login bem-sucedido");
         } else {

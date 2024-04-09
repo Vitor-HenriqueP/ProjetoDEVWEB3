@@ -1,33 +1,30 @@
 <?php
-include 'conexao.php'; // Assumindo que este arquivo inclui a conexão com o banco de dados
+include 'conexao.php'; 
 include 'src/models/User.php';
 
 $usuario = new Usuario_Adm($conn);
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Verificar se é uma solicitação de exclusão
     if (isset($_POST['excluir']) && isset($_POST['id'])) {
         $id = $_POST['id'];
-        // Chame o método para excluir o usuário administrador
         if ($usuario->excluirUsuario($id)) {
-            // Redirecionamento após a exclusão bem-sucedida
+            
             header("Location: listaradm.php");
-            exit(); // Certifique-se de sair do script após o redirecionamento
+            exit(); 
         } else {
             echo "Erro ao excluir administrador";
         }
     }
 
-    // Se não é uma solicitação de exclusão, pode ser uma solicitação de cadastro
+
     $nome = filter_input(INPUT_POST, 'nome', FILTER_SANITIZE_STRING);
     $login = filter_input(INPUT_POST, 'login', FILTER_SANITIZE_STRING);
     $senha = filter_input(INPUT_POST, 'senha', FILTER_SANITIZE_STRING);
 
-    // Validação de campos
     if (empty($nome) || empty($login) || empty($senha)) {
-        // Lógica de validação de campos vazios aqui
+        
     } else {
-        // Verificar se o login já está em uso
+        
         $stmt_verificar = $conn->prepare("SELECT id FROM usuarios WHERE login = ?");
         $stmt_verificar->bind_param("s", $login);
         $stmt_verificar->execute();
@@ -40,12 +37,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         } else {
             $senha_hash = password_hash($senha, PASSWORD_DEFAULT);
             if ($usuario->cadastrarUsuario($nome, $login, $senha_hash)) {
-                // Cadastro bem-sucedido
+
                 $mensagem = "Cadastro bem-sucedido.";
                 echo json_encode(array("status" => "success", "mensagem" => $mensagem));
                 exit();
             } else {
-                // Caso ocorra algum erro no cadastro
             }
         }
     }

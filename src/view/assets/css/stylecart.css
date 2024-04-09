@@ -494,34 +494,34 @@ menu>ul {
 }
 
 #enderecoForm label {
-    display: none; /* Oculta os labels */
+    display: none;
 }
 
 #enderecoForm input {
-    border: none; /* Remove a borda */
-    background: transparent; /* Remove o fundo */
-    color: white; /* Define a cor do texto */
-    padding: 5px; /* Adiciona um pequeno preenchimento */
-    box-sizing: border-box; /* Faz com que o preenchimento não aumente a largura total */
+    border: none;
+    background: transparent;
+    color: white;
+    padding: 5px;
+    box-sizing: border-box;
     transition: background 1s ease-out;
 }
 
 #enderecoForm input::placeholder {
-    color: white; /* Define a cor do placeholder */
+    color: white;
 }
 
 #enderecoForm input[type="submit"] {
-    background: linear-gradient(to right, var(--color-green), var(--color-blue)); /* Fundo do botão */
-    color: white; /* Cor do texto do botão */
-    border: none; /* Remove a borda */
-    padding: 10px 20px; /* Adiciona um preenchimento ao botão */
-    border-radius: 5px; /* Adiciona bordas arredondadas ao botão */
-    cursor: pointer; /* Muda o cursor ao passar por cima do botão */
+    background: linear-gradient(to right, var(--color-green), var(--color-blue));
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
     width: 100%;
 }
 
 #enderecoForm input[type="submit"]:hover {
-    background: linear-gradient(to right, var(--color-blue), var(--color-green)); /* Altera a cor de fundo ao passar por cima */
+    background: linear-gradient(to right, var(--color-blue), var(--color-green));
 }
 
 #mensagem {

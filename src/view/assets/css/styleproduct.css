@@ -320,7 +320,7 @@ body {
 .product-info {
     margin-top: 60px;
     background-color: rgb(255, 255, 255);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Adiciona um sombreamento */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     border-radius: 10px;
     display: grid;
     justify-content: center;
@@ -330,7 +330,7 @@ body {
 }
 
 .product-image img {
-    max-width: calc(100% - 30px); /* para garantir que a imagem não ultrapasse 30px de margem */
+    max-width: calc(100% - 30px);
 }
 
 .product-title {
@@ -399,7 +399,7 @@ menu>ul {
     position: relative;
     margin-top: 20px;
     background-color: rgb(255, 255, 255);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Adiciona um sombreamento */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     padding: 30px;
 }
 .description-toggle {
@@ -452,7 +452,7 @@ menu>ul {
 }
 .comments{
     background-color: rgb(255, 255, 255);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Adiciona um sombreamento */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     width: 100%;
     padding: 30px;
     display: grid;
@@ -466,28 +466,26 @@ menu>ul {
     margin-top: 20px;
 }
 .adicionarContainer > * {
-    flex-grow: 1; /* Para distribuir igualmente o espaço entre os itens */
-    margin: 0 10px; /* Adicionando margem entre os itens (opcional) */
-    max-width: calc(33.33% - 20px); /* Definindo a largura máxima para cada item */
-    box-sizing: border-box; /* Considerar a largura máxima incluindo a margem */
+    flex-grow: 1;
+    margin: 0 10px;
+    max-width: calc(33.33% - 20px);
+    box-sizing: border-box;
 }
 .buttonAdd{
 }
 .textAdd {
-    width: 1000px; /* Faz a textarea ocupar toda a largura disponível */
-    height: 200px; /* Define a altura da textarea */
-    resize: none; /* Impede que o usuário redimensione a textarea */
-    border: none; /* Remove a borda */
-    padding: 10px; /* Adiciona um espaço interno para o conteúdo */
-    font-family: Arial, sans-serif; /* Define a família de fontes */
-    font-size: 16px; /* Define o tamanho da fonte */
-    background-color: #f0f0f0; /* Define uma cor de fundo */
-    color: #333; /* Define a cor do texto */
-    border-radius: 8px; /* Adiciona bordas arredondadas */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Adiciona uma sombra suave */
+    width: 1000px;
+    height: 200px;
+    resize: none;
+    border: none;
+    padding: 10px;
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+    background-color: #f0f0f0;
+    color: #333;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
-
-/* Adiciona um efeito de transição suave */
 .textAdd:focus {
     outline: none;
     box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
@@ -495,7 +493,7 @@ menu>ul {
 }
 .commentsAdmin{
     background-color: rgb(255, 255, 255);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Adiciona um sombreamento */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     width: 50%;
     padding: 30px;
     display: grid;

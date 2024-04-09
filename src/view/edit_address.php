@@ -1,6 +1,6 @@
 <?php
 session_start();
-include '../../conexao.php'; // Assumindo que este arquivo inclui a conexão com o banco de dados
+include '../../conexao.php'; 
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $id = $_POST['id'];
@@ -10,8 +10,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $rua = $_POST['rua_edit'];
     $bairro = $_POST['bairro_edit'];
     $numero = $_POST['numero_edit'];
-
-    // Atualiza os dados do endereço no banco de dados
     $stmt = $conn->prepare("UPDATE enderecos SET cep = ?, cidade = ?, estado = ?, rua = ?, bairro = ?, numero = ? WHERE id = ?");
     $stmt->bind_param("sssssii", $cep, $cidade, $estado, $rua, $bairro, $numero, $id);
 

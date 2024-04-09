@@ -27,8 +27,8 @@ document.getElementById("formProduto").addEventListener("submit", function (even
         if (xhr.readyState === 4 && xhr.status === 200) {
             document.getElementById("mensagem").innerHTML = "<p>Produto cadastrado com sucesso!</p>";
             document.getElementById("formProduto").reset();
-            document.getElementById("imagem").value = ""; // Limpa o campo de upload de arquivo
-            document.getElementById("imagem-preview").style.display = "none"; // Oculta o preview da imagem
+            document.getElementById("imagem").value = "";
+            document.getElementById("imagem-preview").style.display = "none";
         }
     };
     xhr.send(formData);
@@ -41,14 +41,14 @@ function previewImage(input) {
 
     reader.onload = function (e) {
         preview.src = e.target.result;
-        preview.style.display = 'block'; // Exibe a imagem
+        preview.style.display = 'block';
     }
 
     if (file) {
-        reader.readAsDataURL(file); // Lê o arquivo como URL de dados
+        reader.readAsDataURL(file);
     } else {
         preview.src = '';
-        preview.style.display = 'none'; // Oculta a imagem se não houver arquivo selecionado
+        preview.style.display = 'none';
     }
 }
 function showPopup(message) {

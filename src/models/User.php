@@ -35,7 +35,7 @@ class Usuario_Padrao extends Usuario
     {
         $query = "INSERT INTO usuarios (nome, login, senha, tipo_usuario) VALUES (?, ?, ?, 2)";
         $stmt = $this->conn->prepare($query);
-        $stmt->bind_param("sss", $nome, $login, $senha); // 'sss' indica que são três strings
+        $stmt->bind_param("sss", $nome, $login, $senha); 
         return $stmt->execute();
     }
 }
@@ -46,7 +46,7 @@ class Usuario_Adm extends Usuario
     {
         $query = "INSERT INTO usuarios (nome, login, senha, tipo_usuario) VALUES (?, ?, ?, 1)";
         $stmt = $this->conn->prepare($query);
-        $stmt->bind_param("sss", $nome, $login, $senha); // 'sss' indica que são três strings
+        $stmt->bind_param("sss", $nome, $login, $senha);
         return $stmt->execute();
     }
 
@@ -54,14 +54,14 @@ class Usuario_Adm extends Usuario
     {
         $query = "DELETE FROM usuarios WHERE id = ?";
         $stmt = $this->conn->prepare($query);
-        $stmt->bind_param("i", $id); // 'i' indica um inteiro
+        $stmt->bind_param("i", $id);
         return $stmt->execute();
     }
 
 
     public function listarAdministradores()
     {
-        $query = "SELECT * FROM usuarios WHERE tipo_usuario = 1"; // Tipo de usuário 1 para administradores
+        $query = "SELECT * FROM usuarios WHERE tipo_usuario = 1";
         $result = $this->conn->query($query);
         return $result->fetch_all(MYSQLI_ASSOC);
     }
@@ -70,6 +70,6 @@ class Usuario_Adm extends Usuario
 class Usuario_Master extends Usuario
 {
 
-    public $tipo_usuario = 3; // Definindo o tipo de usuário como 3
+    public $tipo_usuario = 3;
 
 }

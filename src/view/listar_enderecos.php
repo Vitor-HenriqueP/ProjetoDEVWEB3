@@ -1,9 +1,8 @@
 <?php
 
 session_start();
-include '../../conexao.php'; // Assumindo que este arquivo inclui a conexão com o banco de dados
+include '../../conexao.php';
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Se o formulário foi submetido, processa o salvamento do endereço
     $cep = $_POST['cep'];
     $cidade = $_POST['cidade'];
     $estado = $_POST['estado'];
@@ -11,12 +10,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $bairro = $_POST['bairro'];
     $numero = $_POST['numero'];
     $usuario_id = $_SESSION['id'];
-    // Verifica se todos os campos estão preenchidos
     if (empty($cep) || empty($cidade) || empty($estado) || empty($rua) || empty($bairro) || empty($numero) || empty($usuario_id)) {
         echo "Todos os campos são obrigatórios.";
         exit;
     }
-    // Insere os dados do endereço no banco de dados
+
     $stmt = $conn->prepare("INSERT INTO enderecos (cep, cidade, estado, rua, bairro, numero, usuario_id) VALUES (?, ?, ?, ?, ?, ?, ?)");
     $stmt->bind_param("ssssssi", $cep, $cidade, $estado, $rua, $bairro, $numero, $usuario_id);
     if ($stmt->execute()) {
@@ -25,13 +23,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo "Erro ao salvar endereço.";
     }
 }
-// Consulta os endereços do usuário logado
 $usuario_id = $_SESSION['id'];
 $stmt = $conn->prepare("SELECT * FROM enderecos WHERE usuario_id = ?");
 $stmt->bind_param("i", $usuario_id);
 $stmt->execute();
 $result = $stmt->get_result();
-// Exibe a página com o formulário e a lista de endereços
 ?>
 <!DOCTYPE html>
 <html>
@@ -77,8 +73,6 @@ $result = $stmt->get_result();
             echo "<td><button class='editAddress' data-id='" . $row['id'] . "'>Editar</button></td>";
             echo "<td><button class='deleteAddress' data-id='" . $row['id'] . "'>Excluir</button></td>";
             echo "</tr>";
-
-            // Adicione um formulário oculto para edição
             echo "<tr class='editAddressFormRow' style='display: none;'>";
             echo "<td colspan='6'>";
             echo "<form class='editAddressForm'>";
@@ -110,7 +104,6 @@ $result = $stmt->get_result();
 
     <script>
         $(document).ready(function() {
-            // Captura o evento de click nos botões de "Selecionar Endereço"
             $('.selectAddress').click(function() {
                 var cep = $(this).data('cep');
                 var cidade = $(this).data('cidade');
@@ -121,33 +114,21 @@ $result = $stmt->get_result();
                 var addressText = "Endereço selecionado: " + rua + ", " + numero + " - " + bairro + " - " + cidade + " - " + estado + " - CEP: " + cep;
                 $('#selectedAddress').text(addressText);
             });
-
-
-            // Captura o evento de click nos botões de "Excluir"
-            // Captura o evento de click nos botões de "Editar"
             $('.editAddress').click(function() {
-                // Oculta todos os formulários de edição que possam estar visíveis
                 $('.editAddressFormRow').hide();
 
                 var id = $(this).data('id');
                 var editFormRow = $(this).closest('tr').next('.editAddressFormRow');
                 editFormRow.show();
-
-                // Adiciona um listener para o formulário de edição
                 $('.editAddressForm').submit(function(event) {
                     event.preventDefault();
-
-                    // Obtém os dados do formulário de edição
                     var formData = $(this).serialize();
-
-                    // Envia os dados via AJAX para salvar a edição
                     $.ajax({
                         url: 'edit_address.php',
                         type: 'POST',
                         data: formData,
                         success: function(response) {
                             if (response === "success") {
-                                // Atualiza a lista de endereços e mantém a tabela aberta
                                 atualizarListaEnderecos();
                             } else {
                                 $('#message').text("Erro ao salvar edição.");
@@ -159,8 +140,6 @@ $result = $stmt->get_result();
                     });
                 });
             });
-
-            // Captura o evento de click nos botões de "Excluir"
             $('.deleteAddress').click(function() {
                 var id = $(this).data('id');
 
@@ -172,7 +151,6 @@ $result = $stmt->get_result();
                     },
                     success: function(response) {
                         if (response === "success") {
-                            // Atualiza a lista de endereços e mantém a tabela aberta
                             atualizarListaEnderecos();
                         } else {
                             $('#message').text("Erro ao excluir endereço.");
@@ -183,14 +161,11 @@ $result = $stmt->get_result();
                     }
                 });
             });
-
-            // Função para atualizar a lista de endereços sem recarregar a página
             function atualizarListaEnderecos() {
                 $.ajax({
                     url: 'listar_enderecos.php',
                     type: 'GET',
                     success: function(response) {
-                        // Atualiza a tabela de endereços com os novos dados
                         $('#listaEnderecos').html(response);
                     },
                     error: function() {

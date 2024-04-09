@@ -1,5 +1,5 @@
 <?php
-include 'conexao.php'; // Assumindo que este arquivo inclui a conexão com o banco de dados
+include 'conexao.php'; 
 
 session_start();
 
@@ -11,21 +11,17 @@ if (!isset($_SESSION['login'])) {
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $novoNome = $_POST['novo_nome'];
 
-    // Verifica se o campo Novo Nome está preenchido
+   
     if (!empty($novoNome)) {
-        // Atualiza o nome no banco de dados
+
         $stmt = $conn->prepare("UPDATE usuarios SET nome = ? WHERE id = ?");
         $stmt->bind_param("si", $novoNome, $_SESSION['id']);
         $stmt->execute();
 
-        // Atualiza $_SESSION['nome'] com o novo nome
         $_SESSION['nome'] = $novoNome;
-
-        // Redirecionar para uma página de confirmação
         header('Location: confirmacao_redefinir.php');
         exit();
     } else {
-        // Exibe uma mensagem de erro caso o novo nome esteja vazio
         $erro = "Por favor, preencha o campo Novo Nome.";
     }
 }
@@ -38,20 +34,13 @@ if (!isset($_SESSION['login'])) {
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $novaSenha = $_POST['nova_senha'];
 
-    // Verifica se o campo Senha está preenchido
     if (!empty($novaSenha)) {
-        // Você pode realizar validações dos dados recebidos aqui
-
-        // Atualiza apenas a senha no banco de dados
         $stmt = $conn->prepare("UPDATE usuarios SET senha = ? WHERE id = ?");
         $stmt->bind_param("si", password_hash($novaSenha, PASSWORD_DEFAULT), $_SESSION['id']);
         $stmt->execute();
-
-        // Redirecionar para uma página de confirmação
         header('Location: confirmacao_redefinir.php');
         exit();
     } else {
-        // Exibe uma mensagem de erro caso a senha esteja vazia
         $erro = "Por favor, preencha o campo Nova Senha.";
     }
 }

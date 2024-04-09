@@ -3,8 +3,6 @@ $('#form1').submit(function(e){
 
     var u_name = $('#name').val();
     var u_comment = $('#comment').val();
-
-    //console.log(u_name, u_comment);
     $.ajax({
         url: 'http://localhost/ProjetoDEVWEB/src/view/inserir.php',
         method: 'POST',

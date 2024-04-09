@@ -1,9 +1,8 @@
 <?php
 session_start();
-include '../../conexao.php'; // Assumindo que este arquivo inclui a conexão com o banco de dados
+include '../../conexao.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Se o formulário foi submetido, processa o salvamento do endereço
     $cep = $_POST['cep'];
     $cidade = $_POST['cidade'];
     $estado = $_POST['estado'];
@@ -12,13 +11,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $numero = $_POST['numero'];
     $usuario_id = $_SESSION['id'];
 
-    // Verifica se todos os campos estão preenchidos
     if (empty($cep) || empty($cidade) || empty($estado) || empty($rua) || empty($bairro) || empty($numero) || empty($usuario_id)) {
         echo "Todos os campos são obrigatórios.";
         exit;
     }
-
-    // Insere os dados do endereço no banco de dados
     $stmt = $conn->prepare("INSERT INTO enderecos (cep, cidade, estado, rua, bairro, numero, usuario_id) VALUES (?, ?, ?, ?, ?, ?, ?)");
     $stmt->bind_param("ssssssi", $cep, $cidade, $estado, $rua, $bairro, $numero, $usuario_id);
 
@@ -29,7 +25,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 
-// Consulta os endereços do usuário logado
+
 $usuario_id = $_SESSION['id'];
 $stmt = $conn->prepare("SELECT * FROM enderecos WHERE usuario_id = ?");
 $stmt->bind_param("i", $usuario_id);
@@ -67,7 +63,7 @@ $result = $stmt->get_result();
             <label for="numero">Número:</label>
             <input type="text" id="numero" name="numero"><br>
             <input type="submit" value="Salvar Endereço" class="button">
-            <div id="mensagem"></div> <!-- Div para exibir mensagem de sucesso ou erro -->
+            <div id="mensagem"></div> 
         </form>
     </div>
     <div id="enderecoSelecionado"></div>
@@ -113,33 +109,26 @@ $result = $stmt->get_result();
 
     <script>
         $(document).ready(function() {
-            // Função para atualizar a lista de endereços
             function atualizarListaEnderecos() {
                 $.ajax({
-                    url: 'listar_enderecos.php', // Arquivo PHP para listar os endereços
+                    url: 'listar_enderecos.php',
                     success: function(data) {
                         $('#listaEnderecos').html(data);
                     }
                 });
             }
-
-            // Ao clicar no botão "Cadastrar Novo Endereço"
             $('#cadastrarNovoEndereco').click(function() {
                 $('#enderecoForm').show();
                 $('#listaEnderecos, #enderecoSelecionado').hide();
                 $('#cep, #cidade, #estado, #rua, #bairro, #numero').val('');
                 $('#mensagem').text('');
             });
-
-            // Ao clicar no botão "Usar Endereço Existente"
             $('#usarEnderecoExistente').click(function() {
                 $('#enderecoForm').hide();
                 $('#listaEnderecos').show();
                 $('#enderecoSelecionado').text('');
                 $('#mensagem').text('');
             });
-
-            // Ao clicar em um botão "Selecionar" da tabela de endereços
             $(document).on('click', '.selecionarEndereco', function() {
                 var cep = $(this).data('cep');
                 var cidade = $(this).data('cidade');
@@ -147,8 +136,6 @@ $result = $stmt->get_result();
                 var rua = $(this).data('rua');
                 var bairro = $(this).data('bairro');
                 var numero = $(this).data('numero');
-
-                // Preenche os campos do formulário com os dados do endereço selecionado
                 $('#cep').val(cep);
                 $('#cidade').val(cidade);
                 $('#estado').val(estado);
@@ -156,24 +143,22 @@ $result = $stmt->get_result();
                 $('#bairro').val(bairro);
                 $('#numero').val(numero);
 
-                // Exibe uma mensagem indicando o endereço selecionado
                 var enderecoSelecionado = "Endereço selecionado: " + rua + ", " + numero + " - " + bairro + " - " + cidade + "/" + estado + " - CEP: " + cep;
                 $('#enderecoSelecionado').text(enderecoSelecionado);
             });
 
-            // Ao enviar o formulário de cadastro de endereço
             $('#enderecoForm').submit(function(e) {
-                e.preventDefault(); // Evita que o formulário seja enviado normalmente
-                var formData = new FormData(this); // Cria um objeto FormData com os dados do formulário
+                e.preventDefault(); 
+                var formData = new FormData(this); 
                 $.ajax({
                     type: 'POST',
-                    url: 'cep.php', // Seu arquivo PHP para salvar o endereço
+                    url: 'cep.php',
                     data: formData,
                     contentType: false,
                     processData: false,
                     success: function(response) {
                         $('#mensagem').text('Endereço salvo com sucesso');
-                        atualizarListaEnderecos(); // Atualiza a lista de endereços após salvar
+                        atualizarListaEnderecos(); 
                     },
                     error: function() {
                         $('#mensagem').text('Erro ao salvar endereço');
@@ -181,18 +166,14 @@ $result = $stmt->get_result();
                 });
             });
 
-            // Ao digitar o CEP
             $('#cep').keyup(function() {
                 var cep = $(this).val().replace(/\D/g, '');
                 if (cep.length === 8) {
-                    $('#mensagem').html(""); // Limpa a mensagem de erro
-                    $('#cidade, #estado, #rua, #bairro').val(""); // Limpa os campos do endereço
-                    $('#numero').val(""); // Limpa o campo do número
-
-                    // Desabilita o botão de "Salvar Endereço"
+                    $('#mensagem').html("");
+                    $('#cidade, #estado, #rua, #bairro').val("");
+                    $('#numero').val(""); 
                     $('.button').prop('disabled', true);
 
-                    // Consulta o CEP na API viacep
                     $.ajax({
                         url: 'https://viacep.com.br/ws/' + cep + '/json/',
                         dataType: 'json',
@@ -202,11 +183,10 @@ $result = $stmt->get_result();
                                 $('#estado').val(data.uf);
                                 $('#rua').val(data.logradouro);
                                 $('#bairro').val(data.bairro);
-                                $('#numero').focus(); // Coloca o foco no campo do número
+                                $('#numero').focus(); 
                             }
                         },
                         complete: function() {
-                            // Habilita o botão de "Salvar Endereço" após a requisição do CEP ser concluída
                             $('.button').prop('disabled', false);
                         }
                     });

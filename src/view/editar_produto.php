@@ -1,13 +1,11 @@
 <?php
 session_start();
 
-// Verifica se o usuário está logado e se é do tipo 1 (administrador)
+
 if (!isset($_SESSION['login']) || $_SESSION['tipo_usuario'] != 1) {
     header('Location: ../../index.php');
     exit();
 }
-
-// Verifica se foi enviado o ID do produto a ser editado
 if (!isset($_POST['id']) || !is_numeric($_POST['id'])) {
     header('Location: ../../index.php');
     exit();
@@ -15,9 +13,7 @@ if (!isset($_POST['id']) || !is_numeric($_POST['id'])) {
 
 $id = $_POST['id'];
 
-include '../../conexao.php'; // Inclua o arquivo de conexão
-
-// Consulta SQL para obter os dados do produto com base no ID
+include '../../conexao.php';
 $sql = "SELECT * FROM produto WHERE id = ?";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param('i', $id);
@@ -64,7 +60,6 @@ if ($result->num_rows > 0) {
             <a href="../../index.php">Voltar para a página inicial</a>
         </div>
         <script>
-            // Preencher os campos com os valores do produto
             var produto = {
                 nome: "<?php echo htmlspecialchars($row['nome']); ?>",
                 descricao: "<?php echo htmlspecialchars($row['descricao']); ?>",

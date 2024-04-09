@@ -15,7 +15,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 if (response.status == "success") {
                     document.querySelector("#mensagem").innerHTML = "<p style='color:green;'>" + response.mensagem + "</p>";
                     setTimeout(function () {
-                        window.location.href = 'cadastro_adm.php'; // Redireciona após 1 segundo
+                        window.location.href = 'cadastro_adm.php';
                     }, 1000);
                 } else {
                     document.querySelector("#mensagem").innerHTML = "<p style='color:red;'>" + response.mensagem + "</p>";

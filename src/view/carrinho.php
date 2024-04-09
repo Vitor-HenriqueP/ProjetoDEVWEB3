@@ -1,7 +1,7 @@
 <?php
-session_start(); // Inicie a sessão no início do arquivo
+session_start();
 
-include '../../conexao.php'; // Inclua o arquivo de conexão com o banco de dados
+include '../../conexao.php';
 function logout()
 {
     session_unset();
@@ -10,11 +10,9 @@ function logout()
     exit();
 }
 
-// Verifica se o logout foi solicitado
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['logout'])) {
     logout();
 }
-// Verifique se o usuário está logado
 if (!isset($_SESSION['login'])) {
     echo '<script>alert("Faça login para acessar o carrinho");</script>';
     echo '<script>setTimeout(function(){ window.location.href = "../../login.php"; });</script>';
@@ -29,69 +27,53 @@ if ($tipo_usuario !== null && $tipo_usuario != 2) {
     exit();
 }
 
-// Verifique se o ID do produto foi enviado por POST
 if (isset($_POST['id_produto']) && isset($_POST['action'])) {
     $id_produto = intval($_POST['id_produto']);
-    $id_usuario = intval($_SESSION['id']); // Obter o ID do usuário da sessão
+    $id_usuario = intval($_SESSION['id']);
 
     if ($_POST['action'] === 'remove') {
-        // Remove um item do carrinho
         $stmt = $conn->prepare("DELETE FROM carrinho WHERE id_usuario = ? AND id_produto = ? LIMIT 1");
         $stmt->bind_param("ii", $id_usuario, $id_produto);
         $stmt->execute();
 
-        // Redireciona o usuário para a mesma página usando GET
         header("Location: $_SERVER[PHP_SELF]");
         exit();
     } elseif ($_POST['action'] === 'add') {
-        // Adiciona um item ao carrinho
         $stmt = $conn->prepare("INSERT INTO carrinho (id_usuario, id_produto) VALUES (?, ?)");
         $stmt->bind_param("ii", $id_usuario, $id_produto);
         $stmt->execute();
-
-        // Definir uma mensagem de sucesso para exibir
         $mensagem = "Produto adicionado ao carrinho.";
-        // Exibir a mensagem de produto adicionado ao carrinho por 3 segundos
         echo "<script>setTimeout(function() { document.getElementById('mensagem').style.display = 'none'; }, 3000);</script>";
-
-        // Redireciona o usuário para a mesma página usando GET
         header("Location: $_SERVER[PHP_SELF]");
         exit();
     }
 }
 
-// Verifique se o ID do produto foi enviado por POST
+
 if (isset($_POST['slug']) && isset($_POST['action'])) {
     $slug = $_POST['slug'];
-    $id_usuario = intval($_SESSION['id']); // Obter o ID do usuário da sessão
+    $id_usuario = intval($_SESSION['id']);
 
     if ($_POST['action'] === 'remove') {
-        // Remove um item do carrinho
         $stmt = $conn->prepare("DELETE FROM carrinho WHERE id_usuario = ? AND id_produto IN (SELECT id FROM produto WHERE slug = ?) LIMIT 1");
         $stmt->bind_param("is", $id_usuario, $slug);
         $stmt->execute();
 
-        // Redireciona o usuário para a mesma página usando GET
         header("Location: $_SERVER[PHP_SELF]");
         exit();
     } elseif ($_POST['action'] === 'add') {
-        // Adiciona um item ao carrinho
         $stmt = $conn->prepare("INSERT INTO carrinho (id_usuario, id_produto) SELECT ?, id FROM produto WHERE slug = ?");
         $stmt->bind_param("is", $id_usuario, $slug);
         $stmt->execute();
 
-        // Definir uma mensagem de sucesso para exibir
         $mensagem = "Produto adicionado ao carrinho.";
-        // Exibir a mensagem de produto adicionado ao carrinho por 3 segundos
         echo "<script>setTimeout(function() { document.getElementById('mensagem').style.display = 'none'; }, 3000);</script>";
 
-        // Redireciona o usuário para a mesma página usando GET
         header("Location: $_SERVER[PHP_SELF]");
         exit();
     }
 }
 
-// Atualizar a quantidade de itens no carrinho na sessão
 $stmt_quantidade = $conn->prepare("SELECT COUNT(id_produto) as quantidade FROM carrinho WHERE id_usuario = ?");
 $stmt_quantidade->bind_param("i", $id_usuario);
 $stmt_quantidade->execute();
@@ -123,7 +105,7 @@ $stmt_quantidade->close();
                     action: action
                 },
                 success: function(response) {
-                    location.reload(); // Recarrega a página após a atualização
+                    location.reload(); 
                 }
             });
         }
@@ -170,7 +152,6 @@ $stmt_quantidade->close();
     </div>
 
     <?php
-    // Consulta SQL para obter os produtos no carrinho do usuário logado
     $id_usuario = intval($_SESSION['id']);
     $stmt = $conn->prepare("SELECT p.slug,c.id_produto, COUNT(c.id_produto) as quantidade, p.nome, p.descricao, p.preco, p.imagem FROM carrinho c INNER JOIN produto p ON c.id_produto = p.id WHERE c.id_usuario = ? GROUP BY c.id_produto");
     $stmt->bind_param("i", $id_usuario);
@@ -178,11 +159,11 @@ $stmt_quantidade->close();
     $result = $stmt->get_result();
 
     if ($result->num_rows > 0) {
-        $total = 0; // Variável para armazenar o total dos produtos no carrinho
+        $total = 0; 
 
         while ($row = $result->fetch_assoc()) {
             $total += $row['preco'] *
-                $row['quantidade']; // Adiciona o preço do produto ao total
+                $row['quantidade']; 
             $nome = $row['nome'];
             $descricao = explode(' ', $row["descricao"]);
             $descricao = array_slice($descricao, 0, 20);
@@ -210,7 +191,6 @@ $stmt_quantidade->close();
             echo "</div>";
         }
 
-        // Exibe o valor total
         echo "<div class='total-wrapper'>";
         echo "<p>Total: R$ $total</p>";
         echo "<form method='post'>";
@@ -219,11 +199,9 @@ $stmt_quantidade->close();
         echo "</div>";
 
         if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['comprar'])) {
-            // Limpa todos os itens do carrinho no banco de dados
             $stmt_delete = $conn->prepare("DELETE FROM carrinho WHERE id_usuario = ?");
             $stmt_delete->bind_param("i", $id_usuario);
             if ($stmt_delete->execute()) {
-                // Recarrega a página após 2 segundos
                 echo "<script>
                 setTimeout(function() {
                     window.location.href = '../../index.php';
@@ -245,15 +223,12 @@ $stmt_quantidade->close();
 
 <?php
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Se o formulário foi submetido, processa o salvamento do endereço
 
 
 
-    // Verifica se todos os campos estão preenchidos
     if (empty($cep) || empty($cidade) || empty($estado) || empty($rua) || empty($bairro) || empty($numero) || empty($usuario_id)) {
         exit;
     }
-    // Insere os dados do endereço no banco de dados
     $stmt = $conn->prepare("INSERT INTO enderecos (cep, cidade, estado, rua, bairro, numero, usuario_id) VALUES (?, ?, ?, ?, ?, ?, ?)");
     $stmt->bind_param("ssssssi", $cep, $cidade, $estado, $rua, $bairro, $numero, $usuario_id);
     if ($stmt->execute()) {
@@ -262,7 +237,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo "Erro ao salvar endereço.";
     }
 }
-// Consulta os endereços do usuário logado
 $usuario_id = $_SESSION['id'];
 $stmt = $conn->prepare("SELECT * FROM enderecos WHERE usuario_id = ?");
 $stmt->bind_param("i", $usuario_id);
@@ -274,7 +248,6 @@ $result = $stmt->get_result();
 
 <head>
     <style>
-        /* Estilo para remover as setas do campo número */
         input[type="number"]::-webkit-inner-spin-button,
         input[type="number"]::-webkit-outer-spin-button {
             -webkit-appearance: none;
@@ -283,7 +256,6 @@ $result = $stmt->get_result();
 
         input[type="number"] {
             -moz-appearance: textfield;
-            /* Firefox */
         }
     </style>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -302,7 +274,7 @@ $result = $stmt->get_result();
             <input type="text" id="rua" name="rua" placeholder="Rua" required><br>
             <input type="text" id="bairro" name="bairro" placeholder="Bairro" required><br>
             <input type="number" text-decoration="none" placeholder="Número" id="numero" name="numero" required><br> <input type="submit" value="Salvar Endereço" class="button">
-            <div id="mensagem"></div> <!-- Div para exibir mensagem de sucesso ou erro -->
+            <div id="mensagem"></div> 
         </form>
     </div>
     <div id="enderecoSelecionado"></div>
@@ -326,16 +298,15 @@ $result = $stmt->get_result();
         const cepInput = document.getElementById('cep');
         cepInput.addEventListener('input', function(event) {
             let cep = event.target.value;
-            cep = cep.replace(/\D/g, ''); // Remove todos os caracteres não numéricos
+            cep = cep.replace(/\D/g, ''); 
             if (cep.length > 5) {
-                cep = cep.replace(/^(\d{5})(\d{1,3})/, '$1-$2'); // Adiciona o hífen após o quinto dígito
+                cep = cep.replace(/^(\d{5})(\d{1,3})/, '$1-$2'); 
             }
             event.target.value = cep;
         });
-        // Função para atualizar a lista de endereços
         function atualizarListaEnderecos() {
             $.ajax({
-                url: 'listar_enderecos.php', // Arquivo PHP para listar os endereços
+                url: 'listar_enderecos.php', 
                 success: function(data) {
                     $('#listaEnderecos').html(data);
                     $('.selecionarEndereco').show();
@@ -343,14 +314,12 @@ $result = $stmt->get_result();
             });
         }
         $(document).ready(function() {
-            // Ao clicar no botão "Cadastrar Novo Endereço"
             $('#cadastrarNovoEndereco').click(function() {
                 $('#enderecoForm').show();
                 $('#listaEnderecos, #enderecoSelecionado').hide();
                 $('#cep, #cidade, #estado, #rua, #bairro, #numero').val('');
                 $('#mensagem').text('');
             });
-            // Ao clicar no botão "Usar Endereço Existente"
             $('#usarEnderecoExistente').click(function() {
                 $('#enderecoForm').hide();
                 $('#listaEnderecos').show();
@@ -358,7 +327,6 @@ $result = $stmt->get_result();
                 $('#mensagem').text('');
                 atualizarListaEnderecos();
             });
-            // Ao clicar em um botão "Selecionar" da tabela de endereços
             $(document).on('click', '.selecionarEndereco', function() {
                 var cep = $(this).data('cep');
                 var cidade = $(this).data('cidade');
@@ -366,41 +334,34 @@ $result = $stmt->get_result();
                 var rua = $(this).data('rua');
                 var bairro = $(this).data('bairro');
                 var numero = $(this).data('numero');
-                // Preenche os campos do formulário com os dados do endereço selecionado
                 $('#cep').val(cep);
                 $('#cidade').val(cidade);
                 $('#estado').val(estado);
                 $('#rua').val(rua);
                 $('#bairro').val(bairro);
                 $('#numero').val(numero);
-                // Exibe uma mensagem indicando o endereço selecionado
                 var enderecoSelecionado = "Endereço selecionado: " + rua + ", " + numero + " - " + bairro + " - " + cidade + "/" + estado + " - CEP: " + cep;
                 $('#enderecoSelecionado').text(enderecoSelecionado);
             });
-            // Ao enviar o formulário de cadastro de endereço
             $('#enderecoForm').submit(function(e) {
-                e.preventDefault(); // Evita que o formulário seja enviado normalmente
-                var formData = new FormData(this); // Cria um objeto FormData com os dados do formulário
+                e.preventDefault(); 
+                var formData = new FormData(this); 
                 $.ajax({
                     type: 'POST',
-                    url: 'cep.php', // Seu arquivo PHP para salvar o endereço
+                    url: 'cep.php', 
                     data: formData,
                     contentType: false,
                     processData: false,
                     success: function(response) {
-                        // Obtém os dados do endereço cadastrado
                         var cep = $('#cep').val();
                         var cidade = $('#cidade').val();
                         var estado = $('#estado').val();
                         var rua = $('#rua').val();
                         var bairro = $('#bairro').val();
                         var numero = $('#numero').val();
-                        // Exibe a mensagem com os dados do endereço selecionado
                         var enderecoSelecionado = "Endereço selecionado: " + rua + ", " + numero + " - " + bairro + " - " + cidade + "/" + estado + " - CEP: " + cep;
                         $('#mensagem').text(enderecoSelecionado);
-                        // Atualiza a lista de endereços
                         atualizarListaEnderecos();
-                        // Limpa os campos do formulário após cadastrar o endereço
                         $('#cep, #cidade, #estado, #rua, #bairro, #numero').val('');
                     },
                     error: function() {
@@ -408,16 +369,13 @@ $result = $stmt->get_result();
                     }
                 });
             });
-            // Ao digitar o CEP
             $('#cep').keyup(function() {
                 var cep = $(this).val().replace(/\D/g, '');
                 if (cep.length === 8) {
-                    $('#mensagem').html(""); // Limpa a mensagem de erro
-                    $('#cidade, #estado, #rua, #bairro').val(""); // Limpa os campos do endereço
-                    $('#numero').val(""); // Limpa o campo do número
-                    // Desabilita o botão de "Salvar Endereço"
+                    $('#mensagem').html("");
+                    $('#cidade, #estado, #rua, #bairro').val("");
+                    $('#numero').val("");
                     $('.button').prop('disabled', true);
-                    // Consulta o CEP na API viacep
                     $.ajax({
                         url: 'https://viacep.com.br/ws/' + cep + '/json/',
                         dataType: 'json',
@@ -427,11 +385,10 @@ $result = $stmt->get_result();
                                 $('#estado').val(data.uf);
                                 $('#rua').val(data.logradouro);
                                 $('#bairro').val(data.bairro);
-                                $('#numero') // Coloca o foco no campo do número
+                                $('#numero');
                             }
                         },
                         complete: function() {
-                            // Habilita o botão de "Salvar Endereço" após a requisição do CEP ser concluída
                             $('.button').prop('disabled', false);
                         }
                     });

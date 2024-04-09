@@ -34,7 +34,7 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 document.getElementById('formLogin').addEventListener('submit', function (event) {
-    event.preventDefault(); // Evita o envio do formulário tradicional
+    event.preventDefault();
 
     var form = this;
     var formData = new FormData(form);
@@ -48,7 +48,7 @@ document.getElementById('formLogin').addEventListener('submit', function (event)
             if (data.success) {
                 document.getElementById('message').innerHTML = "<div  class='success'>" + data.message + "</div>";
                 setTimeout(function () {
-                    window.location.href = 'index.php'; // Redireciona após 1 segundo
+                    window.location.href = 'index.php';
                 }, 1000);
             } else {
                 document.getElementById('message').innerHTML = "<div class='error'>" + data.message + "</div>";

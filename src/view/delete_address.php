@@ -1,6 +1,6 @@
 <?php
 session_start();
-include '../../conexao.php'; // Assumindo que este arquivo inclui a conexão com o banco de dados
+include '../../conexao.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $id = $_POST['id'];

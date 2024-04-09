@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-// Função para limpar a sessão ao fazer logout
+
 function logout()
 {
     session_unset();
@@ -10,7 +10,7 @@ function logout()
     exit();
 }
 
-// Verifica se o logout foi solicitado
+
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['logout'])) {
     logout();
 }
@@ -100,7 +100,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['logout'])) {
     </div>
     <div class="container">
         <?php
-        // Conexão com o banco de dados
         $host = "localhost";
         $username = "root";
         $password = "";
@@ -124,7 +123,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['logout'])) {
                 echo "<div class='card-content'>";
                 echo "<h3>" . htmlspecialchars($row["nome"]) . "</h3>";
 
-                // Truncar a descrição para 20 palavras
+
                 $descricao = explode(' ', $row["descricao"]);
                 $descricao = array_slice($descricao, 0, 5);
                 $descricao = implode(' ', $descricao);
